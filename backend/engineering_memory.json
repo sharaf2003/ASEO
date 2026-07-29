@@ -1,0 +1,32 @@
+[
+    {
+        "id": "97dc7812-05e4-4bda-abb9-68a08d84ce5d",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-07-28T00:28:18.071156"
+    },
+    {
+        "id": "d5f93c66-2b66-437a-9d1e-7ca23785d422",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-07-28T00:29:24.959055"
+    },
+    {
+        "id": "57a3e826-5452-44ec-9c12-04d9384e255a",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-07-28T01:08:42.735509"
+    }
+]

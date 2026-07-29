@@ -1,0 +1,22 @@
+[
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "technology": "FastAPI PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    }
+]

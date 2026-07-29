@@ -1,0 +1,52 @@
+{
+    "status": "warning",
+    "agent_info": {
+        "name": "API Contract Validator Agent",
+        "version": "1.0"
+    },
+    "api_review": {
+        "api_score": 95,
+        "endpoints_checked": 5,
+        "endpoints": [
+            {
+                "method": "GET",
+                "endpoint": "/"
+            },
+            {
+                "method": "GET",
+                "endpoint": "/appointments"
+            },
+            {
+                "method": "POST",
+                "endpoint": "/appointments"
+            },
+            {
+                "method": "GET",
+                "endpoint": "/users"
+            },
+            {
+                "method": "POST",
+                "endpoint": "/users"
+            }
+        ],
+        "files_checked": 9,
+        "issues": [
+            {
+                "endpoint": "/",
+                "issue": "Trailing slash convention",
+                "severity": "low"
+            }
+        ],
+        "recommendations": [
+            {
+                "file": "generated_project\\app\\routes\\appointments_routes.py",
+                "recommendation": "Add response_model validation"
+            },
+            {
+                "file": "generated_project\\app\\routes\\users_routes.py",
+                "recommendation": "Add response_model validation"
+            }
+        ]
+    },
+    "processing_time": 0.003
+}

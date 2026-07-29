@@ -1,0 +1,55 @@
+from fastapi import APIRouter, Depends
+
+from sqlalchemy.orm import Session
+
+
+from app.security.dependencies import (
+    get_current_user
+)
+
+
+from app.database.session import get_database
+
+
+from app.services.metrics_service import (
+    MetricsService
+)
+
+
+
+
+
+router = APIRouter()
+
+
+
+service = MetricsService()
+
+
+
+
+
+@router.get(
+    "/projects/{project_id}/metrics",
+    summary="Project Metrics"
+)
+def project_metrics(
+
+    project_id: int,
+
+    db: Session = Depends(get_database),
+
+    current_user: dict = Depends(get_current_user)
+
+):
+
+
+    return service.calculate_metrics(
+
+        db,
+
+        project_id,
+
+        current_user["organization_id"]
+
+    )

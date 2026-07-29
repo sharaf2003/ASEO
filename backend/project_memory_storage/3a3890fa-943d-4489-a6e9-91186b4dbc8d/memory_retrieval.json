@@ -1,0 +1,79 @@
+{
+    "status": "success",
+    "agent_info": {
+        "name": "Memory Retrieval Agent",
+        "version": "1.2"
+    },
+    "query": "ASEO Demo Project",
+    "matches_count": 10,
+    "previous_projects": [
+        {
+            "project_id": "3a3890fa-943d-4489-a6e9-91186b4dbc8d",
+            "name": "ASEO Demo Project",
+            "created_at": "2026-07-27T17:19:04.833844",
+            "status": "active"
+        },
+        {
+            "project_id": "47b57f6d-369f-40bc-a882-a85bfa607b94",
+            "name": "ASEO Demo Project",
+            "created_at": "2026-07-27T17:11:44.967925",
+            "status": "active"
+        },
+        {
+            "project_id": "83f0e7f1-08d2-43b2-94b9-21ebec0e83a9",
+            "name": "ASEO Demo Project",
+            "created_at": "2026-07-27T17:09:28.228101",
+            "status": "active"
+        },
+        {
+            "project_id": "8f74fef2-8ead-4c29-891c-478047731bf5",
+            "name": "ASEO Demo Project",
+            "created_at": "2026-07-27T17:05:22.446384",
+            "status": "active"
+        },
+        {
+            "project_id": "ad6ae08c-ea4d-4b00-ac91-80082c62532f",
+            "name": "ASEO Demo Project",
+            "created_at": "2026-07-27T17:02:27.236309",
+            "status": "active"
+        },
+        {
+            "project_id": "88f9c648-91da-4c0c-817a-8e2ebebb7e21",
+            "name": "ASEO Demo Project",
+            "created_at": "2026-07-27T17:00:35.483626",
+            "status": "active"
+        },
+        {
+            "project_id": "67604cc1-9eae-4997-9b46-6c58a13c572b",
+            "name": "ASEO Demo Project",
+            "created_at": "2026-07-27T16:59:13.892770",
+            "status": "active"
+        },
+        {
+            "project_id": "c791eff3-9657-4e62-9e8f-f5b17039c6c9",
+            "name": "ASEO Demo Project",
+            "created_at": "2026-07-27T16:53:23.371318",
+            "status": "active"
+        },
+        {
+            "project_id": "d7771a0d-9dd6-45fe-a094-4b6413cd8cea",
+            "name": "ASEO Demo Project",
+            "created_at": "2026-07-27T16:50:35.246506",
+            "status": "active"
+        },
+        {
+            "project_id": "19af3b04-7bf2-4c5c-b6ed-594de5818ce5",
+            "name": "ASEO Demo Project",
+            "created_at": "2026-07-27T16:43:06.766814",
+            "status": "active"
+        }
+    ],
+    "recommendations": {
+        "backend": "FastAPI",
+        "database": "PostgreSQL",
+        "architecture": "MVC",
+        "authentication": "JWT",
+        "confidence": 1
+    },
+    "processing_time": 0.015
+}

@@ -1,0 +1,10 @@
+{
+    "status": "passed",
+    "agent_info": {
+        "name": "Security Agent",
+        "version": "1.0"
+    },
+    "issues": [],
+    "issues_count": 0,
+    "processing_time": 0.0
+}

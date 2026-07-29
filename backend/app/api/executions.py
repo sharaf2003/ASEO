@@ -1,0 +1,55 @@
+from fastapi import APIRouter, Depends
+
+from sqlalchemy.orm import Session
+
+
+from app.security.dependencies import (
+    get_current_user
+)
+
+
+from app.database.session import get_database
+
+
+from app.services.execution_service import (
+    ExecutionService
+)
+
+
+
+
+
+router = APIRouter()
+
+
+
+service = ExecutionService()
+
+
+
+
+
+@router.get(
+    "/projects/{project_id}/executions",
+    summary="Get Project Execution History"
+)
+def get_project_executions(
+
+    project_id: int,
+
+    db: Session = Depends(get_database),
+
+    current_user: dict = Depends(get_current_user)
+
+):
+
+
+    return service.get_project_executions(
+
+        db,
+
+        project_id,
+
+        current_user["organization_id"]
+
+    )

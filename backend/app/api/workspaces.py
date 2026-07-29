@@ -1,0 +1,115 @@
+from fastapi import (
+    APIRouter,
+    Depends,
+    status
+)
+
+
+from sqlalchemy.orm import Session
+
+
+from app.security.dependencies import (
+    get_current_user
+)
+
+
+from app.security.roles import (
+    require_role
+)
+
+
+from app.database.session import get_database
+
+
+from app.schemas.workspace import (
+    WorkspaceCreate,
+    WorkspaceResponse
+)
+
+
+from app.services.workspace_service import (
+    WorkspaceService
+)
+
+
+
+
+
+router = APIRouter()
+
+
+
+service = WorkspaceService()
+
+
+
+
+
+# ==========================
+# Create Workspace
+# OWNER ONLY
+# ==========================
+
+
+@router.post(
+    "",
+    response_model=WorkspaceResponse,
+    status_code=status.HTTP_201_CREATED,
+    summary="Create Workspace"
+)
+def create_workspace(
+
+    workspace: WorkspaceCreate,
+
+    db: Session = Depends(get_database),
+
+    current_user: dict = Depends(
+        require_role(
+            ["OWNER"]
+        )
+    )
+
+):
+
+
+    return service.create_workspace(
+
+        db,
+
+        workspace,
+
+        current_user["organization_id"]
+
+    )
+
+
+
+
+
+# ==========================
+# Get Current Organization Workspaces
+# AUTHENTICATED USERS
+# ==========================
+
+
+@router.get(
+    "",
+    response_model=list[WorkspaceResponse],
+    summary="Get Current Organization Workspaces"
+)
+def list_workspaces(
+
+    db: Session = Depends(get_database),
+
+    current_user: dict = Depends(get_current_user)
+
+):
+
+
+    return service.get_organization_workspaces(
+
+        db,
+
+        current_user["organization_id"]
+
+    )

@@ -1,0 +1,16 @@
+{
+    "status": "passed",
+    "agent_info": {
+        "name": "Database Design Review Agent",
+        "version": "2.0"
+    },
+    "database": {
+        "database_score": 100,
+        "tables_detected": [],
+        "tables_count": 0,
+        "files_checked": 9,
+        "issues": [],
+        "recommendations": []
+    },
+    "processing_time": 0.005
+}
