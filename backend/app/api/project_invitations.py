@@ -12,7 +12,6 @@ from fastapi import (
     HTTPException
 )
 
-
 from sqlalchemy.orm import Session
 
 
@@ -45,11 +44,9 @@ router = APIRouter()
 
 
 
-
-
-# ==========================
+# =====================================================
 # Project Access Check
-# ==========================
+# =====================================================
 
 
 def verify_project_access(
@@ -94,21 +91,15 @@ def verify_project_access(
 
 
 
-
-
-# ==========================
+# =====================================================
 # Create Invitation
-# ==========================
+# =====================================================
 
 
 @router.post(
-
     "/projects/{project_id}/invitations",
-
     response_model=ProjectInvitationResponse,
-
     status_code=status.HTTP_201_CREATED
-
 )
 def create_project_invitation(
 
@@ -119,16 +110,15 @@ def create_project_invitation(
     db: Session = Depends(get_database),
 
     current_user: dict = Depends(
-
         require_permission(
-
             "invitation.create"
-
         )
-
     )
 
 ):
+
+
+    organization_id = current_user["organization_id"]
 
 
     verify_project_access(
@@ -137,7 +127,7 @@ def create_project_invitation(
 
         project_id,
 
-        current_user["organization_id"]
+        organization_id
 
     )
 
@@ -152,25 +142,22 @@ def create_project_invitation(
 
         data.role.value,
 
-        int(current_user["sub"])
+        int(current_user["sub"]),
+
+        organization_id
 
     )
 
 
 
-
-
-# ==========================
+# =====================================================
 # Get Invitations
-# ==========================
+# =====================================================
 
 
 @router.get(
-
     "/projects/{project_id}/invitations",
-
     response_model=list[ProjectInvitationResponse]
-
 )
 def list_project_invitations(
 
@@ -179,16 +166,15 @@ def list_project_invitations(
     db: Session = Depends(get_database),
 
     current_user: dict = Depends(
-
         require_permission(
-
             "invitation.view"
-
         )
-
     )
 
 ):
+
+
+    organization_id = current_user["organization_id"]
 
 
     verify_project_access(
@@ -197,7 +183,7 @@ def list_project_invitations(
 
         project_id,
 
-        current_user["organization_id"]
+        organization_id
 
     )
 
@@ -206,25 +192,22 @@ def list_project_invitations(
 
         db,
 
-        project_id
+        project_id,
+
+        organization_id
 
     )
 
 
 
-
-
-# ==========================
+# =====================================================
 # Accept Invitation
-# ==========================
+# =====================================================
 
 
 @router.post(
-
     "/invitations/{invitation_id}/accept",
-
     response_model=ProjectInvitationResponse
-
 )
 def accept_project_invitation(
 
@@ -243,25 +226,22 @@ def accept_project_invitation(
 
         invitation_id,
 
-        int(current_user["sub"])
+        int(current_user["sub"]),
+
+        current_user["organization_id"]
 
     )
 
 
 
-
-
-# ==========================
+# =====================================================
 # Reject Invitation
-# ==========================
+# =====================================================
 
 
 @router.post(
-
     "/invitations/{invitation_id}/reject",
-
     response_model=ProjectInvitationResponse
-
 )
 def reject_project_invitation(
 
@@ -278,6 +258,10 @@ def reject_project_invitation(
 
         db,
 
-        invitation_id
+        invitation_id,
+
+        int(current_user["sub"]),
+
+        current_user["organization_id"]
 
     )

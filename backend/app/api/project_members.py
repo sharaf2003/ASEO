@@ -12,7 +12,6 @@ from fastapi import (
     HTTPException
 )
 
-
 from sqlalchemy.orm import Session
 
 
@@ -43,29 +42,20 @@ from app.models.project import Project
 
 
 
-
-
 router = APIRouter()
 
 
 
-
-
-# ==========================
+# =====================================================
 # Project Ownership Check
-# ==========================
+# =====================================================
 
 
 def verify_project_access(
-
     db: Session,
-
     project_id: int,
-
     organization_id: int
-
 ):
-
 
     project = (
 
@@ -99,21 +89,15 @@ def verify_project_access(
 
 
 
-
-
-# ==========================
+# =====================================================
 # Add Member
-# ==========================
+# =====================================================
 
 
 @router.post(
-
     "/projects/{project_id}/members",
-
     response_model=ProjectMemberResponse,
-
     status_code=status.HTTP_201_CREATED
-
 )
 def add_project_member(
 
@@ -124,26 +108,21 @@ def add_project_member(
     db: Session = Depends(get_database),
 
     current_user: dict = Depends(
-
         require_permission(
-
             "member.add"
-
         )
-
     )
 
 ):
 
 
+    organization_id = current_user["organization_id"]
+
+
     verify_project_access(
-
         db,
-
         project_id,
-
-        current_user["organization_id"]
-
+        organization_id
     )
 
 
@@ -155,25 +134,22 @@ def add_project_member(
 
         data.user_id,
 
-        data.role.value
+        data.role.value,
+
+        organization_id
 
     )
 
 
 
-
-
-# ==========================
+# =====================================================
 # Get Members
-# ==========================
+# =====================================================
 
 
 @router.get(
-
     "/projects/{project_id}/members",
-
     response_model=list[ProjectMemberResponse]
-
 )
 def list_project_members(
 
@@ -182,26 +158,21 @@ def list_project_members(
     db: Session = Depends(get_database),
 
     current_user: dict = Depends(
-
         require_permission(
-
             "member.view"
-
         )
-
     )
 
 ):
 
 
+    organization_id = current_user["organization_id"]
+
+
     verify_project_access(
-
         db,
-
         project_id,
-
-        current_user["organization_id"]
-
+        organization_id
     )
 
 
@@ -209,25 +180,22 @@ def list_project_members(
 
         db,
 
-        project_id
+        project_id,
+
+        organization_id
 
     )
 
 
 
-
-
-# ==========================
+# =====================================================
 # Update Member Role
-# ==========================
+# =====================================================
 
 
 @router.put(
-
     "/projects/{project_id}/members/{user_id}",
-
     response_model=ProjectMemberResponse
-
 )
 def update_project_member_role(
 
@@ -240,26 +208,21 @@ def update_project_member_role(
     db: Session = Depends(get_database),
 
     current_user: dict = Depends(
-
         require_permission(
-
             "member.update"
-
         )
-
     )
 
 ):
 
 
+    organization_id = current_user["organization_id"]
+
+
     verify_project_access(
-
         db,
-
         project_id,
-
-        current_user["organization_id"]
-
+        organization_id
     )
 
 
@@ -273,23 +236,21 @@ def update_project_member_role(
 
         data.role.value,
 
-        int(current_user["sub"])
+        int(current_user["sub"]),
+
+        organization_id
 
     )
 
 
 
-
-
-# ==========================
+# =====================================================
 # Remove Member
-# ==========================
+# =====================================================
 
 
 @router.delete(
-
     "/projects/{project_id}/members/{user_id}"
-
 )
 def remove_project_member(
 
@@ -300,26 +261,21 @@ def remove_project_member(
     db: Session = Depends(get_database),
 
     current_user: dict = Depends(
-
         require_permission(
-
             "member.remove"
-
         )
-
     )
 
 ):
 
 
+    organization_id = current_user["organization_id"]
+
+
     verify_project_access(
-
         db,
-
         project_id,
-
-        current_user["organization_id"]
-
+        organization_id
     )
 
 
@@ -331,6 +287,8 @@ def remove_project_member(
 
         user_id,
 
-        int(current_user["sub"])
+        int(current_user["sub"]),
+
+        organization_id
 
     )
