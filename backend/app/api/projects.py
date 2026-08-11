@@ -6,7 +6,6 @@ Tenant Isolation and RBAC.
 """
 
 
-
 from fastapi import (
     APIRouter,
     Depends,
@@ -14,27 +13,15 @@ from fastapi import (
     HTTPException
 )
 
-
 from sqlalchemy.orm import Session
-
-
-
-from app.security.dependencies import (
-    get_current_user
-)
-
-
-from app.security.roles import (
-    require_role
-)
-
 
 
 from app.database.session import get_database
 
 
-
-
+from app.security.permissions import (
+    require_permission
+)
 
 
 from app.schemas.project import (
@@ -44,12 +31,14 @@ from app.schemas.project import (
     ProjectExecute
 )
 
+
 from app.services.project_service import (
     create_project,
     get_projects,
     get_project,
     get_my_projects,
-    update_project
+    update_project,
+    delete_project
 )
 
 
@@ -59,26 +48,19 @@ from app.services.aseo_engine_service import (
 
 
 
-
-
 router = APIRouter()
-
-
 
 
 
 # ==========================
 # Create Project
-# OWNER ONLY
 # ==========================
 
 
 @router.post(
     "",
     response_model=ProjectResponse,
-    status_code=status.HTTP_201_CREATED,
-    summary="Create Project",
-    description="Create a new tenant project."
+    status_code=status.HTTP_201_CREATED
 )
 def create_project_api(
 
@@ -87,8 +69,8 @@ def create_project_api(
     db: Session = Depends(get_database),
 
     current_user: dict = Depends(
-        require_role(
-            ["OWNER"]
+        require_permission(
+            "project.create"
         )
     )
 
@@ -109,15 +91,38 @@ def create_project_api(
 
     )
 
-@router.get("/my")
+
+
+
+
+# ==========================
+# Get My Projects
+# ==========================
+
+
+@router.get(
+    "/my",
+    response_model=list[ProjectResponse]
+)
 def get_my_projects_api(
+
     db: Session = Depends(get_database),
-    current_user = Depends(get_current_user)
+
+    current_user: dict = Depends(
+        require_permission(
+            "project.view"
+        )
+    )
+
 ):
 
+
     return get_my_projects(
+
         db,
+
         int(current_user["sub"])
+
     )
 
 
@@ -125,22 +130,23 @@ def get_my_projects_api(
 
 
 # ==========================
-# Get Tenant Projects
-# OWNER + MEMBER
+# Get Organization Projects
 # ==========================
 
 
 @router.get(
     "",
-    response_model=list[ProjectResponse],
-    summary="Get Organization Projects",
-    description="Retrieve projects belonging to current organization."
+    response_model=list[ProjectResponse]
 )
 def list_projects(
 
     db: Session = Depends(get_database),
 
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(
+        require_permission(
+            "project.view"
+        )
+    )
 
 ):
 
@@ -158,29 +164,14 @@ def list_projects(
 
 
 # ==========================
-# Execute ASEO Engine
-# OWNER ONLY
+# Update Project
 # ==========================
 
 
-@router.post(
-    "/execute",
-    summary="Run ASEO Autonomous Engine",
-    description="""
-    Execute complete ASEO autonomous pipeline:
-
-    - Executive Analysis
-    - Agent Selection
-    - Collaboration
-    - Software Factory
-    - Deployment
-    - Operations Monitoring
-
-    Execution result is stored in database.
-    """
+@router.put(
+    "/{project_id}",
+    response_model=ProjectResponse
 )
-
-@router.put("/{project_id}")
 def update_project_api(
 
     project_id: int,
@@ -189,9 +180,14 @@ def update_project_api(
 
     db: Session = Depends(get_database),
 
-    current_user = Depends(get_current_user)
+    current_user: dict = Depends(
+        require_permission(
+            "project.update"
+        )
+    )
 
 ):
+
 
     return update_project(
 
@@ -201,10 +197,63 @@ def update_project_api(
 
         int(current_user["sub"]),
 
+        current_user["organization_id"],
+
         project_data
 
     )
 
+
+
+
+
+# ==========================
+# Delete Project
+# ==========================
+
+
+@router.delete(
+    "/{project_id}"
+)
+def delete_project_api(
+
+    project_id: int,
+
+    db: Session = Depends(get_database),
+
+    current_user: dict = Depends(
+        require_permission(
+            "project.delete"
+        )
+    )
+
+):
+
+
+    return delete_project(
+
+        db,
+
+        project_id,
+
+        int(current_user["sub"]),
+
+        current_user["organization_id"]
+
+    )
+
+
+
+
+
+# ==========================
+# Execute ASEO Engine
+# ==========================
+
+
+@router.post(
+    "/execute"
+)
 def execute_project_api(
 
     data: ProjectExecute,
@@ -212,8 +261,8 @@ def execute_project_api(
     db: Session = Depends(get_database),
 
     current_user: dict = Depends(
-        require_role(
-            ["OWNER"]
+        require_permission(
+            "project.execute"
         )
     )
 
@@ -231,23 +280,18 @@ def execute_project_api(
     )
 
 
-
     if not existing_project:
 
         raise HTTPException(
 
-            status_code=status.HTTP_404_NOT_FOUND,
+            status_code=404,
 
             detail="Project not found"
 
         )
 
 
-
-
-
     engine = ASEOEngineService()
-
 
 
     return engine.execute_project(

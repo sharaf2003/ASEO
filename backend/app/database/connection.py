@@ -41,7 +41,7 @@ DATABASE_HOST = os.getenv(
 
 DATABASE_PORT = os.getenv(
     "DATABASE_PORT",
-    "5433"
+    "5432"
 )
 
 
@@ -63,18 +63,13 @@ DATABASE_URL = (
 
 
 
-
 engine = create_engine(
 
     DATABASE_URL,
 
-    poolclass=QueuePool,
-
-    pool_size=10,
-
-    max_overflow=20,
-
     pool_pre_ping=True,
+
+    pool_recycle=300,
 
     echo=False
 

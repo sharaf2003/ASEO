@@ -42,7 +42,8 @@ class Project(Base):
     organization_id: Mapped[int] = mapped_column(
 
         ForeignKey(
-            "organizations.id"
+            "organizations.id",
+            ondelete="CASCADE"
         ),
 
         nullable=False,
@@ -56,7 +57,8 @@ class Project(Base):
     workspace_id: Mapped[int] = mapped_column(
 
         ForeignKey(
-            "workspaces.id"
+            "workspaces.id",
+            ondelete="CASCADE"
         ),
 
         nullable=False,
@@ -67,7 +69,10 @@ class Project(Base):
 
     owner_id: Mapped[int] = mapped_column(
         Integer,
-        ForeignKey("users.id"),
+        ForeignKey(
+               "users.id",
+               ondelete="CASCADE"
+        ),
         nullable=False,
         index=True
     )
@@ -75,6 +80,7 @@ class Project(Base):
     owner = relationship(
         "User",
         back_populates="projects"
+        
     )
 
     name: Mapped[str] = mapped_column(
@@ -151,6 +157,12 @@ class Project(Base):
 
     members = relationship(
         "ProjectMember",
+        back_populates="project",
+        cascade="all, delete-orphan"
+    )
+    
+    invitations = relationship(
+        "ProjectInvitation",
         back_populates="project",
         cascade="all, delete-orphan"
     )

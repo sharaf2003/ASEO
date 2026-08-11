@@ -11,9 +11,12 @@ from ai_engine.autonomous_company.execution_pipeline import (
 )
 
 
-from app.models.project import (
-    Project
+from app.agents.orchestrator import (
+    AgentOrchestrator
 )
+
+
+from app.models.project import Project
 
 
 from app.services.execution_service import (
@@ -27,17 +30,20 @@ from app.services.lifecycle_service import (
 
 
 
-
-
 class ASEOEngineService:
+
     """
-    ASEO Production Engine v22.9
+    ASEO Production Engine v25.0
 
-    Autonomous execution
-    with:
+    Autonomous execution engine with:
 
+    - Agent Orchestration
+    - Planner Agent
+    - Architect Agent
+    - Developer Agent
     - Executive Analysis
     - AI Pipeline Execution
+    - Execution Lifecycle
     - Execution History
     - Project Lifecycle Management
     """
@@ -46,37 +52,47 @@ class ASEOEngineService:
 
     def __init__(self):
 
+
         self.company = CompanyOrchestrator()
+
 
         self.pipeline = ExecutionPipeline()
 
+
+        self.agent_orchestrator = AgentOrchestrator()
+
+
         self.execution_service = ExecutionService()
+
 
         self.lifecycle = LifecycleService()
 
 
 
-
-
     def execute_project(
+
         self,
+
         db: Session,
-        project_name
+
+        project_name: str
+
     ):
 
 
+        project = (
 
-        # ==========================
-        # Find Project
-        # ==========================
+            db.query(Project)
 
+            .filter(
 
-        project = db.query(Project).filter(
+                Project.name == project_name
 
-            Project.name == project_name
+            )
 
-        ).first()
+            .first()
 
+        )
 
 
         if not project:
@@ -87,175 +103,277 @@ class ASEOEngineService:
 
 
 
+        execution_record = None
 
 
-        # ==========================
-        # Lifecycle: Analysis
-        # ==========================
 
+        try:
 
-        self.lifecycle.update_status(
 
-            db,
+            # ==========================
+            # Create Execution
+            # ==========================
 
-            project,
 
-            "analyzing"
+            execution_record = (
 
-        )
+                self.execution_service.create_execution(
 
+                    db,
 
+                    project.id,
 
+                    project_name,
 
+                    {}
 
-        # ==========================
-        # Executive Analysis
-        # ==========================
+                )
 
+            )
 
-        analysis = self.company.run(
 
-            project_name
 
-        )
+            # ==========================
+            # Start Execution
+            # ==========================
 
 
+            self.execution_service.start_execution(
 
+                db,
 
+                execution_record.id
 
-        # ==========================
-        # Lifecycle: Building
-        # ==========================
+            )
 
 
-        self.lifecycle.update_status(
 
-            db,
+            self.lifecycle.update_status(
 
-            project,
+                db,
 
-            "building"
+                project,
 
-        )
+                "analyzing"
 
+            )
 
 
 
+            # ==========================
+            # Agent Orchestration
+            # ==========================
 
-        # ==========================
-        # Autonomous Execution
-        # ==========================
 
+            agents_result = self.agent_orchestrator.run(
 
-        execution = self.pipeline.execute(
+                project_name
 
-            project_name
+            )
 
-        )
 
 
+            # ==========================
+            # Executive Analysis
+            # ==========================
 
 
+            analysis = self.company.run(
 
-        # ==========================
-        # Lifecycle: Deploying
-        # ==========================
+                project_name
 
+            )
 
-        self.lifecycle.update_status(
 
-            db,
 
-            project,
+            self.lifecycle.update_status(
 
-            "deploying"
+                db,
 
-        )
+                project,
 
+                "building"
 
+            )
 
 
 
-        # ==========================
-        # Save Execution History
-        # ==========================
+            # ==========================
+            # Pipeline Execution
+            # ==========================
 
 
-        record = self.execution_service.create_execution(
+            execution = self.pipeline.execute(
 
-            db,
+                project_name
 
-            project.id,
+            )
 
-            project_name,
 
-            execution
 
-        )
+            # ==========================
+            # Save Execution Data
+            # ==========================
 
 
+            execution_record.team = {
 
 
+                "plan":
 
-        # ==========================
-        # Lifecycle: Operational
-        # ==========================
+                    agents_result.get(
 
+                        "plan",
 
-        self.lifecycle.update_status(
+                        {}
 
-            db,
+                    )
 
-            project,
+            }
 
-            "operational"
 
-        )
 
+            execution_record.software = {
 
 
+                "architecture":
 
+                    agents_result.get(
 
-        # ==========================
-        # Response
-        # ==========================
+                        "architecture",
 
+                        {}
 
-        return {
+                    )
 
+            }
 
-            "project":
 
-                project_name,
 
+            execution_record.operations = {
 
-            "project_id":
 
-                project.id,
+                "development":
 
+                    agents_result.get(
 
-            "lifecycle_status":
+                        "development",
 
-                project.status,
+                        {}
 
+                    )
 
-            "analysis":
+            }
 
-                analysis,
 
 
-            "execution":
+            execution_record.deployment = execution.get(
 
-                execution,
+                "deployment",
 
+                {}
 
-            "execution_record_id":
+            )
 
-                record.id,
 
 
-            "status":
+            db.commit()
 
-                "completed"
 
-        }
+
+            self.lifecycle.update_status(
+
+                db,
+
+                project,
+
+                "deploying"
+
+            )
+
+
+
+            self.execution_service.complete_execution(
+
+                db,
+
+                execution_record.id
+
+            )
+
+
+
+            self.lifecycle.update_status(
+
+                db,
+
+                project,
+
+                "operational"
+
+            )
+
+
+
+            return {
+
+
+                "project":
+
+                    project_name,
+
+
+                "project_id":
+
+                    project.id,
+
+
+                "lifecycle_status":
+
+                    project.status,
+
+
+                "agents":
+
+                    agents_result,
+
+
+                "analysis":
+
+                    analysis,
+
+
+                "execution":
+
+                    execution,
+
+
+                "execution_record_id":
+
+                    execution_record.id,
+
+
+                "status":
+
+                    "SUCCESS"
+
+            }
+
+
+
+        except Exception as error:
+
+
+            if execution_record:
+
+
+                self.execution_service.fail_execution(
+
+                    db,
+
+                    execution_record.id
+
+                )
+
+
+            raise error

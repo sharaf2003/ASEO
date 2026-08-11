@@ -100,14 +100,21 @@ class UserRepository:
         email: str
 
     ):
+        print("LOGIN SEARCH EMAIL:", email)
 
+        users = db.query(User).all()
+
+        print("USERS IN CURRENT DATABASE:")
+
+        for user in users:
+            print(
+                user.id,
+                user.email,
+                user.role
+            )
 
         return db.query(
-
             User
-
         ).filter(
-
             User.email == email
-
         ).first()

@@ -128,10 +128,12 @@ class User(Base):
     )   
     projects = relationship(
         "Project",
-        back_populates="owner"
+        back_populates="owner",
+        cascade="all, delete-orphan"
     )
     
     project_memberships = relationship(
         "ProjectMember",
-        back_populates="user"
+        back_populates="user",
+        cascade="all, delete-orphan"
     )

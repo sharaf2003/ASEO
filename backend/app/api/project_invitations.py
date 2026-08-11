@@ -1,7 +1,7 @@
 """
 ASEO Generated Module
 
-Project Members API.
+Project Invitations API.
 """
 
 
@@ -18,30 +18,26 @@ from sqlalchemy.orm import Session
 
 from app.database.session import get_database
 
+from app.security.dependencies import get_current_user
 
-from app.security.permissions import (
-    require_permission
+from app.security.permissions import require_permission
+
+
+from app.schemas.project_invitation import (
+    ProjectInvitationCreate,
+    ProjectInvitationResponse
 )
 
 
-from app.schemas.project_member import (
-    ProjectMemberCreate,
-    ProjectMemberUpdate,
-    ProjectMemberResponse
-)
-
-
-from app.services.project_member_service import (
-    add_member,
-    get_members,
-    remove_member,
-    update_member_role
+from app.services.project_invitation_service import (
+    create_invitation,
+    get_project_invitations,
+    accept_invitation,
+    reject_invitation
 )
 
 
 from app.models.project import Project
-
-
 
 
 
@@ -52,7 +48,7 @@ router = APIRouter()
 
 
 # ==========================
-# Project Ownership Check
+# Project Access Check
 # ==========================
 
 
@@ -65,7 +61,6 @@ def verify_project_access(
     organization_id: int
 
 ):
-
 
     project = (
 
@@ -88,7 +83,7 @@ def verify_project_access(
 
         raise HTTPException(
 
-            status_code=status.HTTP_404_NOT_FOUND,
+            status_code=404,
 
             detail="Project not found"
 
@@ -102,24 +97,24 @@ def verify_project_access(
 
 
 # ==========================
-# Add Member
+# Create Invitation
 # ==========================
 
 
 @router.post(
 
-    "/projects/{project_id}/members",
+    "/projects/{project_id}/invitations",
 
-    response_model=ProjectMemberResponse,
+    response_model=ProjectInvitationResponse,
 
     status_code=status.HTTP_201_CREATED
 
 )
-def add_project_member(
+def create_project_invitation(
 
     project_id: int,
 
-    data: ProjectMemberCreate,
+    data: ProjectInvitationCreate,
 
     db: Session = Depends(get_database),
 
@@ -127,7 +122,7 @@ def add_project_member(
 
         require_permission(
 
-            "member.add"
+            "invitation.create"
 
         )
 
@@ -147,129 +142,13 @@ def add_project_member(
     )
 
 
-    return add_member(
+    return create_invitation(
 
         db,
 
         project_id,
 
-        data.user_id,
-
-        data.role.value
-
-    )
-
-
-
-
-
-# ==========================
-# Get Members
-# ==========================
-
-
-@router.get(
-
-    "/projects/{project_id}/members",
-
-    response_model=list[ProjectMemberResponse]
-
-)
-def list_project_members(
-
-    project_id: int,
-
-    db: Session = Depends(get_database),
-
-    current_user: dict = Depends(
-
-        require_permission(
-
-            "member.view"
-
-        )
-
-    )
-
-):
-
-
-    verify_project_access(
-
-        db,
-
-        project_id,
-
-        current_user["organization_id"]
-
-    )
-
-
-    return get_members(
-
-        db,
-
-        project_id
-
-    )
-
-
-
-
-
-# ==========================
-# Update Member Role
-# ==========================
-
-
-@router.put(
-
-    "/projects/{project_id}/members/{user_id}",
-
-    response_model=ProjectMemberResponse
-
-)
-def update_project_member_role(
-
-    project_id: int,
-
-    user_id: int,
-
-    data: ProjectMemberUpdate,
-
-    db: Session = Depends(get_database),
-
-    current_user: dict = Depends(
-
-        require_permission(
-
-            "member.update"
-
-        )
-
-    )
-
-):
-
-
-    verify_project_access(
-
-        db,
-
-        project_id,
-
-        current_user["organization_id"]
-
-    )
-
-
-    return update_member_role(
-
-        db,
-
-        project_id,
-
-        user_id,
+        data.email,
 
         data.role.value,
 
@@ -282,20 +161,20 @@ def update_project_member_role(
 
 
 # ==========================
-# Remove Member
+# Get Invitations
 # ==========================
 
 
-@router.delete(
+@router.get(
 
-    "/projects/{project_id}/members/{user_id}"
+    "/projects/{project_id}/invitations",
+
+    response_model=list[ProjectInvitationResponse]
 
 )
-def remove_project_member(
+def list_project_invitations(
 
     project_id: int,
-
-    user_id: int,
 
     db: Session = Depends(get_database),
 
@@ -303,7 +182,7 @@ def remove_project_member(
 
         require_permission(
 
-            "member.remove"
+            "invitation.view"
 
         )
 
@@ -323,14 +202,82 @@ def remove_project_member(
     )
 
 
-    return remove_member(
+    return get_project_invitations(
 
         db,
 
-        project_id,
+        project_id
 
-        user_id,
+    )
+
+
+
+
+
+# ==========================
+# Accept Invitation
+# ==========================
+
+
+@router.post(
+
+    "/invitations/{invitation_id}/accept",
+
+    response_model=ProjectInvitationResponse
+
+)
+def accept_project_invitation(
+
+    invitation_id: int,
+
+    db: Session = Depends(get_database),
+
+    current_user: dict = Depends(get_current_user)
+
+):
+
+
+    return accept_invitation(
+
+        db,
+
+        invitation_id,
 
         int(current_user["sub"])
+
+    )
+
+
+
+
+
+# ==========================
+# Reject Invitation
+# ==========================
+
+
+@router.post(
+
+    "/invitations/{invitation_id}/reject",
+
+    response_model=ProjectInvitationResponse
+
+)
+def reject_project_invitation(
+
+    invitation_id: int,
+
+    db: Session = Depends(get_database),
+
+    current_user: dict = Depends(get_current_user)
+
+):
+
+
+    return reject_invitation(
+
+        db,
+
+        invitation_id
 
     )

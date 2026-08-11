@@ -84,7 +84,21 @@ class ExecutionRecord(Base):
     status: Mapped[str] = mapped_column(
         String(50),
         nullable=False,
-        default="completed"
+        default="QUEUED"
+    )
+
+
+
+    started_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True
+    )
+
+
+
+    finished_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True
     )
 
 
@@ -95,8 +109,6 @@ class ExecutionRecord(Base):
     )
 
 
-
-    # Relationship with Project
 
     project = relationship(
         "Project",

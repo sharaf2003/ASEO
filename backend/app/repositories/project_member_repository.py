@@ -5,10 +5,7 @@ Project Member repository layer.
 """
 
 
-from enum import member
-
 from sqlalchemy.orm import Session
-
 
 from app.models.project_member import ProjectMember
 
@@ -24,6 +21,11 @@ class ProjectMemberRepository:
 
 
 
+    # ==========================
+    # Create Member
+    # ==========================
+
+
     def create(
 
         self,
@@ -32,19 +34,34 @@ class ProjectMemberRepository:
 
         member: ProjectMember
 
-    ):
+    ) -> ProjectMember:
 
 
-        db.add(member)
+        try:
 
-        db.commit()
+            db.add(member)
 
-        db.refresh(member)
+            db.commit()
 
-        return member
+            db.refresh(member)
+
+
+            return member
+
+
+        except Exception:
+
+            db.rollback()
+
+            raise
 
 
 
+
+
+    # ==========================
+    # Get Project Members
+    # ==========================
 
 
     def get_project_members(
@@ -55,7 +72,7 @@ class ProjectMemberRepository:
 
         project_id: int
 
-    ):
+    ) -> list[ProjectMember]:
 
 
         return (
@@ -63,7 +80,11 @@ class ProjectMemberRepository:
             db.query(ProjectMember)
 
             .filter(
-                ProjectMember.project_id == project_id
+
+                ProjectMember.project_id == project_id,
+
+                ProjectMember.status == "ACTIVE"
+
             )
 
             .all()
@@ -72,6 +93,11 @@ class ProjectMemberRepository:
 
 
 
+
+
+    # ==========================
+    # Get Single Member
+    # ==========================
 
 
     def get_member(
@@ -84,7 +110,7 @@ class ProjectMemberRepository:
 
         user_id: int
 
-    ):
+    ) -> ProjectMember | None:
 
 
         return (
@@ -102,27 +128,61 @@ class ProjectMemberRepository:
             .first()
 
         )
-    
-    def delete(
-    self,
-    db: Session,
-    project_id: int,
-    user_id: int
-    ):
 
-        member = (
-            db.query(ProjectMember)
-            .filter(
-                ProjectMember.project_id == project_id,
-                ProjectMember.user_id == user_id
-            )
-        .first()
-    )
+
+
+
+
+    # ==========================
+    # Soft Remove Member
+    # ==========================
+
+
+    def remove(
+
+        self,
+
+        db: Session,
+
+        project_id: int,
+
+        user_id: int
+
+    ) -> ProjectMember | None:
+
+
+        member = self.get_member(
+
+            db,
+
+            project_id,
+
+            user_id
+
+        )
+
 
         if not member:
+
             return None
 
-        db.delete(member)
-        db.commit()
 
-        return member
+
+        try:
+
+            member.status = "REMOVED"
+
+            db.commit()
+
+            db.refresh(member)
+
+
+            return member
+
+
+
+        except Exception:
+
+            db.rollback()
+
+            raise

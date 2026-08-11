@@ -1,63 +1,145 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    DateTime,
+    ForeignKey,
+    UniqueConstraint,
+    Index
+)
+
 from sqlalchemy.sql import func
+
 from sqlalchemy.orm import relationship
 
 from app.database.base import Base
 
 
+
 class ProjectMember(Base):
+
 
     __tablename__ = "project_members"
 
 
-    id = Column(
-        Integer,
-        primary_key=True,
-        index=True
+
+    __table_args__ = (
+
+        UniqueConstraint(
+            "project_id",
+            "user_id",
+            name="uq_project_member"
+        ),
+
+        Index(
+            "ix_project_members_project_id",
+            "project_id"
+        ),
+
+        Index(
+            "ix_project_members_user_id",
+            "user_id"
+        ),
+
     )
+
+
+
+    id = Column(
+
+        Integer,
+
+        primary_key=True,
+
+        index=True
+
+    )
+
 
 
     project_id = Column(
+
         Integer,
+
         ForeignKey(
+
             "projects.id",
+
             ondelete="CASCADE"
+
         ),
+
         nullable=False
+
     )
+
 
 
     user_id = Column(
+
         Integer,
+
         ForeignKey(
+
             "users.id",
+
             ondelete="CASCADE"
+
         ),
+
         nullable=False
+
     )
+
 
 
     role = Column(
+
         String(50),
+
         nullable=False,
+
         default="MEMBER"
+
     )
+    status = Column(
+
+        String(50),
+
+        nullable=False,
+
+        default="ACTIVE"
+
+    )
+
 
 
     created_at = Column(
+
         DateTime(timezone=True),
+
         server_default=func.now(),
+
         nullable=False
+
     )
+
 
 
     user = relationship(
+
         "User",
+
         back_populates="project_memberships"
+
     )
 
 
+
     project = relationship(
+
         "Project",
+
         back_populates="members"
+
     )

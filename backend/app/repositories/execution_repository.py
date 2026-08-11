@@ -2,22 +2,12 @@ from sqlalchemy.orm import Session
 
 from app.models.execution_record import ExecutionRecord
 
-from app.models.project import Project
-
 
 
 
 
 class ExecutionRepository:
-    """
-    Repository for execution history.
-    """
 
-
-
-    # ==========================
-    # Create Execution Record
-    # ==========================
 
 
     def create(
@@ -30,15 +20,15 @@ class ExecutionRepository:
 
         request: str,
 
-        team: dict,
+        team: dict | None = None,
 
-        software: dict,
+        software: dict | None = None,
 
-        deployment: dict,
+        deployment: dict | None = None,
 
-        operations: dict,
+        operations: dict | None = None,
 
-        status: str = "completed"
+        status: str = "QUEUED"
 
     ):
 
@@ -75,9 +65,33 @@ class ExecutionRepository:
 
 
 
-    # ==========================
-    # Get Project Executions
-    # ==========================
+    def get_by_id(
+
+        self,
+
+        db: Session,
+
+        execution_id: int
+
+    ):
+
+
+        return (
+
+            db.query(ExecutionRecord)
+
+            .filter(
+
+                ExecutionRecord.id == execution_id
+
+            )
+
+            .first()
+
+        )
+
+
+
 
 
     def get_by_project(
@@ -86,29 +100,63 @@ class ExecutionRepository:
 
         db: Session,
 
-        project_id: int,
-
-        organization_id: int
+        project_id: int
 
     ):
 
 
-        return db.query(
+        return (
 
-            ExecutionRecord
+            db.query(ExecutionRecord)
 
-        ).join(
+            .filter(
 
-            Project
+                ExecutionRecord.project_id == project_id
 
-        ).filter(
+            )
 
-            ExecutionRecord.project_id == project_id,
+            .all()
 
-            Project.organization_id == organization_id
+        )
 
-        ).order_by(
 
-            ExecutionRecord.created_at.desc()
 
-        ).all()
+
+
+    def update_status(
+
+        self,
+
+        db: Session,
+
+        execution_id: int,
+
+        status: str
+
+    ):
+
+
+        execution = self.get_by_id(
+
+            db,
+
+            execution_id
+
+        )
+
+
+        if not execution:
+
+            return None
+
+
+
+        execution.status = status
+
+
+        db.commit()
+
+        db.refresh(execution)
+
+
+        return execution

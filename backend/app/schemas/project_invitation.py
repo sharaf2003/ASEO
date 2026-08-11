@@ -1,7 +1,7 @@
 """
 ASEO Generated Module
 
-Project Member schemas.
+Project Invitation schemas.
 """
 
 
@@ -16,11 +16,11 @@ from pydantic import BaseModel
 
 
 # ==========================
-# Project Member Roles
+# Invitation Roles
 # ==========================
 
 
-class ProjectMemberRole(str, Enum):
+class ProjectInvitationRole(str, Enum):
 
     MEMBER = "MEMBER"
 
@@ -31,49 +31,61 @@ class ProjectMemberRole(str, Enum):
 
 
 # ==========================
-# Create Project Member
+# Invitation Status
 # ==========================
 
 
-class ProjectMemberCreate(BaseModel):
+class ProjectInvitationStatus(str, Enum):
 
-    user_id: int
+    PENDING = "PENDING"
 
-    role: ProjectMemberRole = ProjectMemberRole.MEMBER
+    ACCEPTED = "ACCEPTED"
 
+    REJECTED = "REJECTED"
 
-
-
-
-# ==========================
-# Update Project Member Role
-# ==========================
-
-
-class ProjectMemberUpdate(BaseModel):
-
-    role: ProjectMemberRole
+    EXPIRED = "EXPIRED"
 
 
 
 
 
 # ==========================
-# Project Member Response
+# Create Invitation Request
 # ==========================
 
 
-class ProjectMemberResponse(BaseModel):
+class ProjectInvitationCreate(BaseModel):
+
+    email: str
+
+    role: ProjectInvitationRole = (
+        ProjectInvitationRole.MEMBER
+    )
+
+
+
+
+
+# ==========================
+# Response
+# ==========================
+
+
+class ProjectInvitationResponse(BaseModel):
 
     id: int
 
     project_id: int
 
-    user_id: int
+    email: str
 
     role: str
 
+    status: str
+
     created_at: datetime
+
+    expires_at: datetime | None
 
 
 

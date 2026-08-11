@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-
+from sqlalchemy import text
 
 # ==========================
 # API Routers
@@ -14,52 +14,33 @@ from app.api import (
     workspaces,
     users,
     auth,
-    project_members
+    project_members,
+    project_invitations,
 )
 
-
 # ==========================
-# Database
+# Database Health
 # ==========================
 
-from app.database.base import Base
-from app.database.connection import engine
+from app.database.connection import SessionLocal
 
 
 # ==========================
-# Register Models
+# Application
 # ==========================
-
-from app.models import (
-    organization,
-    workspace,
-    user,
-    project,
-    execution_record
-)
-
-
-
 
 
 app = FastAPI(
-
     title="ASEO Platform",
-
     description="""
-    Autonomous Software Engineering Organization.
+Autonomous Software Engineering Organization.
 
-    AI-powered software engineering platform
-    for autonomous project generation,
-    analysis, deployment and operations.
-    """,
-
-    version="23.0.0"
-
+AI-powered software engineering platform
+for autonomous project generation,
+analysis, deployment and operations.
+""",
+    version="23.0.0",
 )
-
-
-
 
 
 # =====================================================
@@ -68,129 +49,73 @@ app = FastAPI(
 
 
 app.include_router(
-
     projects.router,
-
     prefix="/api/projects",
-
-    tags=["Projects"]
-
+    tags=["Projects"],
 )
 
 
-
 app.include_router(
-
     executions.router,
-
     prefix="/api",
-
-    tags=["Executions"]
-
+    tags=["Executions"],
 )
 
 
-
 app.include_router(
-
     dashboard.router,
-
     prefix="/api",
-
-    tags=["Dashboard"]
-
+    tags=["Dashboard"],
 )
 
 
-
 app.include_router(
-
     metrics.router,
-
     prefix="/api",
-
-    tags=["Metrics"]
-
+    tags=["Metrics"],
 )
 
 
-
 app.include_router(
-
     organizations.router,
-
     prefix="/api/organizations",
-
-    tags=["Organizations"]
-
+    tags=["Organizations"],
 )
 
 
-
 app.include_router(
-
     workspaces.router,
-
     prefix="/api/workspaces",
-
-    tags=["Workspaces"]
-
+    tags=["Workspaces"],
 )
 
 
-
 app.include_router(
-
     users.router,
-
     prefix="/api/users",
-
-    tags=["Users"]
-
+    tags=["Users"],
 )
 
 
 app.include_router(
-
     auth.router,
-
     prefix="/api/auth",
-
-    tags=["Authentication"]
-
+    tags=["Authentication"],
 )
+
+
 app.include_router(
     project_members.router,
     prefix="/api",
-    tags=["Project Members"]
+    tags=["Project Members"],
 )
 
 
-
-# =====================================================
-# APPLICATION STARTUP
-# =====================================================
-
-
-@app.on_event("startup")
-def startup_event():
-
-    """
-    Initialize application resources.
-    """
-
-    Base.metadata.create_all(
-
-        bind=engine
-
-    )
-
-
-    print(
-        "ASEO Platform v23.0 Started Successfully"
-    )
-
-
+app.include_router(
+    project_invitations.router,
+    prefix="/api",
+    tags=["Project Invitations"],
+)
 
 
 
@@ -200,15 +125,35 @@ def startup_event():
 
 
 @app.get(
-
     "/health",
-
     tags=["System"],
-
-    summary="System Health Check"
-
+    summary="System Health Check",
 )
 def health_check():
+
+    database_status = "unknown"
+
+    try:
+
+        db = SessionLocal()
+
+        db.execute(
+            text("SELECT 1")
+        )
+
+        database_status = "connected"
+
+    except Exception:
+
+        database_status = "disconnected"
+
+    finally:
+
+        try:
+            db.close()
+
+        except Exception:
+            pass
 
 
     return {
@@ -219,13 +164,13 @@ def health_check():
 
         "version": "23.0.0",
 
-        "architecture": "Layered Multi-Tenant Architecture",
+        "architecture":
+            "Layered Multi-Tenant Architecture",
 
-        "database": "connected"
+        "database":
+            database_status,
 
     }
-
-
 
 
 
@@ -235,41 +180,27 @@ def health_check():
 
 
 @app.get(
-
     "/info",
-
     tags=["System"],
-
-    summary="System Information"
-
+    summary="System Information",
 )
 def system_info():
-
 
     return {
 
         "message":
-
             "Welcome to ASEO Platform",
 
-
         "version":
-
             "23.0.0",
 
-
         "architecture":
-
             "Organization → Workspace → User → Project",
 
-
         "docs":
-
             "/docs",
 
-
         "health":
-
-            "/health"
+            "/health",
 
     }
