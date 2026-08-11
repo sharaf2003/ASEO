@@ -55,66 +55,89 @@ class ASEOEngineService:
         self.lifecycle = LifecycleService()
 
 
+
     # =================================================
     # Execute Project
     # =================================================
 
     def execute_project(
+
         self,
+
         db: Session,
+
         project_name: str,
-        organization_id: int,
+
+        organization_id: int
+
     ):
 
-        # ---------------------------------------------
-        # Normalize input
-        # ---------------------------------------------
 
         project_name = project_name.strip()
 
+
         if not project_name:
+
             raise ValueError(
                 "Project name is required"
             )
 
 
-        # ---------------------------------------------
-        # Tenant-safe project lookup
-        # ---------------------------------------------
 
         project = (
+
             db.query(Project)
+
             .filter(
+
                 Project.name == project_name,
-                Project.organization_id == organization_id,
+
+                Project.organization_id == organization_id
+
             )
+
             .first()
+
         )
 
 
         if not project:
+
             raise ValueError(
                 "Project not found"
             )
 
 
+
         execution_record = None
 
 
+
         try:
+
 
             # =========================================
             # Create Execution
             # =========================================
 
             execution_record = (
+
                 self.execution_service.create_execution(
+
                     db,
+
                     project.id,
+
+                    organization_id,
+
                     project.name,
+
                     {}
+
                 )
+
             )
+
 
 
             # =========================================
@@ -122,138 +145,184 @@ class ASEOEngineService:
             # =========================================
 
             self.execution_service.start_execution(
+
                 db,
-                execution_record.id
+
+                execution_record.id,
+
+                organization_id
+
             )
 
 
-            # =========================================
-            # Project Lifecycle: Analyzing
-            # =========================================
 
             self.lifecycle.update_status(
+
                 db,
+
                 project,
+
                 "analyzing"
+
             )
 
 
+
             # =========================================
-            # Agent Orchestration
+            # Agents
             # =========================================
 
             agents_result = (
+
                 self.agent_orchestrator.run(
+
                     project.name
+
                 )
+
             )
 
 
+
             # =========================================
-            # Executive Analysis
+            # Company Analysis
             # =========================================
 
-            analysis = self.company.run(
-                project.name
+            analysis = (
+
+                self.company.run(
+
+                    project.name
+
+                )
+
             )
 
 
-            # =========================================
-            # Project Lifecycle: Building
-            # =========================================
 
             self.lifecycle.update_status(
+
                 db,
+
                 project,
+
                 "building"
+
             )
 
 
+
             # =========================================
-            # Pipeline Execution
+            # Pipeline
             # =========================================
 
-            execution = self.pipeline.execute(
-                project.name
+            execution = (
+
+                self.pipeline.execute(
+
+                    project.name
+
+                )
+
             )
 
 
-            # =========================================
-            # Save Execution Data
-            # =========================================
 
             execution_record.team = {
+
                 "plan": agents_result.get(
+
                     "plan",
+
                     {}
+
                 )
+
             }
 
 
             execution_record.software = {
+
                 "architecture": agents_result.get(
+
                     "architecture",
+
                     {}
+
                 )
+
             }
 
 
             execution_record.operations = {
+
                 "development": agents_result.get(
+
                     "development",
+
                     {}
+
                 )
+
             }
 
 
             execution_record.deployment = (
+
                 execution.get(
+
                     "deployment",
+
                     {}
+
                 )
+
             )
+
 
 
             db.commit()
 
 
-            # =========================================
-            # Project Lifecycle: Deploying
-            # =========================================
 
             self.lifecycle.update_status(
+
                 db,
+
                 project,
+
                 "deploying"
+
             )
 
 
-            # =========================================
-            # Complete Execution
-            # =========================================
 
             self.execution_service.complete_execution(
+
                 db,
-                execution_record.id
+
+                execution_record.id,
+
+                organization_id
+
             )
 
 
-            # =========================================
-            # Project Lifecycle: Operational
-            # =========================================
 
             self.lifecycle.update_status(
+
                 db,
+
                 project,
+
                 "operational"
+
             )
 
 
-            # =========================================
-            # Response
-            # =========================================
 
             return {
+
 
                 "project": project.name,
 
@@ -276,24 +345,25 @@ class ASEOEngineService:
             }
 
 
+
         except Exception:
 
-            # -----------------------------------------
-            # Rollback failed database work
-            # -----------------------------------------
 
             db.rollback()
 
 
-            # -----------------------------------------
-            # Mark execution as failed
-            # -----------------------------------------
 
             if execution_record:
 
+
                 self.execution_service.fail_execution(
+
                     db,
-                    execution_record.id
+
+                    execution_record.id,
+
+                    organization_id
+
                 )
 
 

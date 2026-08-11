@@ -1,14 +1,17 @@
+from datetime import datetime
+
 from sqlalchemy.orm import Session
 
 from app.models.execution_record import ExecutionRecord
-
-
-
+from app.models.project import Project
 
 
 class ExecutionRepository:
 
 
+    # =====================================================
+    # Create Execution
+    # =====================================================
 
     def create(
 
@@ -54,16 +57,19 @@ class ExecutionRepository:
 
         db.add(execution)
 
-        db.commit()
+        # Keep transaction control
+        # inside Service layer
 
-        db.refresh(execution)
+        db.flush()
 
 
         return execution
 
 
 
-
+    # =====================================================
+    # Get By ID
+    # =====================================================
 
     def get_by_id(
 
@@ -71,7 +77,9 @@ class ExecutionRepository:
 
         db: Session,
 
-        execution_id: int
+        execution_id: int,
+
+        organization_id: int
 
     ):
 
@@ -80,9 +88,19 @@ class ExecutionRepository:
 
             db.query(ExecutionRecord)
 
+            .join(
+
+                Project,
+
+                ExecutionRecord.project_id == Project.id
+
+            )
+
             .filter(
 
-                ExecutionRecord.id == execution_id
+                ExecutionRecord.id == execution_id,
+
+                Project.organization_id == organization_id
 
             )
 
@@ -92,7 +110,9 @@ class ExecutionRepository:
 
 
 
-
+    # =====================================================
+    # Get Project Executions
+    # =====================================================
 
     def get_by_project(
 
@@ -100,7 +120,9 @@ class ExecutionRepository:
 
         db: Session,
 
-        project_id: int
+        project_id: int,
+
+        organization_id: int
 
     ):
 
@@ -109,9 +131,19 @@ class ExecutionRepository:
 
             db.query(ExecutionRecord)
 
+            .join(
+
+                Project,
+
+                ExecutionRecord.project_id == Project.id
+
+            )
+
             .filter(
 
-                ExecutionRecord.project_id == project_id
+                ExecutionRecord.project_id == project_id,
+
+                Project.organization_id == organization_id
 
             )
 
@@ -121,7 +153,9 @@ class ExecutionRepository:
 
 
 
-
+    # =====================================================
+    # Update Status
+    # =====================================================
 
     def update_status(
 
@@ -130,6 +164,8 @@ class ExecutionRepository:
         db: Session,
 
         execution_id: int,
+
+        organization_id: int,
 
         status: str
 
@@ -140,7 +176,9 @@ class ExecutionRepository:
 
             db,
 
-            execution_id
+            execution_id,
+
+            organization_id
 
         )
 
@@ -154,9 +192,26 @@ class ExecutionRepository:
         execution.status = status
 
 
-        db.commit()
 
-        db.refresh(execution)
+        if status == "RUNNING":
+
+            execution.started_at = datetime.utcnow()
+
+
+
+        if status in [
+
+            "SUCCESS",
+
+            "FAILED"
+
+        ]:
+
+            execution.finished_at = datetime.utcnow()
+
+
+
+        db.flush()
 
 
         return execution
