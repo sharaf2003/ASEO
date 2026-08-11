@@ -1,45 +1,49 @@
 from sqlalchemy.orm import Session
 
+
 from ai_engine.company_platform.company_orchestrator import (
     CompanyOrchestrator
 )
+
 
 from ai_engine.autonomous_company.execution_pipeline import (
     ExecutionPipeline
 )
 
+
 from app.agents.orchestrator import (
     AgentOrchestrator
 )
 
+
 from app.models.project import Project
+
 
 from app.services.execution_service import (
     ExecutionService
 )
+
 
 from app.services.lifecycle_service import (
     LifecycleService
 )
 
 
+
 class ASEOEngineService:
 
     """
-    ASEO Production Engine v25.0
+    ASEO Production Engine.
 
-    Autonomous execution engine with:
+    Responsible for coordinating:
 
     - Agent Orchestration
-    - Planner Agent
-    - Architect Agent
-    - Developer Agent
-    - Executive Analysis
-    - AI Pipeline Execution
     - Execution Lifecycle
-    - Execution History
-    - Project Lifecycle Management
+    - Project Lifecycle
+    - Company Analysis
+    - Legacy Execution Pipeline
     """
+
 
 
     def __init__(self):
@@ -56,9 +60,9 @@ class ASEOEngineService:
 
 
 
-    # =================================================
+    # =====================================================
     # Execute Project
-    # =================================================
+    # =====================================================
 
     def execute_project(
 
@@ -76,6 +80,7 @@ class ASEOEngineService:
         project_name = project_name.strip()
 
 
+
         if not project_name:
 
             raise ValueError(
@@ -83,6 +88,10 @@ class ASEOEngineService:
             )
 
 
+
+        # =================================================
+        # Load Project With Tenant Isolation
+        # =================================================
 
         project = (
 
@@ -101,6 +110,7 @@ class ASEOEngineService:
         )
 
 
+
         if not project:
 
             raise ValueError(
@@ -116,9 +126,9 @@ class ASEOEngineService:
         try:
 
 
-            # =========================================
-            # Create Execution
-            # =========================================
+            # =============================================
+            # Create Execution Record
+            # =============================================
 
             execution_record = (
 
@@ -140,9 +150,9 @@ class ASEOEngineService:
 
 
 
-            # =========================================
+            # =============================================
             # Start Execution
-            # =========================================
+            # =============================================
 
             self.execution_service.start_execution(
 
@@ -156,6 +166,10 @@ class ASEOEngineService:
 
 
 
+            # =============================================
+            # Project Lifecycle
+            # =============================================
+
             self.lifecycle.update_status(
 
                 db,
@@ -168,15 +182,19 @@ class ASEOEngineService:
 
 
 
-            # =========================================
-            # Agents
-            # =========================================
+            # =============================================
+            # Agent Execution
+            # =============================================
 
             agents_result = (
 
                 self.agent_orchestrator.run(
 
-                    project.name
+                    request=project.name,
+
+                    project_id=project.id,
+
+                    organization_id=organization_id
 
                 )
 
@@ -184,9 +202,9 @@ class ASEOEngineService:
 
 
 
-            # =========================================
+            # =============================================
             # Company Analysis
-            # =========================================
+            # =============================================
 
             analysis = (
 
@@ -200,6 +218,10 @@ class ASEOEngineService:
 
 
 
+            # =============================================
+            # Building Phase
+            # =============================================
+
             self.lifecycle.update_status(
 
                 db,
@@ -212,9 +234,9 @@ class ASEOEngineService:
 
 
 
-            # =========================================
-            # Pipeline
-            # =========================================
+            # =============================================
+            # Legacy Pipeline Support
+            # =============================================
 
             execution = (
 
@@ -228,43 +250,65 @@ class ASEOEngineService:
 
 
 
+            # =============================================
+            # Save Agent Results
+            # =============================================
+
             execution_record.team = {
 
-                "plan": agents_result.get(
 
-                    "plan",
+                "tasks": (
 
-                    {}
+                    agents_result.get(
+
+                        "tasks",
+
+                        []
+
+                    )
 
                 )
 
             }
+
 
 
             execution_record.software = {
 
-                "architecture": agents_result.get(
 
-                    "architecture",
+                "artifacts": (
 
-                    {}
+                    agents_result.get(
+
+                        "artifacts",
+
+                        []
+
+                    )
 
                 )
 
             }
+
 
 
             execution_record.operations = {
 
-                "development": agents_result.get(
 
-                    "development",
+                "metadata": (
 
-                    {}
+                    agents_result.get(
+
+                        "metadata",
+
+                        {}
+
+                    )
 
                 )
 
             }
+
 
 
             execution_record.deployment = (
@@ -284,6 +328,10 @@ class ASEOEngineService:
             db.commit()
 
 
+
+            # =============================================
+            # Deployment Lifecycle
+            # =============================================
 
             self.lifecycle.update_status(
 
@@ -321,24 +369,36 @@ class ASEOEngineService:
 
 
 
+            # =============================================
+            # Final Response
+            # =============================================
+
             return {
 
 
                 "project": project.name,
 
+
                 "project_id": project.id,
+
 
                 "organization_id": project.organization_id,
 
+
                 "lifecycle_status": project.status,
+
 
                 "agents": agents_result,
 
+
                 "analysis": analysis,
+
 
                 "execution": execution,
 
+
                 "execution_record_id": execution_record.id,
+
 
                 "status": "SUCCESS"
 
@@ -346,7 +406,7 @@ class ASEOEngineService:
 
 
 
-        except Exception:
+        except Exception as error:
 
 
             db.rollback()
@@ -367,4 +427,4 @@ class ASEOEngineService:
                 )
 
 
-            raise
+            raise error

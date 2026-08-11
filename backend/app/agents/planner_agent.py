@@ -1,81 +1,198 @@
 from app.agents.base_agent import BaseAgent
 
+from app.shared.models.execution import ExecutionContext
+from app.shared.models.task import Task
 
 
 class PlannerAgent(BaseAgent):
 
-
     """
-    Responsible for analyzing
-    user requirements and creating
-    execution tasks.
+    Responsible for analyzing user requirements
+    and creating the initial execution tasks.
     """
 
+    name = "PlannerAgent"
 
+    role = "planner"
+
+
+    # =====================================================
+    # Run Planner
+    # =====================================================
 
     def run(
 
         self,
 
-        context: dict
+        context: ExecutionContext
 
     ) -> dict:
 
+        """
+        Analyze the execution request and create
+        the initial ASEO engineering task plan.
+        """
 
-        request = context.get(
+        request = context.metadata.get(
             "request"
         )
 
 
-        return {
+        if not request:
+
+            raise ValueError(
+                "Execution request is required "
+                "for PlannerAgent"
+            )
 
 
-            "agent":
+        # =================================================
+        # Create Planning Tasks
+        # =================================================
 
-                "PlannerAgent",
+        tasks = [
+
+            Task(
+
+                name="Analyze requirements",
+
+                description=(
+                    "Analyze the user request and "
+                    "identify functional and technical "
+                    "requirements."
+                ),
+
+                agent_name="PlannerAgent",
+
+                input_data={
+                    "request": request
+                }
+
+            ),
 
 
-            "request":
+            Task(
 
-                request,
+                name="Design architecture",
 
+                description=(
+                    "Design the software architecture "
+                    "based on the analyzed requirements."
+                ),
+
+                agent_name="ArchitectAgent"
+
+            ),
+
+
+            Task(
+
+                name="Create database schema",
+
+                description=(
+                    "Design the required database "
+                    "schema and relationships."
+                ),
+
+                agent_name="ArchitectAgent"
+
+            ),
+
+
+            Task(
+
+                name="Develop application",
+
+                description=(
+                    "Implement the application based "
+                    "on the approved architecture."
+                ),
+
+                agent_name="DeveloperAgent"
+
+            ),
+
+
+            Task(
+
+                name="Test application",
+
+                description=(
+                    "Validate the generated application "
+                    "using unit, integration and "
+                    "security tests."
+                ),
+
+                agent_name="TesterAgent"
+
+            ),
+
+
+            Task(
+
+                name="Deploy application",
+
+                description=(
+                    "Prepare and execute the deployment "
+                    "workflow."
+                ),
+
+                agent_name="DeploymentAgent"
+
+            )
+
+        ]
+
+
+        # =================================================
+        # Attach Tasks To Execution Context
+        # =================================================
+
+        for task in tasks:
+
+            context.add_task(
+                task
+            )
+
+
+        # =================================================
+        # Store Planner Result
+        # =================================================
+
+        planner_result = {
+
+            "agent": self.name,
+
+            "role": self.role,
+
+            "request": request,
+
+            "tasks_created": len(tasks),
 
             "tasks": [
 
                 {
-                    "id": 1,
-                    "name": "Analyze requirements",
-                    "status": "PENDING"
-                },
 
+                    "name": task.name,
 
-                {
-                    "id": 2,
-                    "name": "Design architecture",
-                    "status": "PENDING"
-                },
+                    "description": task.description,
 
+                    "agent": task.agent_name,
 
-                {
-                    "id": 3,
-                    "name": "Create database schema",
-                    "status": "PENDING"
-                },
+                    "status": task.status.value
 
-
-                {
-                    "id": 4,
-                    "name": "Develop application",
-                    "status": "PENDING"
-                },
-
-
-                {
-                    "id": 5,
-                    "name": "Deploy application",
-                    "status": "PENDING"
                 }
+
+                for task in tasks
 
             ]
 
         }
+
+
+        context.metadata[
+            "planner_result"
+        ] = planner_result
+
+
+        return planner_result

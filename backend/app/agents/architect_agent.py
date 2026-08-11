@@ -1,14 +1,23 @@
 from app.agents.base_agent import BaseAgent
 
+from app.shared.models.execution import ExecutionContext
+
+from app.shared.models.artifact import Artifact
+
 
 
 class ArchitectAgent(BaseAgent):
 
-
     """
     Responsible for designing
-    system architecture.
+    system architecture and producing
+    architecture artifacts.
     """
+
+
+    name = "ArchitectAgent"
+
+    role = "architect"
 
 
 
@@ -16,17 +25,34 @@ class ArchitectAgent(BaseAgent):
 
         self,
 
-        context: dict
+        context: ExecutionContext
 
     ) -> dict:
 
 
+        # =========================================
+        # Collect Planner Tasks
+        # =========================================
 
-        tasks = context.get(
-            "tasks",
-            []
-        )
+        tasks = [
 
+            {
+
+                "name": task.name,
+
+                "status": task.status.value
+
+            }
+
+            for task in context.tasks
+
+        ]
+
+
+
+        # =========================================
+        # Generate Architecture
+        # =========================================
 
         architecture = {
 
@@ -70,21 +96,61 @@ class ArchitectAgent(BaseAgent):
 
 
 
-        return {
+        # =========================================
+        # Create Artifact
+        # =========================================
+
+        artifact = Artifact(
+
+            execution_id=context.id,
+
+            created_by_agent=self.name,
+
+            artifact_type="ARCHITECTURE",
+
+            name="System Architecture Design",
+
+            content=architecture
+
+        )
 
 
-            "agent":
 
-                "ArchitectAgent",
+        context.add_artifact(
 
+            artifact
 
-            "input_tasks":
-
-                tasks,
+        )
 
 
-            "architecture":
 
-                architecture
+        # =========================================
+        # Save Result
+        # =========================================
+
+        result = {
+
+
+            "agent": self.name,
+
+            "role": self.role,
+
+            "input_tasks": tasks,
+
+            "architecture": architecture,
+
+            "artifact": artifact.name
 
         }
+
+
+
+        context.metadata[
+
+            "architecture_result"
+
+        ] = result
+
+
+
+        return result

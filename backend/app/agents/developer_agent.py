@@ -1,14 +1,25 @@
 from app.agents.base_agent import BaseAgent
 
+from app.shared.models.execution import ExecutionContext
+
+from app.shared.models.task import Task
+
+from app.shared.models.artifact import Artifact
+
 
 
 class DeveloperAgent(BaseAgent):
 
-
     """
     Responsible for converting
-    architecture into implementation tasks.
+    architecture into implementation tasks
+    and development artifacts.
     """
+
+
+    name = "DeveloperAgent"
+
+    role = "developer"
 
 
 
@@ -16,13 +27,25 @@ class DeveloperAgent(BaseAgent):
 
         self,
 
-        context: dict
+        context: ExecutionContext
 
     ) -> dict:
 
 
+        # =========================================
+        # Get Architecture Result
+        # =========================================
 
-        architecture = context.get(
+        architecture_result = context.metadata.get(
+
+            "architecture_result",
+
+            {}
+
+        )
+
+
+        architecture = architecture_result.get(
 
             "architecture",
 
@@ -32,80 +55,186 @@ class DeveloperAgent(BaseAgent):
 
 
 
-        return {
+        if not architecture:
 
+            raise ValueError(
 
-            "agent":
+                "Architecture is required "
+                "before development phase"
 
-                "DeveloperAgent",
-
-
-
-            "implementation":
-
-            {
-
-
-                "backend":
-
-                [
-
-                    "Create database models",
-
-                    "Create repositories",
-
-                    "Create service layer",
-
-                    "Create API endpoints"
-
-                ],
+            )
 
 
 
-                "database":
+        # =========================================
+        # Create Development Tasks
+        # =========================================
 
-                [
-
-                    "Create schema",
-
-                    "Create migrations",
-
-                    "Create relationships"
-
-                ],
+        development_tasks = [
 
 
+            Task(
 
-                "frontend":
+                name="Create backend models",
 
-                [
+                description="Create database models",
 
-                    "Create UI components",
+                agent_name=self.name
 
-                    "Create application pages",
-
-                    "Integrate APIs"
-
-                ],
+            ),
 
 
+            Task(
 
-                "testing":
+                name="Create repositories",
 
-                [
+                description="Create repository layer",
 
-                    "Write unit tests",
+                agent_name=self.name
 
-                    "Run integration tests"
-
-                ]
-
-            },
+            ),
 
 
+            Task(
 
-            "based_on":
+                name="Create service layer",
 
-                architecture
+                description="Create business services",
+
+                agent_name=self.name
+
+            ),
+
+
+            Task(
+
+                name="Create API endpoints",
+
+                description="Create REST API endpoints",
+
+                agent_name=self.name
+
+            ),
+
+
+            Task(
+
+                name="Create frontend components",
+
+                description="Build frontend interfaces",
+
+                agent_name=self.name
+
+            )
+
+
+        ]
+
+
+
+        for task in development_tasks:
+
+            context.add_task(
+
+                task
+
+            )
+
+
+
+        # =========================================
+        # Create Development Artifact
+        # =========================================
+
+        implementation_plan = {
+
+
+            "backend": [
+
+                "Create database models",
+
+                "Create repositories",
+
+                "Create service layer",
+
+                "Create API endpoints"
+
+            ],
+
+
+            "frontend": [
+
+                "Create UI components",
+
+                "Create application pages",
+
+                "Integrate APIs"
+
+            ],
+
+
+            "testing": [
+
+                "Write unit tests",
+
+                "Run integration tests"
+
+            ]
 
         }
+
+
+
+        artifact = Artifact(
+
+            execution_id=context.id,
+
+            created_by_agent=self.name,
+
+            artifact_type="IMPLEMENTATION_PLAN",
+
+            name="Development Implementation Plan",
+
+            content=implementation_plan
+
+        )
+
+
+        context.add_artifact(
+
+            artifact
+
+        )
+
+
+
+        # =========================================
+        # Save Result
+        # =========================================
+
+        result = {
+
+
+            "agent": self.name,
+
+            "role": self.role,
+
+            "implementation": implementation_plan,
+
+            "tasks_created": len(development_tasks),
+
+            "based_on": architecture
+
+        }
+
+
+
+        context.metadata[
+
+            "development_result"
+
+        ] = result
+
+
+
+        return result

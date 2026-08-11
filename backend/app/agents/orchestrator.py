@@ -1,46 +1,31 @@
 from app.agents.planner_agent import PlannerAgent
-
 from app.agents.architect_agent import ArchitectAgent
-
 from app.agents.developer_agent import DeveloperAgent
-
 from app.agents.tester_agent import TesterAgent
-
 from app.agents.deployment_agent import DeploymentAgent
 
+
+from app.shared.models.execution import ExecutionContext
 
 
 
 class AgentOrchestrator:
 
-
     """
     Controls execution flow between ASEO agents.
 
-    Pipeline:
-
-    Planner
-        |
-    Architect
-        |
-    Developer
-        |
-    Tester
+    Uses ExecutionContext as the shared
+    communication layer between agents.
     """
-
 
 
     def __init__(self):
 
-
         self.planner = PlannerAgent()
-
 
         self.architect = ArchitectAgent()
 
-
         self.developer = DeveloperAgent()
-
 
         self.tester = TesterAgent()
 
@@ -48,26 +33,26 @@ class AgentOrchestrator:
 
 
 
-
-
     def run(
 
         self,
 
-        request: str
+        request: str,
+
+        project_id: int | None = None,
+
+        organization_id: int | None = None
 
     ) -> dict:
 
 
+        context = ExecutionContext(
 
-        # =====================
-        # Planning
-        # =====================
+            project_id=project_id,
 
+            organization_id=organization_id,
 
-        plan = self.planner.run(
-
-            {
+            metadata={
 
                 "request": request
 
@@ -76,72 +61,166 @@ class AgentOrchestrator:
         )
 
 
-
-        # =====================
-        # Architecture
-        # =====================
+        try:
 
 
-        architecture = self.architect.run(
+            # =====================
+            # Planning
+            # =====================
 
-            plan
+            context.start(
 
-        )
+                self.planner.name
 
+            )
 
+            self.planner.execute(
 
-        # =====================
-        # Development
-        # =====================
+                context
 
-
-        development = self.developer.run(
-
-            architecture
-
-        )
+            )
 
 
 
-        # =====================
-        # Testing
-        # =====================
+            # =====================
+            # Architecture
+            # =====================
+
+            context.current_agent = (
+
+                self.architect.name
+
+            )
+
+            self.architect.execute(
+
+                context
+
+            )
 
 
-        testing = self.tester.run(
 
-            {
+            # =====================
+            # Development
+            # =====================
 
-                "development": development
+            context.current_agent = (
 
-            }
+                self.developer.name
 
-        )
+            )
 
-        deployment = self.deployment.run(
+            self.developer.execute(
 
-            {
-                "testing": testing
-            }
+                context
 
-        )
+            )
+
+
+
+            # =====================
+            # Testing
+            # =====================
+
+            context.current_agent = (
+
+                self.tester.name
+
+            )
+
+            self.tester.execute(
+
+                context
+
+            )
+
+
+
+            # =====================
+            # Deployment
+            # =====================
+
+            context.current_agent = (
+
+                self.deployment.name
+
+            )
+
+            self.deployment.execute(
+
+                context
+
+            )
+
+
+            context.complete()
+
+
+
+        except Exception as error:
+
+
+            context.fail(
+
+                str(error)
+
+            )
+
+            raise
 
 
 
         return {
 
 
-            "plan": plan,
+            "execution_status": (
+
+                context.status.value
+
+            ),
 
 
-            "architecture": architecture,
+            "project_id": (
+
+                context.project_id
+
+            ),
 
 
-            "development": development,
+            "tasks": [
+
+                {
+
+                    "name": task.name,
+
+                    "agent": task.agent_name,
+
+                    "status": task.status.value
+
+                }
+
+                for task in context.tasks
+
+            ],
 
 
-            "testing": testing,
+            "artifacts": [
 
-            "deployment": deployment
+                {
+
+                    "name": artifact.name,
+
+                    "type": artifact.artifact_type,
+
+                    "agent": artifact.created_by_agent
+
+                }
+
+                for artifact in context.artifacts
+
+            ],
+
+
+            "metadata": context.metadata
 
         }
