@@ -8,13 +8,21 @@ from app.models.permission import Permission
 from app.models.role_permission import RolePermission
 
 
-
-# ==========================
+# =====================================================
 # Permission Checker
-# ==========================
+# =====================================================
 
 
 def require_permission(permission_name: str):
+
+    if not permission_name:
+        raise ValueError(
+            "Permission name is required"
+        )
+
+
+    permission_name = permission_name.lower()
+
 
 
     def checker(
@@ -26,52 +34,48 @@ def require_permission(permission_name: str):
     ):
 
 
-        role = current_user.get("role")
+        # ---------------------------------------------
+        # Get user role
+        # ---------------------------------------------
+
+        role = current_user.get(
+            "role"
+        )
 
 
         if not role:
 
             raise HTTPException(
+
                 status_code=status.HTTP_403_FORBIDDEN,
+
                 detail="Role not found"
+
             )
 
 
-        role = str(role).strip().upper()
+        role = str(
+            role
+        ).strip().upper()
 
 
 
-        role_permissions = (
-
-            db.query(RolePermission)
-
-            .filter(
-                RolePermission.role == role
-            )
-
-            .all()
-
-        )
-
-
-
-        permission_ids = [
-
-            item.permission_id
-
-            for item in role_permissions
-
-        ]
-
-
+        # ---------------------------------------------
+        # Check Permission
+        # ---------------------------------------------
 
         permission = (
 
             db.query(Permission)
 
+            .join(
+                RolePermission,
+                Permission.id == RolePermission.permission_id
+            )
+
             .filter(
 
-                Permission.id.in_(permission_ids),
+                RolePermission.role == role,
 
                 Permission.name == permission_name
 
@@ -92,6 +96,7 @@ def require_permission(permission_name: str):
                 detail=f"You do not have permission: {permission_name}"
 
             )
+
 
 
         return current_user

@@ -5,14 +5,19 @@ from app.security.dependencies import (
 )
 
 
-
-
+# =====================================================
+# Role Checker
+# =====================================================
 
 def require_role(
-
     allowed_roles: list[str]
-
 ):
+
+    # Normalize allowed roles once
+    normalized_roles = [
+        role.upper()
+        for role in allowed_roles
+    ]
 
 
     def role_checker(
@@ -21,16 +26,31 @@ def require_role(
 
     ):
 
-
         user_role = current_user.get(
-
             "role"
-
         )
 
 
+        if not user_role:
 
-        if user_role not in allowed_roles:
+            raise HTTPException(
+
+                status_code=status.HTTP_403_FORBIDDEN,
+
+                detail="Role not found"
+
+            )
+
+
+        # Normalize current user role
+
+        user_role = str(
+            user_role
+        ).upper()
+
+
+
+        if user_role not in normalized_roles:
 
 
             raise HTTPException(
@@ -40,7 +60,6 @@ def require_role(
                 detail="Insufficient permissions"
 
             )
-
 
 
         return current_user

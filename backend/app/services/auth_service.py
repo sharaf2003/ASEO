@@ -1,22 +1,16 @@
 from sqlalchemy.orm import Session
 
-
 from app.repositories.user_repository import (
     UserRepository
 )
-
 
 from app.security.password import (
     verify_password
 )
 
-
 from app.security.jwt import (
     create_access_token
 )
-
-
-
 
 
 class AuthService:
@@ -25,12 +19,9 @@ class AuthService:
     """
 
 
-
     def __init__(self):
 
         self.repository = UserRepository()
-
-
 
 
 
@@ -41,40 +32,43 @@ class AuthService:
         password: str
     ):
 
+        # Normalize email
+
+        email = email.lower().strip()
+
+
 
         user = self.repository.get_by_email(
-
             db,
-
             email
-
         )
 
 
 
         if not user:
 
-            raise Exception(
+            raise ValueError(
                 "Invalid credentials"
             )
-
-
 
 
 
         if not verify_password(
-
             password,
-
             user.password_hash
-
         ):
 
-            raise Exception(
+            raise ValueError(
                 "Invalid credentials"
             )
 
 
+
+        if not user.role:
+
+            raise ValueError(
+                "User role is not configured"
+            )
 
 
 
@@ -91,8 +85,6 @@ class AuthService:
             "workspace_id": user.workspace_id
 
         })
-
-
 
 
 

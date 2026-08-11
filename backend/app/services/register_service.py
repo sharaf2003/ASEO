@@ -1,107 +1,127 @@
 from sqlalchemy.orm import Session
-
+from sqlalchemy.exc import IntegrityError
 
 from app.models.organization import Organization
-
 from app.models.workspace import Workspace
-
 from app.models.user import User
 
-
 from app.security.password import hash_password
-
 
 from app.repositories.user_repository import UserRepository
 
 
-
-
-
 class RegisterService:
-
 
     def __init__(self):
 
         self.user_repository = UserRepository()
 
 
-
     def register(
-
         self,
-
         db: Session,
-
         data
-
     ):
 
+        # =================================================
+        # Normalize Input
+        # =================================================
 
-        # Create Organization
+        email = data.email.lower().strip()
 
-        organization = Organization(
 
-            name=data.organization_name,
+        # =================================================
+        # Check Existing User
+        # =================================================
 
-            plan="free"
-
+        existing_user = self.user_repository.get_by_email(
+            db,
+            email
         )
 
+        if existing_user:
 
-        db.add(organization)
-
-        db.commit()
-
-        db.refresh(organization)
-
+            raise ValueError(
+                "A user with this email already exists"
+            )
 
 
+        try:
 
-        # Create Workspace
+            # =============================================
+            # Create Organization
+            # =============================================
 
-        workspace = Workspace(
+            organization = Organization(
+                name=data.organization_name,
+                plan="free"
+            )
 
-            organization_id=organization.id,
+            db.add(organization)
 
-            name="Production"
+            # Send INSERT to database without COMMIT.
+            # This gives us organization.id while keeping
+            # the whole registration in one transaction.
 
-        )
-
-
-        db.add(workspace)
-
-        db.commit()
-
-        db.refresh(workspace)
-
-
-
-
-        # Create Owner User
-
-        user = User(
-
-            name=data.name,
-
-            organization_id=organization.id,
-
-            workspace_id=workspace.id,
-
-            email=data.email,
-
-            password_hash=hash_password(data.password),
-
-            role="OWNER"
-
-        )
+            db.flush()
 
 
-        db.add(user)
+            # =============================================
+            # Create Workspace
+            # =============================================
 
-        db.commit()
+            workspace = Workspace(
+                organization_id=organization.id,
+                name="Production"
+            )
 
-        db.refresh(user)
+            db.add(workspace)
+
+            # Get workspace.id without COMMIT.
+
+            db.flush()
 
 
+            # =============================================
+            # Create Owner User
+            # =============================================
 
-        return user
+            user = User(
+                name=data.name,
+                organization_id=organization.id,
+                workspace_id=workspace.id,
+                email=email,
+                password_hash=hash_password(
+                    data.password
+                ),
+                role="OWNER"
+            )
+
+            db.add(user)
+
+
+            # =============================================
+            # Commit Complete Registration
+            # =============================================
+
+            db.commit()
+
+            db.refresh(user)
+
+            return user
+
+
+        except IntegrityError as exc:
+
+            db.rollback()
+
+            raise ValueError(
+                "Registration data conflicts with existing data"
+            ) from exc
+
+
+        except Exception:
+
+            db.rollback()
+
+            raise
