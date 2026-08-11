@@ -298,6 +298,8 @@ def execute_project_api(
 
         db,
 
-        existing_project.name
+        existing_project.name,
+
+        current_user["organization_id"]
 
     )
