@@ -1,0 +1,31 @@
+from dataclasses import dataclass
+
+
+
+@dataclass
+class FeedbackResult:
+
+    agent: str
+
+    score: float
+
+    confidence: float
+
+    issues: list
+
+    suggestions: list
+
+
+feedback = FeedbackResult(
+
+    agent="ArchitectAgent",
+
+    score=1.0,
+
+    confidence=1.0,
+
+    issues=[],
+
+    suggestions=[]
+
+)

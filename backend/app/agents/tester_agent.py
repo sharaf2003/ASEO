@@ -1,8 +1,8 @@
 from app.agents.base_agent import BaseAgent
 
-from app.shared.models.execution import ExecutionContext
+from app.agents.capabilities import AgentCapability
 
-from app.shared.models.task import Task
+from app.shared.models.execution import ExecutionContext
 
 from app.shared.models.artifact import Artifact
 
@@ -17,9 +17,31 @@ class TesterAgent(BaseAgent):
     """
 
 
+
     name = "TesterAgent"
 
     role = "tester"
+
+
+
+    description = (
+        "Validates software quality through "
+        "testing strategies and quality assurance."
+    )
+
+
+
+    capabilities = [
+
+        AgentCapability.UNIT_TESTING,
+
+        AgentCapability.INTEGRATION_TESTING,
+
+        AgentCapability.SECURITY_TESTING,
+
+        AgentCapability.QUALITY_ASSURANCE
+
+    ]
 
 
 
@@ -45,6 +67,7 @@ class TesterAgent(BaseAgent):
         )
 
 
+
         if not development_result:
 
             raise ValueError(
@@ -57,156 +80,212 @@ class TesterAgent(BaseAgent):
 
 
         # =========================================
-        # Create Testing Tasks
+        # Main Testing Task
         # =========================================
 
-        test_tasks = [
+        main_task = context.create_task(
 
+            name="Test application",
 
-            Task(
+            agent_name=self.name,
 
-                name="Run unit tests",
+            description=(
 
-                description=(
-                    "Validate models, services "
-                    "and business logic."
-                ),
-
-                agent_name=self.name
-
-            ),
-
-
-            Task(
-
-                name="Run integration tests",
-
-                description=(
-                    "Validate API and database "
-                    "integration."
-                ),
-
-                agent_name=self.name
-
-            ),
-
-
-            Task(
-
-                name="Run security tests",
-
-                description=(
-                    "Validate authentication "
-                    "and authorization."
-                ),
-
-                agent_name=self.name
+                "Validate application quality, "
+                "integration and security."
 
             )
 
-        ]
+        )
+
+
+        context.start_task(main_task)
 
 
 
-        for task in test_tasks:
-
-            context.add_task(
-
-                task
-
-            )
+        try:
 
 
+            # =========================================
+            # Testing Tasks
+            # =========================================
 
-        # =========================================
-        # Create Test Artifact
-        # =========================================
+            test_tasks = [
 
-        test_plan = {
+                "Run unit tests",
 
+                "Run integration tests",
 
-            "unit": [
-
-                "Test database models",
-
-                "Test business logic",
-
-                "Test services"
-
-            ],
-
-
-            "integration": [
-
-                "Test API endpoints",
-
-                "Test database integration"
-
-            ],
-
-
-            "security": [
-
-                "Test authentication",
-
-                "Test authorization"
+                "Run security tests"
 
             ]
 
-        }
+
+            completed_tests = []
 
 
 
-        artifact = Artifact(
-
-            execution_id=context.id,
-
-            created_by_agent=self.name,
-
-            artifact_type="TEST_PLAN",
-
-            name="Application Test Plan",
-
-            content=test_plan
-
-        )
+            for test_name in test_tasks:
 
 
-        context.add_artifact(
+                task = context.create_task(
 
-            artifact
+                    name=test_name,
 
-        )
+                    agent_name=self.name,
+
+                    description=test_name
+
+                )
+
+
+                context.start_task(task)
 
 
 
-        # =========================================
-        # Save Result
-        # =========================================
+                context.complete_task(
 
-        result = {
+                    task,
+
+                    {
+
+                        "result": "completed",
+
+                        "test": test_name
+
+                    }
+
+                )
 
 
-            "agent": self.name,
-
-            "role": self.role,
-
-            "tests": test_plan,
-
-            "tasks_created": len(test_tasks),
-
-            "status": "READY_FOR_DEPLOYMENT"
-
-        }
+                completed_tests.append(test_name)
 
 
 
-        context.metadata[
+            # =========================================
+            # Create Test Artifact
+            # =========================================
 
-            "testing_result"
-
-        ] = result
+            test_plan = {
 
 
+                "unit": [
 
-        return result
+                    "Test database models",
+
+                    "Test business logic",
+
+                    "Test services"
+
+                ],
+
+
+                "integration": [
+
+                    "Test API endpoints",
+
+                    "Test database integration"
+
+                ],
+
+
+                "security": [
+
+                    "Test authentication",
+
+                    "Test authorization"
+
+                ]
+
+            }
+
+
+
+            artifact = Artifact(
+
+                execution_id=context.id,
+
+                created_by_agent=self.name,
+
+                artifact_type="TEST_PLAN",
+
+                name="Application Test Plan",
+
+                content=test_plan
+
+            )
+
+
+            context.add_artifact(
+
+                artifact
+
+            )
+
+
+
+            result = {
+
+
+                "agent": self.name,
+
+
+                "role": self.role,
+
+
+                "capabilities": [
+
+                    capability.value
+
+                    for capability in self.capabilities
+
+                ],
+
+
+                "tests": test_plan,
+
+
+                "tasks_created": len(completed_tests),
+
+
+                "status": "READY_FOR_DEPLOYMENT"
+
+            }
+
+
+
+            context.metadata[
+
+                "testing_result"
+
+            ] = result
+
+
+
+            context.complete_task(
+
+                main_task,
+
+                result
+
+            )
+
+
+
+            return result
+
+
+
+        except Exception as error:
+
+
+            context.fail_task(
+
+                main_task,
+
+                str(error)
+
+            )
+
+
+            raise

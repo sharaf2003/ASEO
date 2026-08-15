@@ -1,0 +1,1 @@
+from app.repositories.knowledge_relation_repository import KnowledgeRelationRepository

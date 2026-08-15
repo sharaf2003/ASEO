@@ -1,0 +1,19 @@
+from dataclasses import dataclass, field
+
+
+@dataclass
+class EvolutionResult:
+
+    architecture: str
+
+    improvements: list = field(
+        default_factory=list
+    )
+
+    risks: list = field(
+        default_factory=list
+    )
+
+    future_recommendations: list = field(
+        default_factory=list
+    )

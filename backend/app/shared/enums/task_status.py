@@ -2,14 +2,13 @@ from enum import Enum
 
 
 class TaskStatus(str, Enum):
-    """
-    Lifecycle states for ASEO tasks.
-    """
+
+    CREATED = "CREATED"
 
     PENDING = "PENDING"
 
     RUNNING = "RUNNING"
 
-    SUCCESS = "SUCCESS"
+    COMPLETED = "COMPLETED"
 
     FAILED = "FAILED"

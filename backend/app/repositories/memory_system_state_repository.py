@@ -1,0 +1,81 @@
+from datetime import datetime
+
+from sqlalchemy.orm import Session
+
+from app.models.memory_system_state import MemorySystemState
+
+
+
+class MemorySystemStateRepository:
+
+
+    def __init__(
+
+        self,
+
+        db: Session
+
+    ):
+
+        self.db = db
+
+
+
+    def get_state(self):
+
+
+        return (
+
+            self.db.query(
+
+                MemorySystemState
+
+            )
+
+            .first()
+
+        )
+
+
+
+    def update_after_consolidation(
+
+        self,
+
+        memory_count: int
+
+    ):
+
+
+        state = self.get_state()
+
+
+
+        if not state:
+
+
+            state = MemorySystemState()
+
+
+            self.db.add(state)
+
+
+
+        state.last_consolidation_count = memory_count
+
+
+        state.total_consolidations += 1
+
+
+        state.last_consolidation_time = datetime.utcnow()
+
+
+
+        self.db.commit()
+
+
+        self.db.refresh(state)
+
+
+
+        return state

@@ -1,11 +1,10 @@
-from app.agents.planner_agent import PlannerAgent
-from app.agents.architect_agent import ArchitectAgent
-from app.agents.developer_agent import DeveloperAgent
-from app.agents.tester_agent import TesterAgent
-from app.agents.deployment_agent import DeploymentAgent
+from app.agents.decision_engine import AgentDecisionEngine
 
+from app.intelligence.learning_engine import LearningEngine
 
 from app.shared.models.execution import ExecutionContext
+
+
 
 
 
@@ -14,23 +13,173 @@ class AgentOrchestrator:
     """
     Controls execution flow between ASEO agents.
 
-    Uses ExecutionContext as the shared
-    communication layer between agents.
+    Supports:
+
+    - Dynamic agent selection
+    - Agent memory
+    - Intelligence decision system
+    - Learning from executions
     """
 
 
-    def __init__(self):
 
-        self.planner = PlannerAgent()
+    def __init__(
 
-        self.architect = ArchitectAgent()
+        self,
 
-        self.developer = DeveloperAgent()
+        db=None,
 
-        self.tester = TesterAgent()
+        project_id: int | None = None,
 
-        self.deployment = DeploymentAgent()
+        organization_id: int | None = None
 
+    ):
+
+
+        self.db = db
+
+        self.project_id = project_id
+
+        self.organization_id = organization_id
+
+
+
+        self.decision_engine = AgentDecisionEngine(
+
+            db=self.db,
+
+            project_id=self.project_id,
+
+            organization_id=self.organization_id
+
+        )
+
+
+        # =============================================
+        # Intelligence Learning
+        # =============================================
+
+
+        self.learning_engine = LearningEngine(
+                db=self.db
+
+        )
+
+
+
+
+
+    # =====================================================
+    # Agent Execution
+    # =====================================================
+
+
+    def execute_agent(
+
+        self,
+
+        agent,
+
+        context
+
+    ):
+
+
+        try:
+
+
+            result = agent.execute(
+
+                context
+
+            )
+
+
+            # Learn from successful execution
+
+            lesson = self.learning_engine.learn_from_execution(
+
+                {
+
+                    "agent": agent.name,
+
+                    "status": "SUCCESS",
+
+                    **(
+                        result
+                        if isinstance(result, dict)
+                        else {}
+                    )
+
+                }
+
+            )
+
+
+            context.metadata.setdefault(
+
+                "learning",
+
+                []
+
+            ).append(
+
+                lesson
+
+            )
+
+
+            return result
+
+
+
+        except Exception as error:
+
+
+
+            lesson = self.learning_engine.learn_from_execution(
+
+                {
+
+                    "agent": agent.name,
+
+                    "status": "FAILED",
+
+                    "error": str(error),
+
+                    "solutions": [],
+
+                    "problems": [
+                        str(error)
+                    ]
+
+                }
+
+            )
+
+
+            context.metadata.setdefault(
+
+                "learning",
+
+                []
+
+            ).append(
+
+                lesson
+
+            )
+
+
+            raise error
+
+
+
+
+
+    # =====================================================
+    # Main Execution Flow
+    # =====================================================
 
 
     def run(
@@ -41,12 +190,17 @@ class AgentOrchestrator:
 
         project_id: int | None = None,
 
-        organization_id: int | None = None
+        organization_id: int | None = None,
+
+        execution_id: int | None = None
 
     ) -> dict:
 
 
+
         context = ExecutionContext(
+
+            id=execution_id,
 
             project_id=project_id,
 
@@ -61,96 +215,53 @@ class AgentOrchestrator:
         )
 
 
+
+        executed_agents = []
+
+
+
         try:
 
 
-            # =====================
-            # Planning
-            # =====================
+            selected_agents = self.decision_engine.select_agents(
 
-            context.start(
-
-                self.planner.name
-
-            )
-
-            self.planner.execute(
-
-                context
+                request
 
             )
 
 
 
-            # =====================
-            # Architecture
-            # =====================
+            for agent in selected_agents:
 
-            context.current_agent = (
 
-                self.architect.name
-
-            )
-
-            self.architect.execute(
-
-                context
-
-            )
+                context.current_agent = agent.name
 
 
 
-            # =====================
-            # Development
-            # =====================
+                context.start(
 
-            context.current_agent = (
+                    agent.name
 
-                self.developer.name
-
-            )
-
-            self.developer.execute(
-
-                context
-
-            )
+                )
 
 
 
-            # =====================
-            # Testing
-            # =====================
+                self.execute_agent(
 
-            context.current_agent = (
+                    agent,
 
-                self.tester.name
+                    context
 
-            )
-
-            self.tester.execute(
-
-                context
-
-            )
+                )
 
 
 
-            # =====================
-            # Deployment
-            # =====================
+                executed_agents.append(
 
-            context.current_agent = (
+                    agent.name
 
-                self.deployment.name
+                )
 
-            )
-
-            self.deployment.execute(
-
-                context
-
-            )
 
 
             context.complete()
@@ -160,31 +271,89 @@ class AgentOrchestrator:
         except Exception as error:
 
 
+
             context.fail(
 
                 str(error)
 
             )
 
+
             raise
+
+
+
+        # =============================================
+        # Final Learning Evaluation
+        # =============================================
+
+
+        final_lesson = self.learning_engine.learn_from_execution(
+
+            {
+
+                "status": context.status.value,
+
+
+                "agents": executed_agents,
+
+                "request": request,
+                
+                "technologies": context.metadata.get(
+                    "technologies",
+                    []
+                ),
+
+                "solutions": context.metadata.get(
+                    "solutions",
+                    []
+                ),
+
+                "problems": context.metadata.get(
+                    "problems",
+                    []
+                )
+                
+            }
+
+        )
+
+
+        context.metadata.setdefault(
+
+            "learning",
+
+            []
+
+        ).append(
+
+            final_lesson
+
+        )
 
 
 
         return {
 
 
-            "execution_status": (
+            "execution_status":
 
-                context.status.value
-
-            ),
+                context.status.value,
 
 
-            "project_id": (
+            "project_id":
 
-                context.project_id
+                context.project_id,
 
-            ),
+
+            "organization_id":
+
+                context.organization_id,
+
+
+            "agents_executed":
+
+                executed_agents,
 
 
             "tasks": [
@@ -221,6 +390,8 @@ class AgentOrchestrator:
             ],
 
 
-            "metadata": context.metadata
+            "metadata":
+
+                context.metadata
 
         }

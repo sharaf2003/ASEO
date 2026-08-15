@@ -1,0 +1,124 @@
+class ContextExtractor:
+
+
+    def extract(self, request):
+
+        text = request.lower()
+
+
+        context = {
+
+            "project_type": "unknown",
+
+            "domain": [],
+
+            "needs": []
+
+        }
+
+
+        # Project Type
+
+        if any(
+            word in text
+            for word in [
+                "ai",
+                "artificial intelligence",
+                "machine learning",
+                "deep learning"
+            ]
+        ):
+
+            context["project_type"] = "ai"
+
+
+
+        elif any(
+            word in text
+            for word in [
+                "mobile",
+                "android",
+                "ios",
+                "flutter",
+                "app"
+            ]
+        ):
+
+            context["project_type"] = "mobile"
+
+
+
+        elif any(
+            word in text
+            for word in [
+                "website",
+                "web",
+                "saas",
+                "dashboard",
+                "platform"
+            ]
+        ):
+
+            context["project_type"] = "web"
+
+
+
+        # Domain
+
+        if any(
+            word in text
+            for word in [
+                "shop",
+                "store",
+                "ecommerce",
+                "payment"
+            ]
+        ):
+
+            context["domain"].append(
+                "ecommerce"
+            )
+
+
+
+        if any(
+            word in text
+            for word in [
+                "ai",
+                "machine learning",
+                "model"
+            ]
+        ):
+
+            context["domain"].append(
+                "ai"
+            )
+
+
+
+        # Needs
+
+        if "auth" in text or "login" in text:
+
+            context["needs"].append(
+                "authentication"
+            )
+
+
+
+        if "database" in text or "data" in text:
+
+            context["needs"].append(
+                "database"
+            )
+
+
+
+        if "payment" in text:
+
+            context["needs"].append(
+                "payments"
+            )
+
+
+        return context

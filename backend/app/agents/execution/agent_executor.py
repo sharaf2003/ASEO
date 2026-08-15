@@ -1,0 +1,322 @@
+from app.agents.agent_plan import AgentExecutionPlan
+
+from app.agents.collaboration.collaboration_engine import CollaborationEngine
+
+from app.intelligence.feedback.feedback_engine import FeedbackEngine
+
+from app.intelligence.learning.learning_engine import LearningEngine
+
+from app.intelligence.decision_quality_monitor import DecisionQualityMonitor
+
+from app.intelligence.optimization.self_optimizer import SelfOptimizer
+
+from app.intelligence.self_improvement.self_improvement_engine import (
+    SelfImprovementEngine
+)
+
+from app.repositories.knowledge_repository import KnowledgeRepository
+
+
+
+class AgentExecutor:
+
+
+    def __init__(
+
+        self,
+
+        db=None
+
+    ):
+
+
+        self.db = db
+
+
+        self.collaboration = CollaborationEngine()
+
+
+        self.feedback_engine = FeedbackEngine()
+
+
+
+        self.learning_engine = LearningEngine(
+
+            db=db
+
+        )
+
+
+        self.optimizer = SelfOptimizer(
+
+            db=db
+
+        )
+
+
+        self.quality_monitor = DecisionQualityMonitor()
+
+
+
+        knowledge_repository = None
+
+
+        if db:
+
+            knowledge_repository = KnowledgeRepository(
+
+                db
+
+            )
+
+
+        self.self_improvement = SelfImprovementEngine(
+
+            repository=knowledge_repository
+
+        )
+
+
+
+    def execute(
+
+        self,
+
+        plan: AgentExecutionPlan,
+
+        context
+
+    ):
+
+
+        results = {}
+
+
+
+        for agent in plan.agents:
+
+
+
+            result = agent.run(
+
+                context
+
+            )
+
+
+
+            results[agent.name] = result
+
+
+
+            # =============================================
+            # Feedback Evaluation
+            # =============================================
+
+
+            feedback = self.feedback_engine.evaluate(
+
+                result
+
+            )
+
+
+
+            # =============================================
+            # Self Improvement
+            # =============================================
+
+
+            if feedback.score < 0.8:
+
+
+                improvement_result = (
+
+                    self.self_improvement.process_failure(
+
+                        execution_result={
+
+                            "success": False,
+
+                            "agent": agent.name
+
+                        },
+
+
+                        architecture_result=result
+
+                    )
+
+                )
+
+
+            else:
+
+
+                improvement_result = {
+
+
+                    "updated": False,
+
+
+                    "reason": "Execution successful"
+
+                }
+
+
+
+            # =============================================
+            # Decision Quality Evaluation
+            # =============================================
+
+
+            decision_data = {}
+
+
+
+            if hasattr(agent, "last_decision"):
+
+
+                decision_data = agent.last_decision
+
+
+
+            quality_result = self.quality_monitor.evaluate(
+
+                decision_data,
+
+                feedback
+
+            )
+
+
+
+            # =============================================
+            # Learning
+            # =============================================
+
+
+            learning_result = self.learning_engine.learn(
+
+                feedback,
+
+                result
+
+            )
+
+
+
+            # =============================================
+            # Save Execution Metadata
+            # =============================================
+
+
+            context.metadata[
+
+                f"{agent.name}_result"
+
+            ] = result
+
+
+
+            context.metadata[
+
+                f"{agent.name}_feedback"
+
+            ] = feedback
+
+
+
+            context.metadata[
+
+                f"{agent.name}_improvement"
+
+            ] = improvement_result
+
+
+
+            context.metadata[
+
+                f"{agent.name}_quality"
+
+            ] = quality_result
+
+
+
+            # =============================================
+            # Optimization
+            # =============================================
+
+
+            if feedback.score >= 0.8:
+
+
+                optimization_result = self.optimizer.optimize(
+
+                    result.get(
+
+                        "architecture_decisions",
+
+                        []
+
+                    ),
+
+                    quality_result
+
+                )
+
+
+            else:
+
+
+                optimization_result = {
+
+
+                    "optimized": False,
+
+
+                    "reason": "Skipped optimization because execution failed",
+
+
+                    "updated_patterns": []
+
+                }
+
+
+
+            context.metadata[
+
+                f"{agent.name}_optimization"
+
+            ] = optimization_result
+
+
+
+            context.metadata[
+
+                f"{agent.name}_learning"
+
+            ] = learning_result
+
+
+
+            # =============================================
+            # Agent Collaboration
+            # =============================================
+
+
+            self.collaboration.send(
+
+                sender=agent.name,
+
+                receiver="next_agent",
+
+                message_type="result",
+
+                content=result
+
+            )
+
+
+
+        return results

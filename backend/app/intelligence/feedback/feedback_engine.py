@@ -1,0 +1,125 @@
+from app.intelligence.feedback.feedback_result import FeedbackResult
+
+
+
+class FeedbackEngine:
+
+
+    def evaluate(
+
+        self,
+
+        agent_result: dict
+
+    ) -> FeedbackResult:
+
+
+        agent_name = agent_result.get(
+
+            "agent",
+
+            "Unknown"
+
+        )
+
+
+        issues = []
+
+        suggestions = []
+
+
+
+        score = 1.0
+
+
+
+        # Check empty results
+
+        if not agent_result:
+
+
+            score = 0
+
+            issues.append(
+
+                "Empty agent result"
+
+            )
+
+
+            suggestions.append(
+
+                "Agent should provide output"
+
+            )
+
+
+
+        # Check architecture
+
+        if agent_name == "ArchitectAgent":
+
+
+            if not agent_result.get(
+
+                "architecture"
+
+            ):
+
+
+                score -= 0.5
+
+
+                issues.append(
+
+                    "Missing architecture"
+
+                )
+
+
+
+        # Check implementation
+
+        if agent_name == "DeveloperAgent":
+
+
+            if not agent_result.get(
+
+                "implementation"
+
+            ):
+
+
+                score -= 0.5
+
+
+                issues.append(
+
+                    "Missing implementation plan"
+
+                )
+
+
+
+        score = max(
+
+            score,
+
+            0
+
+        )
+
+
+        return FeedbackResult(
+
+            agent=agent_name,
+
+            score=score,
+
+            confidence=score,
+
+            issues=issues,
+
+            suggestions=suggestions
+
+        )

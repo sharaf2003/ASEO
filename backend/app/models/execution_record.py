@@ -84,7 +84,7 @@ class ExecutionRecord(Base):
     status: Mapped[str] = mapped_column(
         String(50),
         nullable=False,
-        default="QUEUED"
+        default="PENDING"
     )
 
 
@@ -113,4 +113,16 @@ class ExecutionRecord(Base):
     project = relationship(
         "Project",
         back_populates="executions"
+    )
+
+    tasks = relationship(
+        "Task",
+        back_populates="execution",
+        cascade="all, delete-orphan"
+    )
+
+    artifacts = relationship(
+        "Artifact",
+        back_populates="execution",
+        cascade="all, delete-orphan"
     )

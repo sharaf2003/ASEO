@@ -1,8 +1,26 @@
 from sqlalchemy.orm import Session
+from datetime import datetime
+
 
 from app.repositories.execution_repository import (
     ExecutionRepository
 )
+
+
+from app.repositories.task_repository import (
+    TaskRepository
+)
+
+
+from app.repositories.artifact_repository import (
+    ArtifactRepository
+)
+
+
+from app.models.task import Task
+
+from app.models.artifact import Artifact
+
 
 
 class ExecutionService:
@@ -10,8 +28,10 @@ class ExecutionService:
     """
     Execution management service.
 
-    Handles ASEO execution lifecycle.
+    Handles ASEO execution lifecycle,
+    tasks persistence and artifacts persistence.
     """
+
 
 
     # =====================================================
@@ -20,26 +40,42 @@ class ExecutionService:
 
     ALLOWED_TRANSITIONS = {
 
-        "QUEUED": {
+
+        "PENDING": {
+
             "RUNNING",
+
             "FAILED",
+
         },
+
 
         "RUNNING": {
+
             "SUCCESS",
+
             "FAILED",
+
         },
 
+
         "SUCCESS": set(),
+
 
         "FAILED": set(),
 
     }
 
 
+
     def __init__(self):
 
         self.repository = ExecutionRepository()
+
+        self.task_repository = TaskRepository()
+
+        self.artifact_repository = ArtifactRepository()
+
 
 
     # =====================================================
@@ -62,6 +98,7 @@ class ExecutionService:
 
     ):
 
+
         if not project_id:
 
             raise ValueError(
@@ -69,11 +106,13 @@ class ExecutionService:
             )
 
 
+
         if not organization_id:
 
             raise ValueError(
                 "Organization ID is required"
             )
+
 
 
         if not request:
@@ -84,6 +123,7 @@ class ExecutionService:
 
 
         try:
+
 
             execution_record = self.repository.create(
 
@@ -113,26 +153,33 @@ class ExecutionService:
                     {}
                 ),
 
-                "QUEUED"
+                "PENDING"
 
             )
 
 
+
             db.commit()
 
+
             db.refresh(
+
                 execution_record
+
             )
 
 
             return execution_record
 
 
+
         except Exception:
+
 
             db.rollback()
 
             raise
+
 
 
     # =====================================================
@@ -149,36 +196,54 @@ class ExecutionService:
 
     ):
 
+
         current_status = str(
+
             current_status
+
         ).strip().upper()
+
 
 
         new_status = str(
+
             new_status
+
         ).strip().upper()
 
 
+
         allowed_statuses = (
+
             self.ALLOWED_TRANSITIONS.get(
+
                 current_status
+
             )
+
         )
+
 
 
         if allowed_statuses is None:
 
             raise ValueError(
+
                 f"Unknown execution status: {current_status}"
+
             )
+
 
 
         if new_status not in allowed_statuses:
 
             raise ValueError(
+
                 f"Invalid execution status transition: "
                 f"{current_status} -> {new_status}"
+
             )
+
 
 
     # =====================================================
@@ -199,6 +264,7 @@ class ExecutionService:
 
     ):
 
+
         execution = self.repository.get_by_id(
 
             db,
@@ -210,16 +276,23 @@ class ExecutionService:
         )
 
 
+
         if not execution:
 
             raise ValueError(
+
                 "Execution not found"
+
             )
 
 
+
         new_status = str(
+
             new_status
+
         ).strip().upper()
+
 
 
         self._validate_transition(
@@ -231,7 +304,9 @@ class ExecutionService:
         )
 
 
+
         try:
+
 
             execution = self.repository.update_status(
 
@@ -246,21 +321,29 @@ class ExecutionService:
             )
 
 
+
             db.commit()
 
+
             db.refresh(
+
                 execution
+
             )
+
 
 
             return execution
 
 
+
         except Exception:
+
 
             db.rollback()
 
             raise
+
 
 
     # =====================================================
@@ -279,6 +362,7 @@ class ExecutionService:
 
     ):
 
+
         return self._change_status(
 
             db,
@@ -290,6 +374,7 @@ class ExecutionService:
             "RUNNING"
 
         )
+
 
 
     # =====================================================
@@ -308,6 +393,7 @@ class ExecutionService:
 
     ):
 
+
         return self._change_status(
 
             db,
@@ -319,6 +405,7 @@ class ExecutionService:
             "SUCCESS"
 
         )
+
 
 
     # =====================================================
@@ -337,6 +424,7 @@ class ExecutionService:
 
     ):
 
+
         return self._change_status(
 
             db,
@@ -348,6 +436,304 @@ class ExecutionService:
             "FAILED"
 
         )
+
+
+
+    # =====================================================
+    # Create Task
+    # =====================================================
+
+    def create_task(
+
+        self,
+
+        db: Session,
+
+        execution_id: int,
+
+        name: str,
+
+        description: str | None,
+
+        agent_name: str,
+
+        status: str = "PENDING",
+
+        input_data: dict | None = None
+
+    ):
+
+
+        task = Task(
+
+            execution_id=execution_id,
+
+            name=name,
+
+            description=description,
+
+            agent_name=agent_name,
+
+            status=status,
+
+            input_data=input_data
+
+        )
+
+
+        return self.task_repository.create(
+
+            db,
+
+            task
+
+        )
+
+
+
+    # =====================================================
+    # Update Task Status
+    # =====================================================
+
+    def update_task_status(
+
+        self,
+
+        db: Session,
+
+        task: Task,
+
+        status: str
+
+    ):
+
+
+        return self.task_repository.update_status(
+
+            db,
+
+            task,
+
+            status
+
+        )
+
+
+    # =====================================================
+    # Start Task
+    # =====================================================
+
+    def start_task(
+
+        self,
+
+        db: Session,
+
+        task_id: int
+
+    ):
+
+        task = (
+
+            db.query(Task)
+
+            .filter(
+
+                Task.id == task_id
+
+            )
+
+            .first()
+
+        )
+
+
+        if not task:
+
+            raise ValueError(
+                "Task not found"
+            )
+
+
+        task.status = "RUNNING"
+
+        task.started_at = datetime.utcnow()
+
+
+        db.commit()
+
+        db.refresh(task)
+
+
+        return task
+
+
+
+    # =====================================================
+    # Complete Task
+    # =====================================================
+
+    def complete_task(
+
+        self,
+
+        db: Session,
+
+        task_id: int,
+
+        output_data: dict | None = None
+
+    ):
+
+
+        task = (
+
+            db.query(Task)
+
+            .filter(
+
+                Task.id == task_id
+
+            )
+
+            .first()
+
+        )
+
+
+        if not task:
+
+            raise ValueError(
+                "Task not found"
+            )
+
+
+        task.status = "COMPLETED"
+
+        task.output_data = output_data
+
+        task.completed_at = datetime.utcnow()
+
+
+        db.commit()
+
+        db.refresh(task)
+
+
+        return task
+
+
+
+    # =====================================================
+    # Fail Task
+    # =====================================================
+
+    def fail_task(
+
+        self,
+
+        db: Session,
+
+        task_id: int,
+
+        error: Exception | str
+
+    ):
+
+
+        task = (
+
+            db.query(Task)
+
+            .filter(
+
+                Task.id == task_id
+
+            )
+
+            .first()
+
+        )
+
+
+        if not task:
+
+            raise ValueError(
+                "Task not found"
+            )
+
+
+        task.status = "FAILED"
+
+        task.output_data = {
+
+            "error": str(error)
+
+        }
+
+
+        task.completed_at = datetime.utcnow()
+
+
+        db.commit()
+
+        db.refresh(task)
+
+
+        return task
+
+
+
+    # =====================================================
+    # Create Artifact
+    # =====================================================
+
+    def create_artifact(
+
+        self,
+
+        db: Session,
+
+        execution_id: int,
+
+        created_by_agent: str,
+
+        artifact_type: str,
+
+        name: str,
+
+        content: dict | None = None,
+
+        extra_data: dict | None = None
+
+    ):
+
+
+        artifact = Artifact(
+
+            execution_id=execution_id,
+
+            created_by_agent=created_by_agent,
+
+            artifact_type=artifact_type,
+
+            name=name,
+
+            content=content,
+
+            extra_data=extra_data
+
+        )
+
+
+        return self.artifact_repository.create(
+
+            db,
+
+            artifact
+
+        )
+
 
 
     # =====================================================
@@ -366,6 +752,7 @@ class ExecutionService:
 
     ):
 
+
         execution = self.repository.get_by_id(
 
             db,
@@ -377,14 +764,19 @@ class ExecutionService:
         )
 
 
+
         if not execution:
 
             raise ValueError(
+
                 "Execution not found"
+
             )
 
 
+
         return execution
+
 
 
     # =====================================================
@@ -402,6 +794,7 @@ class ExecutionService:
         organization_id: int
 
     ):
+
 
         return self.repository.get_by_project(
 

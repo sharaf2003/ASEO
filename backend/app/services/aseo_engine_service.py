@@ -45,14 +45,11 @@ class ASEOEngineService:
     """
 
 
-
     def __init__(self):
 
         self.company = CompanyOrchestrator()
 
         self.pipeline = ExecutionPipeline()
-
-        self.agent_orchestrator = AgentOrchestrator()
 
         self.execution_service = ExecutionService()
 
@@ -148,8 +145,6 @@ class ASEOEngineService:
 
             )
 
-
-
             # =============================================
             # Start Execution
             # =============================================
@@ -165,21 +160,39 @@ class ASEOEngineService:
             )
 
 
+            # =============================================
+            # Initialize Agent Orchestrator
+            # =============================================
+
+            agent_orchestrator = AgentOrchestrator(
+
+                    db=db,
+
+                    project_id=project.id,
+
+                    organization_id=organization_id
+            )
+
+
 
             # =============================================
             # Project Lifecycle
             # =============================================
 
-            self.lifecycle.update_status(
+            if project.status in [
+                "created",
+                "operational"
+            ]:
 
-                db,
+                self.lifecycle.update_status(
 
-                project,
+                    db,
 
-                "analyzing"
+                    project,
 
-            )
+                    "analyzing"
 
+                )
 
 
             # =============================================
@@ -188,17 +201,120 @@ class ASEOEngineService:
 
             agents_result = (
 
-                self.agent_orchestrator.run(
+                agent_orchestrator.run(
 
                     request=project.name,
 
                     project_id=project.id,
 
-                    organization_id=organization_id
+                    organization_id=organization_id,
+
+                    execution_id=execution_record.id
 
                 )
 
             )
+
+            # =============================================
+            # Persist Agent Tasks
+            # =============================================
+
+            for task in agents_result.get(
+                "tasks",
+                []
+            ):
+
+                db_task = self.execution_service.create_task(
+
+                    db,
+
+                    execution_record.id,
+
+                    task.get(
+                        "name",
+                        "Unnamed Task"
+                    ),
+
+                    task.get(
+                        "description"
+                    ),
+
+                    task.get(
+                        "agent",
+                        "Unknown Agent"
+                    ),
+
+                    "PENDING",
+                    
+
+                    task
+
+                )
+
+                self.execution_service.start_task(
+
+                    db,
+
+                    db_task.id
+
+                )
+
+                self.execution_service.complete_task(
+
+                    db,
+
+                    db_task.id,
+
+                    task
+
+                )
+
+
+            # =============================================
+            # Persist Agent Artifacts
+            # =============================================
+
+            for artifact in agents_result.get(
+                "artifacts",
+                []
+            ):
+
+
+                self.execution_service.create_artifact(
+
+                    db,
+
+                    execution_record.id,
+
+                    artifact.get(
+
+                        "agent",
+
+                        "Unknown Agent"
+                            
+                    ),
+
+                    artifact.get(
+
+                        "type",
+
+                        "DOCUMENT"
+
+                    ),
+
+                    artifact.get(
+
+                        "name",
+
+                        "Unnamed Artifact"
+
+                    ),
+
+                    artifact,
+
+                    {}
+
+                )
 
 
 
@@ -217,20 +333,21 @@ class ASEOEngineService:
             )
 
 
-
             # =============================================
             # Building Phase
             # =============================================
 
-            self.lifecycle.update_status(
+            if project.status == "analyzing":
 
-                db,
+                self.lifecycle.update_status(
 
-                project,
+                    db,
 
-                "building"
+                    project,
 
-            )
+                    "building"
+
+                )
 
 
 
@@ -290,10 +407,7 @@ class ASEOEngineService:
 
             }
 
-
-
             execution_record.operations = {
-
 
                 "metadata": (
 
@@ -309,8 +423,6 @@ class ASEOEngineService:
 
             }
 
-
-
             execution_record.deployment = (
 
                 execution.get(
@@ -323,27 +435,27 @@ class ASEOEngineService:
 
             )
 
-
-
             db.commit()
-
-
 
             # =============================================
             # Deployment Lifecycle
             # =============================================
 
-            self.lifecycle.update_status(
+            if project.status == "building":
 
-                db,
+                self.lifecycle.update_status(
 
-                project,
+                    db,
 
-                "deploying"
+                    project,
 
-            )
+                    "deploying"
 
+                )
 
+            # =============================================
+            # Complete Execution
+            # =============================================
 
             self.execution_service.complete_execution(
 
@@ -355,19 +467,21 @@ class ASEOEngineService:
 
             )
 
+            # =============================================
+            # Operational Lifecycle
+            # =============================================
 
+            if project.status == "deploying":
 
-            self.lifecycle.update_status(
+                self.lifecycle.update_status(
 
-                db,
+                    db,
 
-                project,
+                    project,
 
-                "operational"
+                    "operational"
 
-            )
-
-
+                )
 
             # =============================================
             # Final Response
@@ -406,7 +520,7 @@ class ASEOEngineService:
 
 
 
-        except Exception as error:
+        except Exception :
 
 
             db.rollback()
@@ -427,4 +541,4 @@ class ASEOEngineService:
                 )
 
 
-            raise error
+            raise 

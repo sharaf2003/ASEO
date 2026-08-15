@@ -1,0 +1,19 @@
+from dataclasses import dataclass
+
+
+@dataclass
+class ArchitectureMetrics:
+
+    architecture_name: str
+
+    total_projects: int = 0
+
+    successful_projects: int = 0
+
+    failed_projects: int = 0
+
+    average_score: float = 0.0
+
+    success_rate: float = 0.0
+
+    confidence: float = 0.0

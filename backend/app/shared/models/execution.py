@@ -2,21 +2,25 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
 
+
 from app.shared.enums.execution_status import ExecutionStatus
+from app.shared.enums.task_status import TaskStatus
 
 from app.shared.models.task import Task
-
 from app.shared.models.artifact import Artifact
+
 
 
 @dataclass
 class ExecutionContext:
+
     """
     Domain execution context for ASEO engine.
 
     Represents a running autonomous
     software engineering execution.
     """
+
 
     id: int | None = None
 
@@ -54,7 +58,16 @@ class ExecutionContext:
 
 
 
-    def start(self, agent_name: str | None = None):
+    # =====================================================
+    # Execution Lifecycle
+    # =====================================================
+
+
+    def start(
+        self,
+        agent_name: str | None = None
+    ):
+
         """
         Start execution.
         """
@@ -68,6 +81,7 @@ class ExecutionContext:
 
 
     def complete(self):
+
         """
         Mark execution as completed.
         """
@@ -78,7 +92,11 @@ class ExecutionContext:
 
 
 
-    def fail(self, reason: str):
+    def fail(
+        self,
+        reason: str
+    ):
+
         """
         Mark execution as failed.
         """
@@ -91,13 +109,124 @@ class ExecutionContext:
 
 
 
-    def add_task(
+    # =====================================================
+    # Task Management
+    # =====================================================
+
+
+    def create_task(
+
         self,
+
+        name: str,
+
+        agent_name: str,
+
+        description: str | None = None
+
+    ) -> Task:
+
+        """
+        Create and attach a new execution task.
+        """
+
+
+        task = Task(
+
+            name=name,
+
+            agent_name=agent_name,
+
+            description=description,
+
+            status=TaskStatus.PENDING
+
+        )
+
+
+        self.add_task(task)
+
+
+        return task
+
+
+
+    def start_task(
+
+        self,
+
         task: Task
+
     ):
+
+        """
+        Move task to running state.
+        """
+
+        task.start()
+
+
+
+    def complete_task(
+
+        self,
+
+        task: Task,
+
+        output: dict[str, Any] | None = None
+
+    ):
+
+        """
+        Mark task as completed.
+        """
+
+        task.status = TaskStatus.COMPLETED
+
+        if output:
+
+            task.output_data = output
+
+
+        task.completed_at = datetime.utcnow()
+
+
+
+    def fail_task(
+
+        self,
+
+        task: Task,
+
+        error: str
+
+    ):
+
+        """
+        Mark task as failed.
+        """
+
+        task.fail(error)
+
+
+
+    # =====================================================
+    # Task / Artifact Registration
+    # =====================================================
+
+
+    def add_task(
+
+        self,
+
+        task: Task
+
+    ):
+
         """
         Attach task to execution.
         """
+
 
         task.execution_id = self.id
 
@@ -106,12 +235,17 @@ class ExecutionContext:
 
 
     def add_artifact(
+
         self,
+
         artifact: Artifact
+
     ):
+
         """
         Attach artifact to execution.
         """
+
 
         artifact.execution_id = self.id
 

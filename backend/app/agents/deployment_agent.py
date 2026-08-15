@@ -1,8 +1,8 @@
 from app.agents.base_agent import BaseAgent
 
-from app.shared.models.execution import ExecutionContext
+from app.agents.capabilities import AgentCapability
 
-from app.shared.models.task import Task
+from app.shared.models.execution import ExecutionContext
 
 from app.shared.models.artifact import Artifact
 
@@ -17,9 +17,32 @@ class DeploymentAgent(BaseAgent):
     """
 
 
+
     name = "DeploymentAgent"
 
     role = "deployment"
+
+
+
+    description = (
+        "Prepares deployment strategies, "
+        "CI/CD pipelines and production "
+        "deployment configurations."
+    )
+
+
+
+    capabilities = [
+
+        AgentCapability.DOCKER,
+
+        AgentCapability.CI_CD,
+
+        AgentCapability.CLOUD_DEPLOYMENT,
+
+        AgentCapability.MONITORING
+
+    ]
 
 
 
@@ -30,6 +53,7 @@ class DeploymentAgent(BaseAgent):
         context: ExecutionContext
 
     ) -> dict:
+
 
 
         # =========================================
@@ -45,6 +69,7 @@ class DeploymentAgent(BaseAgent):
         )
 
 
+
         if not testing_result:
 
             raise ValueError(
@@ -57,164 +82,208 @@ class DeploymentAgent(BaseAgent):
 
 
         # =========================================
-        # Create Deployment Tasks
+        # Main Deployment Task
         # =========================================
 
-        deployment_tasks = [
+        main_task = context.create_task(
 
+            name="Deploy application",
 
-            Task(
+            agent_name=self.name,
 
-                name="Prepare Docker configuration",
+            description=(
 
-                description=(
-                    "Create containerization "
-                    "configuration."
-                ),
-
-                agent_name=self.name
-
-            ),
-
-
-            Task(
-
-                name="Configure CI/CD pipeline",
-
-                description=(
-                    "Create automated deployment "
-                    "workflow."
-                ),
-
-                agent_name=self.name
-
-            ),
-
-
-            Task(
-
-                name="Configure hosting",
-
-                description=(
-                    "Prepare cloud deployment "
-                    "environment."
-                ),
-
-                agent_name=self.name
-
-            ),
-
-
-            Task(
-
-                name="Verify health checks",
-
-                description=(
-                    "Validate service availability "
-                    "after deployment."
-                ),
-
-                agent_name=self.name
+                "Prepare and validate "
+                "application deployment."
 
             )
 
-        ]
+        )
+
+
+        context.start_task(main_task)
 
 
 
-        for task in deployment_tasks:
-
-            context.add_task(
-
-                task
-
-            )
+        try:
 
 
+            # =========================================
+            # Deployment Tasks
+            # =========================================
 
-        # =========================================
-        # Create Deployment Artifact
-        # =========================================
+            deployment_tasks = [
 
-        deployment_plan = {
+                "Prepare Docker configuration",
 
+                "Configure CI/CD pipeline",
 
-            "environment": "Production",
+                "Configure hosting",
 
-
-            "containerization": "Docker",
-
-
-            "ci_cd": "GitHub Actions",
-
-
-            "hosting": "Cloud Platform",
-
-
-            "health_checks": [
-
-                "API availability",
-
-                "Database connection",
-
-                "Service monitoring"
+                "Verify health checks"
 
             ]
 
-        }
+
+            completed_tasks = []
 
 
 
-        artifact = Artifact(
-
-            execution_id=context.id,
-
-            created_by_agent=self.name,
-
-            artifact_type="DEPLOYMENT_PLAN",
-
-            name="Deployment Strategy",
-
-            content=deployment_plan
-
-        )
+            for task_name in deployment_tasks:
 
 
-        context.add_artifact(
+                task = context.create_task(
 
-            artifact
+                    name=task_name,
 
-        )
+                    agent_name=self.name,
+
+                    description=task_name
+
+                )
+
+
+                context.start_task(task)
 
 
 
-        # =========================================
-        # Save Result
-        # =========================================
+                context.complete_task(
 
-        result = {
+                    task,
+
+                    {
+
+                        "result": "completed",
+
+                        "task": task_name
+
+                    }
+
+                )
 
 
-            "agent": self.name,
-
-            "role": self.role,
-
-            "deployment": deployment_plan,
-
-            "tasks_created": len(deployment_tasks),
-
-            "status": "READY_TO_DEPLOY"
-
-        }
+                completed_tasks.append(task_name)
 
 
 
-        context.metadata[
+            # =========================================
+            # Deployment Artifact
+            # =========================================
 
-            "deployment_result"
-
-        ] = result
+            deployment_plan = {
 
 
+                "environment": "Production",
 
-        return result
+
+                "containerization": "Docker",
+
+
+                "ci_cd": "GitHub Actions",
+
+
+                "hosting": "Cloud Platform",
+
+
+                "health_checks": [
+
+                    "API availability",
+
+                    "Database connection",
+
+                    "Service monitoring"
+
+                ]
+
+            }
+
+
+
+            artifact = Artifact(
+
+                execution_id=context.id,
+
+                created_by_agent=self.name,
+
+                artifact_type="DEPLOYMENT_PLAN",
+
+                name="Deployment Strategy",
+
+                content=deployment_plan
+
+            )
+
+
+            context.add_artifact(
+
+                artifact
+
+            )
+
+
+
+            result = {
+
+
+                "agent": self.name,
+
+
+                "role": self.role,
+
+
+                "capabilities": [
+
+                    capability.value
+
+                    for capability in self.capabilities
+
+                ],
+
+
+                "deployment": deployment_plan,
+
+
+                "tasks_created": len(completed_tasks),
+
+
+                "status": "READY_TO_DEPLOY"
+
+            }
+
+
+
+            context.metadata[
+
+                "deployment_result"
+
+            ] = result
+
+
+
+            context.complete_task(
+
+                main_task,
+
+                result
+
+            )
+
+
+
+            return result
+
+
+
+        except Exception as error:
+
+
+            context.fail_task(
+
+                main_task,
+
+                str(error)
+
+            )
+
+
+            raise

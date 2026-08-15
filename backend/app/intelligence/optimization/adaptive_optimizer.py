@@ -1,0 +1,42 @@
+class AdaptiveArchitectureOptimizer:
+
+
+    def calculate_weights(
+        self,
+        performance_confidence: float,
+        memory_strength: float
+    ):
+
+        base = {
+
+            "reasoning": 0.35,
+
+            "memory": 0.25,
+
+            "performance": 0.25,
+
+            "feedback": 0.15
+        }
+
+
+        if performance_confidence > 0.8:
+
+            base["performance"] += 0.10
+
+            base["reasoning"] -= 0.05
+
+            base["memory"] -= 0.05
+
+
+
+        if memory_strength > 0.8:
+
+            base["memory"] += 0.10
+
+            base["reasoning"] -= 0.05
+
+            base["feedback"] -= 0.05
+
+
+
+        return base

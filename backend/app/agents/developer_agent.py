@@ -1,8 +1,8 @@
 from app.agents.base_agent import BaseAgent
 
-from app.shared.models.execution import ExecutionContext
+from app.agents.capabilities import AgentCapability
 
-from app.shared.models.task import Task
+from app.shared.models.execution import ExecutionContext
 
 from app.shared.models.artifact import Artifact
 
@@ -17,9 +17,34 @@ class DeveloperAgent(BaseAgent):
     """
 
 
+
     name = "DeveloperAgent"
 
     role = "developer"
+
+
+
+    description = (
+        "Transforms architecture designs into "
+        "implementation plans and software "
+        "development tasks."
+    )
+
+
+
+    capabilities = [
+
+        AgentCapability.BACKEND_DEVELOPMENT,
+
+        AgentCapability.FRONTEND_DEVELOPMENT,
+
+        AgentCapability.API_DEVELOPMENT,
+
+        AgentCapability.DATABASE_IMPLEMENTATION,
+
+        AgentCapability.CODE_GENERATION
+
+    ]
 
 
 
@@ -32,209 +57,258 @@ class DeveloperAgent(BaseAgent):
     ) -> dict:
 
 
+
         # =========================================
-        # Get Architecture Result
+        # Create Main Development Task
         # =========================================
 
-        architecture_result = context.metadata.get(
+        main_task = context.create_task(
 
-            "architecture_result",
+            name="Develop application",
 
-            {}
+            agent_name=self.name,
+
+            description=(
+
+                "Implement the application "
+                "based on approved architecture."
+
+            )
 
         )
 
 
-        architecture = architecture_result.get(
-
-            "architecture",
-
-            {}
-
-        )
+        context.start_task(main_task)
 
 
 
-        if not architecture:
-
-            raise ValueError(
-
-                "Architecture is required "
-                "before development phase"
-
-            )
+        try:
 
 
+            # =========================================
+            # Get Architecture Result
+            # =========================================
 
-        # =========================================
-        # Create Development Tasks
-        # =========================================
+            architecture_result = context.metadata.get(
 
-        development_tasks = [
+                "architecture_result",
 
-
-            Task(
-
-                name="Create backend models",
-
-                description="Create database models",
-
-                agent_name=self.name
-
-            ),
-
-
-            Task(
-
-                name="Create repositories",
-
-                description="Create repository layer",
-
-                agent_name=self.name
-
-            ),
-
-
-            Task(
-
-                name="Create service layer",
-
-                description="Create business services",
-
-                agent_name=self.name
-
-            ),
-
-
-            Task(
-
-                name="Create API endpoints",
-
-                description="Create REST API endpoints",
-
-                agent_name=self.name
-
-            ),
-
-
-            Task(
-
-                name="Create frontend components",
-
-                description="Build frontend interfaces",
-
-                agent_name=self.name
-
-            )
-
-
-        ]
-
-
-
-        for task in development_tasks:
-
-            context.add_task(
-
-                task
+                {}
 
             )
 
 
 
-        # =========================================
-        # Create Development Artifact
-        # =========================================
+            architecture = architecture_result.get(
 
-        implementation_plan = {
+                "architecture",
+
+                {}
+
+            )
 
 
-            "backend": [
 
-                "Create database models",
+            if not architecture:
+
+                raise ValueError(
+
+                    "Architecture is required "
+                    "before development phase"
+
+                )
+
+
+
+            # =========================================
+            # Create Development Sub Tasks
+            # =========================================
+
+            development_tasks = [
+
+                "Create backend models",
 
                 "Create repositories",
 
                 "Create service layer",
 
-                "Create API endpoints"
+                "Create API endpoints",
 
-            ],
-
-
-            "frontend": [
-
-                "Create UI components",
-
-                "Create application pages",
-
-                "Integrate APIs"
-
-            ],
-
-
-            "testing": [
-
-                "Write unit tests",
-
-                "Run integration tests"
+                "Create frontend components"
 
             ]
 
-        }
+
+
+            created_tasks = []
 
 
 
-        artifact = Artifact(
-
-            execution_id=context.id,
-
-            created_by_agent=self.name,
-
-            artifact_type="IMPLEMENTATION_PLAN",
-
-            name="Development Implementation Plan",
-
-            content=implementation_plan
-
-        )
+            for task_name in development_tasks:
 
 
-        context.add_artifact(
+                task = context.create_task(
 
-            artifact
+                    name=task_name,
 
-        )
+                    agent_name=self.name,
+
+                    description=task_name
+
+                )
+
+
+                context.start_task(task)
 
 
 
-        # =========================================
-        # Save Result
-        # =========================================
+                context.complete_task(
 
-        result = {
+                    task,
+
+                    {
+
+                        "result": "planned",
+
+                        "task": task_name
+
+                    }
+
+                )
 
 
-            "agent": self.name,
-
-            "role": self.role,
-
-            "implementation": implementation_plan,
-
-            "tasks_created": len(development_tasks),
-
-            "based_on": architecture
-
-        }
+                created_tasks.append(task_name)
 
 
 
-        context.metadata[
+            # =========================================
+            # Create Development Artifact
+            # =========================================
 
-            "development_result"
-
-        ] = result
+            implementation_plan = {
 
 
+                "backend": [
 
-        return result
+                    "Create database models",
+
+                    "Create repositories",
+
+                    "Create service layer",
+
+                    "Create API endpoints"
+
+                ],
+
+
+                "frontend": [
+
+                    "Create UI components",
+
+                    "Create application pages",
+
+                    "Integrate APIs"
+
+                ],
+
+
+                "testing": [
+
+                    "Write unit tests",
+
+                    "Run integration tests"
+
+                ]
+
+            }
+
+
+
+            artifact = Artifact(
+
+                execution_id=context.id,
+
+                created_by_agent=self.name,
+
+                artifact_type="IMPLEMENTATION_PLAN",
+
+                name="Development Implementation Plan",
+
+                content=implementation_plan
+
+            )
+
+
+            context.add_artifact(
+
+                artifact
+
+            )
+
+
+
+            result = {
+
+
+                "agent": self.name,
+
+
+                "role": self.role,
+
+
+                "capabilities": [
+
+                    capability.value
+
+                    for capability in self.capabilities
+
+                ],
+
+
+                "implementation": implementation_plan,
+
+
+                "tasks_created": len(created_tasks),
+
+
+                "based_on": architecture
+
+            }
+
+
+
+            context.metadata[
+
+                "development_result"
+
+            ] = result
+
+
+
+            context.complete_task(
+
+                main_task,
+
+                result
+
+            )
+
+
+
+            return result
+
+
+
+        except Exception as error:
+
+
+            context.fail_task(
+
+                main_task,
+
+                str(error)
+
+            )
+
+
+            raise

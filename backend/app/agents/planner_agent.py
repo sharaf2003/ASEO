@@ -1,24 +1,44 @@
 from app.agents.base_agent import BaseAgent
 
+from app.agents.capabilities import AgentCapability
+
 from app.shared.models.execution import ExecutionContext
-from app.shared.models.task import Task
+
 
 
 class PlannerAgent(BaseAgent):
 
     """
     Responsible for analyzing user requirements
-    and creating the initial execution tasks.
+    and creating the initial execution plan.
     """
+
 
     name = "PlannerAgent"
 
     role = "planner"
 
 
+    description = (
+        "Analyzes requirements and creates "
+        "initial project execution plans."
+    )
+
+
+    capabilities = [
+
+        AgentCapability.REQUIREMENT_ANALYSIS,
+
+        AgentCapability.PROJECT_PLANNING
+
+    ]
+
+
+
     # =====================================================
     # Run Planner
     # =====================================================
+
 
     def run(
 
@@ -28,171 +48,130 @@ class PlannerAgent(BaseAgent):
 
     ) -> dict:
 
+
         """
-        Analyze the execution request and create
-        the initial ASEO engineering task plan.
+        Analyze execution request and create
+        initial planning result.
         """
 
-        request = context.metadata.get(
-            "request"
+
+
+        task = context.create_task(
+
+            name="Analyze requirements",
+
+            agent_name=self.name,
+
+            description=(
+
+                "Analyze the user request and "
+                "identify functional and technical "
+                "requirements."
+
+            )
+
         )
 
 
-        if not request:
 
-            raise ValueError(
-                "Execution request is required "
-                "for PlannerAgent"
-            )
+        context.start_task(task)
 
 
-        # =================================================
-        # Create Planning Tasks
-        # =================================================
 
-        tasks = [
-
-            Task(
-
-                name="Analyze requirements",
-
-                description=(
-                    "Analyze the user request and "
-                    "identify functional and technical "
-                    "requirements."
-                ),
-
-                agent_name="PlannerAgent",
-
-                input_data={
-                    "request": request
-                }
-
-            ),
+        try:
 
 
-            Task(
+            request = context.metadata.get(
 
-                name="Design architecture",
-
-                description=(
-                    "Design the software architecture "
-                    "based on the analyzed requirements."
-                ),
-
-                agent_name="ArchitectAgent"
-
-            ),
-
-
-            Task(
-
-                name="Create database schema",
-
-                description=(
-                    "Design the required database "
-                    "schema and relationships."
-                ),
-
-                agent_name="ArchitectAgent"
-
-            ),
-
-
-            Task(
-
-                name="Develop application",
-
-                description=(
-                    "Implement the application based "
-                    "on the approved architecture."
-                ),
-
-                agent_name="DeveloperAgent"
-
-            ),
-
-
-            Task(
-
-                name="Test application",
-
-                description=(
-                    "Validate the generated application "
-                    "using unit, integration and "
-                    "security tests."
-                ),
-
-                agent_name="TesterAgent"
-
-            ),
-
-
-            Task(
-
-                name="Deploy application",
-
-                description=(
-                    "Prepare and execute the deployment "
-                    "workflow."
-                ),
-
-                agent_name="DeploymentAgent"
+                "request"
 
             )
 
-        ]
 
 
-        # =================================================
-        # Attach Tasks To Execution Context
-        # =================================================
+            if not request:
 
-        for task in tasks:
+                raise ValueError(
 
-            context.add_task(
-                task
+                    "Execution request is required "
+                    "for PlannerAgent"
+
+                )
+
+
+
+            # =============================================
+            # Planner Logic
+            # =============================================
+
+
+            result = {
+
+
+                "agent": self.name,
+
+
+                "role": self.role,
+
+
+                "capabilities": [
+
+                    capability.value
+
+                    for capability in self.capabilities
+
+                ],
+
+
+                "request": request,
+
+
+                "requirements": [
+
+                    "Analyze user requirements",
+
+                    "Identify technical constraints",
+
+                    "Prepare execution plan"
+
+                ]
+
+            }
+
+
+
+            context.complete_task(
+
+                task,
+
+                result
+
             )
 
 
-        # =================================================
-        # Store Planner Result
-        # =================================================
 
-        planner_result = {
+            context.metadata[
 
-            "agent": self.name,
+                "planner_result"
 
-            "role": self.role,
-
-            "request": request,
-
-            "tasks_created": len(tasks),
-
-            "tasks": [
-
-                {
-
-                    "name": task.name,
-
-                    "description": task.description,
-
-                    "agent": task.agent_name,
-
-                    "status": task.status.value
-
-                }
-
-                for task in tasks
-
-            ]
-
-        }
+            ] = result
 
 
-        context.metadata[
-            "planner_result"
-        ] = planner_result
+
+            return result
 
 
-        return planner_result
+
+        except Exception as error:
+
+
+            context.fail_task(
+
+                task,
+
+                str(error)
+
+            )
+
+
+            raise

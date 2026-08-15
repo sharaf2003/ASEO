@@ -1,0 +1,95 @@
+from app.intelligence.optimization.architecture_metrics import (
+    ArchitectureMetrics
+)
+
+
+class ArchitecturePerformanceTracker:
+
+
+    def __init__(self):
+
+        self.metrics = {}
+
+
+
+    def register_architecture(
+        self,
+        architecture_name: str
+    ):
+
+        if architecture_name not in self.metrics:
+
+            self.metrics[architecture_name] = (
+                ArchitectureMetrics(
+                    architecture_name
+                )
+            )
+
+
+
+    def record_result(
+        self,
+        architecture_name: str,
+        score: float,
+        success: bool
+    ):
+
+        self.register_architecture(
+            architecture_name
+        )
+
+
+        metric = self.metrics[
+            architecture_name
+        ]
+
+
+        metric.total_projects += 1
+
+
+        if success:
+
+            metric.successful_projects += 1
+
+        else:
+
+            metric.failed_projects += 1
+
+
+
+        metric.average_score = (
+            (
+                metric.average_score *
+                (metric.total_projects - 1)
+            )
+            +
+            score
+        ) / metric.total_projects
+
+
+
+        metric.success_rate = (
+            metric.successful_projects /
+            metric.total_projects
+        )
+
+
+
+        metric.confidence = (
+            metric.success_rate *
+            0.7
+            +
+            metric.average_score *
+            0.3
+        )
+
+
+
+    def get_metrics(
+        self,
+        architecture_name: str
+    ):
+
+        return self.metrics.get(
+            architecture_name
+        )
