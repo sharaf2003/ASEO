@@ -1,45 +1,23 @@
 from fastapi import FastAPI
-from sqlalchemy import text
 
-# ==========================
-# API Routers
-# ==========================
+from app.core.settings import settings
 
-from app.api import (
-    projects,
-    executions,
-    dashboard,
-    metrics,
-    organizations,
-    workspaces,
-    users,
-    auth,
-    project_members,
-    project_invitations,
+from app.core.middleware import (
+    setup_middleware
 )
 
-# ==========================
-# Database Health
-# ==========================
+from app.core.exceptions import (
+    ASEOException,
+    aseo_exception_handler,
+    global_exception_handler
+)
 
-from app.database.connection import SessionLocal
+from app.core.lifecycle import (
+    lifespan
+)
 
-
-# ==========================
-# Application
-# ==========================
-
-
-app = FastAPI(
-    title="ASEO Platform",
-    description="""
-Autonomous Software Engineering Organization.
-
-AI-powered software engineering platform
-for autonomous project generation,
-analysis, deployment and operations.
-""",
-    version="23.0.0",
+from app.security.security_config import (
+    add_security_middleware
 )
 
 
@@ -47,32 +25,107 @@ analysis, deployment and operations.
 # API ROUTERS
 # =====================================================
 
-
-app.include_router(
-    projects.router,
-    prefix="/api/projects",
-    tags=["Projects"],
+from app.api import (
+    auth,
+    organizations,
+    workspaces,
+    users,
+    projects,
+    executions,
+    dashboard,
+    platform_dashboard,
+    metrics,
+    project_members,
+    project_invitations,
+    api_keys,
+    subscriptions,
+    billing,
+    billing_dashboard,
+    payments,
+    payment_webhook,
+    audit,
+    health
 )
 
 
-app.include_router(
-    executions.router,
-    prefix="/api",
-    tags=["Executions"],
+from app.middleware.api_gateway_middleware import (
+    APIGatewayMiddleware
 )
 
 
-app.include_router(
-    dashboard.router,
-    prefix="/api",
-    tags=["Dashboard"],
+from app.core.logging_config import (
+    setup_logging
 )
 
 
+# =====================================================
+# APPLICATION
+# =====================================================
+
+
+app = FastAPI(
+
+    title=settings.APP_NAME,
+
+    description="""
+Autonomous Software Engineering Organization.
+
+AI-powered software engineering platform
+for autonomous project generation,
+analysis, deployment and operations.
+""",
+
+    version=settings.VERSION,
+
+    lifespan=lifespan
+
+)
+
+
+# =====================================================
+# MIDDLEWARE
+# =====================================================
+
+
+add_security_middleware(app)
+
+setup_middleware(app)
+
+setup_logging()
+
+
+# =====================================================
+# EXCEPTION HANDLERS
+# =====================================================
+
+
+app.add_exception_handler(
+
+    ASEOException,
+
+    aseo_exception_handler
+
+)
+
+
+app.add_exception_handler(
+
+    Exception,
+
+    global_exception_handler
+
+)
+
+
+# =====================================================
+# ROUTERS
+# =====================================================
+
+
 app.include_router(
-    metrics.router,
-    prefix="/api",
-    tags=["Metrics"],
+    auth.router,
+    prefix="/api/auth",
+    tags=["Authentication"],
 )
 
 
@@ -98,9 +151,16 @@ app.include_router(
 
 
 app.include_router(
-    auth.router,
-    prefix="/api/auth",
-    tags=["Authentication"],
+    projects.router,
+    prefix="/api/projects",
+    tags=["Projects"],
+)
+
+
+app.include_router(
+    executions.router,
+    prefix="/api",
+    tags=["Executions"],
 )
 
 
@@ -118,89 +178,130 @@ app.include_router(
 )
 
 
-
-# =====================================================
-# SYSTEM HEALTH
-# =====================================================
-
-
-@app.get(
-    "/health",
-    tags=["System"],
-    summary="System Health Check",
+app.include_router(
+    dashboard.router,
+    prefix="/api",
+    tags=["Dashboard"],
 )
-def health_check():
-
-    database_status = "unknown"
-
-    try:
-
-        db = SessionLocal()
-
-        db.execute(
-            text("SELECT 1")
-        )
-
-        database_status = "connected"
-
-    except Exception:
-
-        database_status = "disconnected"
-
-    finally:
-
-        try:
-            db.close()
-
-        except Exception:
-            pass
 
 
-    return {
+app.include_router(
+    platform_dashboard.router,
+    prefix="/api",
+    tags=["Platform Dashboard"],
+)
 
-        "system": "ASEO",
 
-        "status": "running",
+app.include_router(
+    metrics.router,
+    prefix="/api",
+    tags=["Metrics"],
+)
 
-        "version": "23.0.0",
 
-        "architecture":
-            "Layered Multi-Tenant Architecture",
+app.include_router(
+    api_keys.router,
+    prefix="/api/api-keys",
+    tags=["API Keys"],
+)
 
-        "database":
-            database_status,
 
-    }
+app.include_router(
+    subscriptions.router,
+    prefix="/api/subscriptions",
+    tags=["Subscriptions"],
+)
 
+
+app.include_router(
+    billing.router,
+    prefix="/api/billing",
+    tags=["Billing"],
+)
+
+
+app.include_router(
+    billing_dashboard.router,
+    prefix="/api/billing",
+    tags=["Billing Dashboard"],
+)
+
+
+app.include_router(
+    payments.router,
+    prefix="/api/payments",
+    tags=["Payments"]
+)
+
+
+app.include_router(
+    payment_webhook.router,
+    prefix="/api/payments",
+    tags=["Payment Webhook"]
+)
+
+
+app.add_middleware(
+    APIGatewayMiddleware
+)
+
+
+app.include_router(
+
+    audit.router,
+
+    prefix="/audit",
+
+    tags=["Audit"]
+
+)
 
 
 # =====================================================
 # SYSTEM INFORMATION
 # =====================================================
+# Health + Metrics
+# يحتوي الآن على:
+# /health
+# /metrics
 
+app.include_router(
+
+    health.router
+
+)
 
 @app.get(
     "/info",
     tags=["System"],
-    summary="System Information",
+    summary="System Information"
 )
 def system_info():
 
     return {
 
         "message":
+
             "Welcome to ASEO Platform",
 
+
         "version":
-            "23.0.0",
+
+            settings.VERSION,
+
 
         "architecture":
+
             "Organization → Workspace → User → Project",
 
+
         "docs":
+
             "/docs",
 
+
         "health":
+
             "/health",
 
     }

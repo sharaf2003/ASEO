@@ -1,0 +1,58 @@
+{
+    "status": "success",
+    "agent_info": {
+        "name": "Coding Agent",
+        "version": "4.0"
+    },
+    "processing_time": 0.014,
+    "generated_files": [
+        "generated_project/app/main.py",
+        "generated_project/app/models/users.py",
+        "generated_project/app/schemas/users_schema.py",
+        "generated_project/app/routes/users_routes.py",
+        "generated_project/app/services/users_service.py",
+        "generated_project/app/models/appointments.py",
+        "generated_project/app/schemas/appointments_schema.py",
+        "generated_project/app/routes/appointments_routes.py",
+        "generated_project/app/services/appointments_service.py"
+    ],
+    "files_count": 9,
+    "validation": [
+        {
+            "file": "generated_project/app/main.py",
+            "valid": true
+        },
+        {
+            "file": "generated_project/app/models/users.py",
+            "valid": true
+        },
+        {
+            "file": "generated_project/app/schemas/users_schema.py",
+            "valid": true
+        },
+        {
+            "file": "generated_project/app/routes/users_routes.py",
+            "valid": true
+        },
+        {
+            "file": "generated_project/app/services/users_service.py",
+            "valid": true
+        },
+        {
+            "file": "generated_project/app/models/appointments.py",
+            "valid": true
+        },
+        {
+            "file": "generated_project/app/schemas/appointments_schema.py",
+            "valid": true
+        },
+        {
+            "file": "generated_project/app/routes/appointments_routes.py",
+            "valid": true
+        },
+        {
+            "file": "generated_project/app/services/appointments_service.py",
+            "valid": true
+        }
+    ]
+}

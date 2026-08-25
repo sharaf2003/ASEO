@@ -6,6 +6,7 @@ from app.shared.models.execution import ExecutionContext
 
 from app.shared.models.artifact import Artifact
 
+import copy
 
 from app.intelligence.knowledge_retriever import KnowledgeRetriever
 
@@ -143,8 +144,10 @@ class ArchitectAgent(BaseAgent):
         self.architecture_decision_engine = ArchitectureDecisionEngine()
 
         self.architecture_evolution_engine = (
-            ArchitectureEvolutionEngine()
-        )
+            ArchitectureEvolutionEngine(
+                db=db
+            )
+)
 
 
 
@@ -497,26 +500,16 @@ class ArchitectAgent(BaseAgent):
 
         for layer, values in previous.items():
 
-
             if layer not in architecture:
-
                 continue
-
-
 
             if not isinstance(values, dict):
-
                 continue
-
-
 
             for key, value in values.items():
 
-
-                if value:
-
+                if value and not architecture[layer].get(key):
                     architecture[layer][key] = value
-
 
 
         return architecture
@@ -768,9 +761,15 @@ class ArchitectAgent(BaseAgent):
 
             architecture_decision = {}
 
+            evolution_score = 1.0
+
+            evolution_feedback_score = 1.0
+
             architecture_pattern_applied = False
 
             best = {}
+
+            adaptive_locked_architecture = None
 
             reasoning_architecture = (
                 reasoning_result
@@ -872,13 +871,139 @@ class ArchitectAgent(BaseAgent):
                     )
 
 
+                if self.architecture_evolution_engine:
+
+                    evolution_result = (
+                        self.architecture_evolution_engine.evolve(
+                            architecture
+                        )
+                    )
+
+                    architecture_evolution = {
+
+                        "architecture":
+                            evolution_result.architecture,
+
+                        "improvements":
+                            evolution_result.improvements,
+
+                        "risks":
+                            evolution_result.risks,
+
+                        "future_recommendations":
+                            evolution_result.future_recommendations
+                    }
+
+                    scores = []
+
+                    for item in evolution_result.improvements:
+
+                        if isinstance(item, dict):
+
+                            scores.append(
+                                item.get(
+                                    "weight",
+                                    0
+                                )
+                            )
+
+                    if scores:
+
+                        evolution_score = (
+                            sum(scores) / len(scores)
+                        )
+                
+
+                    evolution_memory = (
+                        self.architecture_evolution_engine
+                        .get_learning_score(
+                            architecture
+                        )
+                    )
+
+                    candidate_evolution_memory = {}
+
+                    for candidate in reasoning_result.get(
+                        "candidates",
+                        []
+                    ):
+
+                        candidate_name = candidate.get(
+                            "name"
+                        )
+
+
+                        candidate_architecture = candidate.get(
+                            "architecture",
+                            {}
+                        )
+
+
+                        candidate_evolution_memory[candidate_name] = (
+                            self.architecture_evolution_engine
+                            .get_learning_score(
+                                candidate_architecture
+                            )
+                        )
+
+                    if evolution_memory:
+
+                        evolution_feedback_score = (
+                            evolution_memory.get(
+                                "success_rate",
+                                1.0
+                            )
+                        )               
+                
+
+                architecture_evolution = None
+
+                feedback_score = (
+                    evolution_feedback_score *
+                    evolution_score
+                )
+
+
+
+                if feedback_score is None:
+
+                    feedback_score = 1.0
+
+
+                feedback_score = max(
+                    0,
+                    min(
+                        feedback_score,
+                        1.0
+                    )
+                )
+
+                print("DEBUG EVOLUTION FEEDBACK:")
+                print(evolution_feedback_score)
+
+                print("DEBUG FINAL FEEDBACK SENT:")
+                print(feedback_score)
 
                 architecture_decision = (
+
                     self.architecture_decision_engine.decide(
+
                         reasoning_result,
+
                         best_memory,
-                        feedback_score=1.0,
-                        performance_confidence=performance_confidence
+
+                        feedback_score=feedback_score,
+
+                        performance_confidence=performance_confidence,
+
+                        evolution_score=evolution_score,
+
+                        candidates=reasoning_result.get(
+                            "candidates",
+                            []
+                        ),
+                        evolution_memory=
+                                candidate_evolution_memory
                     )
                 )
 
@@ -887,6 +1012,38 @@ class ArchitectAgent(BaseAgent):
                     "final_decision_score",
                     final_decision_score
                 )
+
+
+                # Apply adaptive architecture decision
+
+                selected_architecture = architecture_decision.get(
+                    "architecture"
+                )
+
+
+                if selected_architecture:
+
+                    for candidate in reasoning_result.get(
+                        "candidates",
+                        []
+                    ):
+
+                        if candidate.get(
+                            "name"
+                        ) == selected_architecture:
+
+                            architecture = candidate.get(
+                                "architecture",
+                                architecture
+                            )
+
+                            break
+
+                if architecture_decision.get("architecture"):
+
+                    adaptive_locked_architecture = copy.deepcopy(
+                        architecture
+                    )
 
             # =========================================
             # Retrieve Consolidated Architecture Patterns
@@ -946,19 +1103,15 @@ class ArchitectAgent(BaseAgent):
                 )
 
 
-                if pattern_context:
-
+                if not architecture_decision.get("architecture"):
 
                     architecture = self.apply_previous_architecture(
-
                         architecture,
-
                         [
                             {
                                 "architecture": pattern_context
                             }
                         ]
-
                     )
 
 
@@ -992,7 +1145,31 @@ class ArchitectAgent(BaseAgent):
 
                     })
 
-            if previous_architectures:
+                    # Restore adaptive decision after knowledge patterns
+
+                    if architecture_decision.get("architecture"):
+
+                        selected_architecture = (
+                            architecture_decision.get("architecture")
+                        )
+
+                        for candidate in reasoning_result.get(
+                            "candidates",
+                            []
+                        ):
+
+                            if candidate.get(
+                                "name"
+                            ) == selected_architecture:
+
+                                architecture = candidate.get(
+                                    "architecture",
+                                    architecture
+                                )
+
+                                break
+
+            if previous_architectures and not architecture_decision.get("architecture"):
 
                 top_memory = previous_architectures[0]
 
@@ -1164,18 +1341,14 @@ class ArchitectAgent(BaseAgent):
 
                         knowledge_used = True
 
+                    elif layer == "frontend":
 
+                        if adaptive_locked_architecture:
+                            continue
 
+                        if pattern["category"] == "technology":
 
-                elif layer == "frontend":
-
-
-                    if pattern["category"] == "technology":
-
-                        architecture["frontend"]["technology"] = pattern["name"]
-
-                        knowledge_used = True
-
+                            architecture["frontend"]["technology"] = pattern["name"]
 
                     elif pattern["category"] == "type":
 
@@ -1183,11 +1356,7 @@ class ArchitectAgent(BaseAgent):
 
                         knowledge_used = True
 
-
-
-
                 elif layer == "deployment":
-
 
                     if pattern["category"] == "technology":
 
@@ -1195,14 +1364,11 @@ class ArchitectAgent(BaseAgent):
 
                         knowledge_used = True
 
-
                     elif pattern["category"] == "environment":
 
                         architecture["deployment"]["environment"] = pattern["name"]
 
                         knowledge_used = True
-
-
 
             if not knowledge_used and not previous_architectures:
 
@@ -1212,7 +1378,11 @@ class ArchitectAgent(BaseAgent):
                 ).lower()
 
 
-                if "flutter" in request_text:
+                if (
+                    not architecture_decision.get("architecture")
+                    and
+                    "flutter" in request_text
+                ):
 
                     architecture["frontend"]["technology"] = "Flutter"
                     architecture["frontend"]["type"] = "Mobile Application"
@@ -1225,34 +1395,11 @@ class ArchitectAgent(BaseAgent):
                     architecture["deployment"]["technology"] = "Firebase"
                     architecture["deployment"]["environment"] = "Cloud"
 
-                
+            # Restore adaptive decision after all learning modifications
 
-            architecture_evolution = None
+            if adaptive_locked_architecture:
 
-
-            if self.architecture_evolution_engine:
-
-                evolution_result = (
-                    self.architecture_evolution_engine.evolve(
-                        architecture
-                    )
-                )
-
-
-                architecture_evolution = {
-
-                    "architecture":
-                        evolution_result.architecture,
-
-                    "improvements":
-                        evolution_result.improvements,
-
-                    "risks":
-                        evolution_result.risks,
-
-                    "future_recommendations":
-                        evolution_result.future_recommendations
-                }
+                architecture = adaptive_locked_architecture
 
             artifact = Artifact(
 
@@ -1267,8 +1414,6 @@ class ArchitectAgent(BaseAgent):
                 content=architecture
 
             )
-
-
 
             context.add_artifact(
 
@@ -1292,19 +1437,15 @@ class ArchitectAgent(BaseAgent):
 
             if self.decision_memory and decision_history:
 
-
                 memory_result = self.decision_memory.save(
 
                     {
 
                         "decision_history_id": decision_history.id,
 
-
                         "agent_name": self.name,
 
-
                         "architecture": architecture,
-
 
                         "success_score": (
 
@@ -1315,7 +1456,6 @@ class ArchitectAgent(BaseAgent):
                             else 0.5
 
                         ),
-
 
                         "similarity_score": (
 
@@ -1332,7 +1472,6 @@ class ArchitectAgent(BaseAgent):
                             else 0
 
                         ),
-
 
                         "memory_score": final_decision_score,
 
@@ -1357,7 +1496,6 @@ class ArchitectAgent(BaseAgent):
 
                         "usage_count": 0,
 
-
                         "extra_data": {
 
                             "architecture_decisions":
@@ -1371,13 +1509,11 @@ class ArchitectAgent(BaseAgent):
                             "source":
 
                                 "ArchitectAgent"
-
                         }
 
                     }
 
                 )
-
 
                 decision_memory_saved = memory_result.get(
 
@@ -1387,18 +1523,11 @@ class ArchitectAgent(BaseAgent):
 
                 )
 
-
-
-
-
             result = {
-
 
                 "agent": self.name,
 
-
                 "role": self.role,
-
 
                 "capabilities": [
 
@@ -1407,7 +1536,6 @@ class ArchitectAgent(BaseAgent):
                     for capability in self.capabilities
 
                 ],
-
 
                 "planner_input": planner_result,
 
@@ -1483,19 +1611,11 @@ class ArchitectAgent(BaseAgent):
                 }
             }
 
-
-
-
-
             context.metadata[
 
                 "architecture_result"
 
             ] = result
-
-
-
-
 
             context.complete_task(
 

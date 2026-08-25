@@ -28,5 +28,1115 @@
             "quality": 100
         },
         "created_at": "2026-07-28T01:08:42.735509"
+    },
+    {
+        "id": "d16a55aa-0b3b-4c1d-9607-e4e86378aaca",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-16T19:35:45.358433"
+    },
+    {
+        "id": "6009c065-20a0-44f3-bdfa-787c7586c40b",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-16T19:35:51.704700"
+    },
+    {
+        "id": "facbd58f-80cc-4380-87b0-84bb4661622a",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-16T19:39:27.053127"
+    },
+    {
+        "id": "2d1cb0c2-acee-4d63-a830-97845b7dc5f1",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-16T19:39:32.384075"
+    },
+    {
+        "id": "e9d965c9-b2e8-4aef-98ad-c602db985734",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-16T19:48:45.803243"
+    },
+    {
+        "id": "a5d58f62-f52f-4fff-a899-9e01598d23f1",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-16T19:48:51.259382"
+    },
+    {
+        "id": "b073f076-fa35-4b1c-9faf-939592501cb0",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-16T20:28:39.106280"
+    },
+    {
+        "id": "ea8fe5c7-cf72-4ae7-9e17-35c79f9a895d",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-16T20:28:51.539879"
+    },
+    {
+        "id": "531dffa2-0734-4274-be90-a01f3e656384",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-16T20:38:34.968111"
+    },
+    {
+        "id": "2746c5dc-bee4-4f42-83d2-82f8b5b0e9d6",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-16T20:38:49.659323"
+    },
+    {
+        "id": "0ecc24f7-8b03-4d53-a97b-8d8e69966653",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-16T20:41:31.276585"
+    },
+    {
+        "id": "7f81551e-36ec-4a99-ab0a-4cbc1d7c08d3",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-16T20:49:24.508370"
+    },
+    {
+        "id": "2181aa37-2074-4590-917c-a83c141bdc37",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-16T23:52:22.623741"
+    },
+    {
+        "id": "b57d6093-4333-4b45-8713-a2e1ef2cae79",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-16T23:52:26.868749"
+    },
+    {
+        "id": "0cb98fd4-f302-4ca5-8150-55615c04f4d5",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-17T00:10:37.233005"
+    },
+    {
+        "id": "54b10fbe-ddde-495f-9329-4542531562a5",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-17T00:10:43.107894"
+    },
+    {
+        "id": "5962cf56-c06d-40e8-93dd-d13fead2c4d9",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-17T00:13:06.542721"
+    },
+    {
+        "id": "144c2130-d2ea-4137-9ec2-f51219d9c25e",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-17T00:13:09.151888"
+    },
+    {
+        "id": "7405b8e8-df22-4ed3-8215-a687bdc1480c",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-17T00:16:31.349693"
+    },
+    {
+        "id": "29b13cfc-9807-44d0-9a66-966e50a6f07f",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-17T00:16:33.834754"
+    },
+    {
+        "id": "533d7ba0-38f7-499b-9c90-29bee33f62d0",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-17T00:24:41.574635"
+    },
+    {
+        "id": "60cbedfd-a45c-41c3-8376-82a987bf2ceb",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-17T00:24:46.268241"
+    },
+    {
+        "id": "58116d19-2a6c-4e78-8183-ae3cd415d2ab",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-17T02:26:12.033426"
+    },
+    {
+        "id": "50fef1ce-cb50-4ba7-8a61-fbaafa20d011",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-17T02:26:14.946416"
+    },
+    {
+        "id": "b5b1262b-f618-453f-88f9-95f4e14edd93",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-17T02:42:34.585339"
+    },
+    {
+        "id": "21af98dd-0bf0-4679-aa6f-f57d1e80c6c3",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-17T02:42:43.191155"
+    },
+    {
+        "id": "7b2d4d1a-2176-4716-b52d-b962b1cb7775",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-17T20:16:03.853607"
+    },
+    {
+        "id": "4017c82e-32bc-49a1-81b8-7ea78ec2776f",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-17T20:16:24.757247"
+    },
+    {
+        "id": "ce8ad673-0be0-43e1-a777-53cebcc61efa",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-17T20:39:05.486809"
+    },
+    {
+        "id": "9f879f18-f9cd-4398-bdb6-ccc89ddd0db4",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-17T20:39:18.731756"
+    },
+    {
+        "id": "84d27c21-544f-4f6b-8501-18ebb7b744d1",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-17T20:44:37.819682"
+    },
+    {
+        "id": "77a91d94-9440-421a-82f6-7eef492ff6a9",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-17T20:45:00.484147"
+    },
+    {
+        "id": "e505705b-f5e1-4c8f-8b1b-3845704c1723",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-17T20:59:52.629549"
+    },
+    {
+        "id": "8cb331eb-0c8a-4bb4-a794-154fbd54775d",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-17T21:00:06.114891"
+    },
+    {
+        "id": "24fdcbfa-a1ea-4227-bcb3-d7624320c91f",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-17T21:29:20.920380"
+    },
+    {
+        "id": "80b6133a-7a12-4c79-ae12-88b7fd1daf46",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-17T21:29:59.450822"
+    },
+    {
+        "id": "d43617ec-606f-4a16-bfaa-24102c07e07c",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-17T23:46:48.163489"
+    },
+    {
+        "id": "535e7d32-9803-48a1-bfd2-191f18ca535b",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-17T23:47:10.612816"
+    },
+    {
+        "id": "f4186141-0b1e-4629-a4b0-f27ed03a3e6e",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-18T00:04:53.928065"
+    },
+    {
+        "id": "c84abe50-8f05-4014-8f30-48d6163c5fcc",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-18T00:05:16.991038"
+    },
+    {
+        "id": "86b8113a-c766-4ed9-a71b-cbad998d35f9",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-18T00:16:03.851781"
+    },
+    {
+        "id": "acc65846-ca14-413a-b75c-87565d764813",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-18T00:16:21.270787"
+    },
+    {
+        "id": "c5ff559f-1c4f-4232-bad5-0279c30a4035",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-18T00:53:57.731763"
+    },
+    {
+        "id": "168ef3a6-bbf1-4392-84cd-f5408d43f16e",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-18T00:54:42.390946"
+    },
+    {
+        "id": "c59e183c-8a2c-46e9-aeb1-5f1e3e988127",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-18T01:13:35.467482"
+    },
+    {
+        "id": "a7a11707-7a3f-49c4-87fb-d8714428274f",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-18T01:13:55.895663"
+    },
+    {
+        "id": "644cd15a-62ff-4ea3-979e-1650e87c6f60",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-18T01:29:47.616927"
+    },
+    {
+        "id": "91ef5fe5-cb19-4ddd-ae00-eb527e8f5988",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-18T01:30:08.609502"
+    },
+    {
+        "id": "8c418fc5-b7b9-4009-877b-63fe16086372",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-18T02:17:54.528894"
+    },
+    {
+        "id": "0c0769b9-5483-4234-a913-30aa691c8e88",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-18T02:18:23.308735"
+    },
+    {
+        "id": "095ec019-d1cc-4c91-a6c5-9ceeb995723e",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-18T02:50:33.884301"
+    },
+    {
+        "id": "348aca51-3b88-4122-b118-955ef7ff20dc",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-18T02:50:55.909253"
+    },
+    {
+        "id": "354871fb-1d8f-4547-ad8c-b483b1613911",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-18T03:19:39.849549"
+    },
+    {
+        "id": "78bd76e2-61d0-47dc-83db-3ee71d34f8fc",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-18T03:20:02.823744"
+    },
+    {
+        "id": "f47f2bcb-fd4b-462b-8936-ec38fbf4bfde",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-18T03:26:48.752835"
+    },
+    {
+        "id": "9e275a55-0d2f-4518-ab1d-4b86ac1ce256",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-18T03:27:09.074416"
+    },
+    {
+        "id": "b590a081-11b8-4b14-b863-ba3a6de7ad22",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-18T03:49:23.306743"
+    },
+    {
+        "id": "2ec63896-8b5c-4e21-b8be-698fc07b5df8",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-18T03:50:04.439734"
+    },
+    {
+        "id": "57f856f2-22c6-4658-99af-dbc8ba599c29",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-18T04:06:14.100658"
+    },
+    {
+        "id": "78978be6-6c7e-4e78-9f4b-3ce223255599",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-18T04:06:40.517345"
+    },
+    {
+        "id": "6fb5080e-c1e0-477b-a454-5007d4222cef",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-18T04:19:51.527320"
+    },
+    {
+        "id": "4f97f9f3-fceb-43b3-9621-d90b54b8aa62",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-18T04:20:15.914307"
+    },
+    {
+        "id": "2a8a1fad-2e81-4b9b-bffd-fac0f4b37d3d",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-18T05:03:00.921628"
+    },
+    {
+        "id": "ec9ac500-4d84-4bb5-b20c-59026e66ebb6",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-18T05:03:17.835037"
+    },
+    {
+        "id": "56f07459-0e04-4f97-847a-259ff15d820b",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-18T05:14:40.543195"
+    },
+    {
+        "id": "4a4e6a66-ce7d-449b-b04d-94b7a12ea857",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-18T05:14:55.596227"
+    },
+    {
+        "id": "4e028284-5eaf-4032-b722-52ce73078f58",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-18T05:30:36.537786"
+    },
+    {
+        "id": "cc91df2a-42d4-4804-ab58-6c4e417af1ab",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-18T05:30:52.439365"
+    },
+    {
+        "id": "7ef7a653-36cb-447e-8f9d-c2991e159853",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-18T05:38:16.197437"
+    },
+    {
+        "id": "1fb771ca-6aa6-49c5-a94c-dc8cc483351b",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-18T05:38:31.633572"
+    },
+    {
+        "id": "8795f47d-e568-470d-8c3e-57cec14c5efe",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-18T05:51:47.881228"
+    },
+    {
+        "id": "bdb80831-84b8-4e51-a470-085f560d07e1",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-18T05:52:04.556274"
+    },
+    {
+        "id": "0f67bfac-38a0-4d63-977c-731e1eebde9e",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-18T05:59:48.860788"
+    },
+    {
+        "id": "b76dc575-1342-4328-9b1b-4cbe40cd2c27",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-18T06:00:04.321033"
+    },
+    {
+        "id": "e773d7f2-eb0c-4b0e-917a-7984101a20a9",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-18T06:06:32.114524"
+    },
+    {
+        "id": "876cbe92-5fd5-430a-b4a8-15903e139afd",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-18T06:06:47.581635"
+    },
+    {
+        "id": "c6f9148d-39cf-4019-8932-23eb3f1d5618",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-19T01:18:17.948032"
+    },
+    {
+        "id": "c5f8add1-7157-4d6f-ac14-596d63d12736",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-19T01:18:50.329138"
+    },
+    {
+        "id": "dd296534-adeb-4b51-be2b-40d44c4ca776",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-19T01:36:50.700831"
+    },
+    {
+        "id": "0dcdabed-3815-47f9-bcf3-4790be481e46",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-19T01:37:26.592464"
+    },
+    {
+        "id": "58ad3d86-eeff-4cdf-a153-9a489445c678",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-19T01:52:48.105285"
+    },
+    {
+        "id": "10a0c25e-3a6d-4e1d-9ccf-6c87e0ea10e7",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-19T01:53:22.459369"
+    },
+    {
+        "id": "61901f63-07c2-418c-a0a2-72dca8cc0c3c",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-19T02:28:24.474421"
+    },
+    {
+        "id": "24d9f909-4774-406c-b247-3eab3f57b474",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-19T02:28:49.846143"
+    },
+    {
+        "id": "2e1a4145-4fa1-4298-976a-3d8e7c3e43ec",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-19T02:39:43.524416"
+    },
+    {
+        "id": "5daa75ec-8f11-4add-a87f-3c6268b6e581",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-19T02:40:01.233782"
+    },
+    {
+        "id": "6773bb98-c0f9-4ba8-9552-9c4546e8a037",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-19T02:48:14.747121"
+    },
+    {
+        "id": "5858c983-c737-4555-ac6a-ea63c1fbee68",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-19T02:48:46.627475"
+    },
+    {
+        "id": "02171216-a0b6-4640-896d-b164372a9790",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-19T02:56:32.444669"
+    },
+    {
+        "id": "83840787-3d12-43cf-a9f8-8aa8a18f230e",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-19T02:56:59.626102"
+    },
+    {
+        "id": "a60f4c22-f25a-4c05-8229-ed09e81a1099",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-21T20:16:17.289312"
+    },
+    {
+        "id": "1d7f0e4f-d4e9-461a-bd46-4afe25bb1bd8",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-21T20:17:09.639205"
+    },
+    {
+        "id": "85d517d5-ef0d-43c7-9d34-f793801da645",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-25T14:47:16.296075"
+    },
+    {
+        "id": "68b6b298-a743-4e10-9082-cbf5e90eec98",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-25T14:56:19.231092"
+    },
+    {
+        "id": "f44ed95f-ba04-400d-af8b-9038028bde1a",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-25T14:56:25.069389"
+    },
+    {
+        "id": "462bf5aa-e37c-4fed-b548-691ed91f2e1b",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-25T15:09:05.626510"
+    },
+    {
+        "id": "d2d0a515-0d58-4031-bb19-43d5fd8c4567",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-25T15:12:11.794359"
+    },
+    {
+        "id": "8e428135-d7e7-4af2-ad70-5d55d566c0cc",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-25T15:15:09.269605"
+    },
+    {
+        "id": "2ae55459-7ec8-4970-803d-7af04ef7235d",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-25T15:15:11.509725"
+    },
+    {
+        "id": "8a504605-1bab-4ef6-8020-cd199ec42e3a",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-25T15:31:18.454535"
+    },
+    {
+        "id": "fc4877a5-491c-4190-a7d6-b8d28925ea8b",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-25T15:31:25.354887"
+    },
+    {
+        "id": "273c4f7e-0880-45f4-861b-3316d4ac48ba",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-25T15:55:12.005793"
+    },
+    {
+        "id": "49b62385-9952-4107-b425-af1643fc897f",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-25T15:55:14.669381"
+    },
+    {
+        "id": "56423926-233b-4bb5-b5bc-9b7f689c007d",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-25T16:10:53.681937"
+    },
+    {
+        "id": "9175bef2-fee6-4e0f-985b-3f4c7fd988fe",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-25T16:10:56.681890"
+    },
+    {
+        "id": "a66ab865-a7a7-4129-b28c-a7a9af5cc8b5",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-25T16:16:31.387715"
+    },
+    {
+        "id": "22d9e114-ee57-4313-9208-ed06341b6b69",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-25T16:16:34.826867"
+    },
+    {
+        "id": "7a6ba22d-4e60-48a5-82eb-e058bdf8c772",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-25T16:27:13.440800"
+    },
+    {
+        "id": "eb92250b-a540-437b-847a-92fb37e82f17",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-25T16:27:17.716625"
+    },
+    {
+        "id": "36d3ef77-88e6-4b78-b853-bf5d4a8d6d9a",
+        "project": "Build ecommerce platform",
+        "decision": "Production completed",
+        "result": {
+            "success": true,
+            "quality": 100
+        },
+        "created_at": "2026-08-25T16:38:42.863301"
+    },
+    {
+        "id": "b6562010-f137-4a9c-af42-75cc39d51fde",
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL + Layered",
+        "result": {
+            "score": 95,
+            "success": true
+        },
+        "created_at": "2026-08-25T16:38:47.895084"
     }
 ]

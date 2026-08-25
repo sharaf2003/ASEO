@@ -1,0 +1,293 @@
+{
+    "status": "success",
+    "agent_info": {
+        "name": "Planning Agent",
+        "version": "5.0"
+    },
+    "processing_time": 1.534,
+    "knowledge": {
+        "actors": [
+            "customer",
+            "admin"
+        ],
+        "entities": [
+            "appointments",
+            "users"
+        ],
+        "actions": [
+            "manage",
+            "book"
+        ],
+        "statistics": {
+            "documents": 3,
+            "requirements": 2,
+            "graphs": 3,
+            "plans": 582
+        }
+    },
+    "memory_context": {
+        "status": "success",
+        "agent_info": {
+            "name": "Memory Retrieval Agent",
+            "version": "1.2"
+        },
+        "query": "Clinic Management System",
+        "matches_count": 7,
+        "previous_projects": [
+            {
+                "project_id": "7dcd32c8-7d7c-48f5-8292-3b210d62c979",
+                "name": "Clinic Management System",
+                "created_at": "2026-08-25T14:46:42.022900",
+                "status": "active"
+            },
+            {
+                "project_id": "2f9d4c89-fe89-4ed5-89ad-5916b73b3f50",
+                "name": "Clinic Management System",
+                "created_at": "2026-08-25T14:46:32.135425",
+                "status": "active"
+            },
+            {
+                "project_id": "84c0942d-d94f-43ec-82e9-b4cd28539aab",
+                "name": "Clinic Management System",
+                "created_at": "2026-08-25T14:46:23.733538",
+                "status": "active"
+            },
+            {
+                "project_id": "67020b8d-c7df-4f13-8cb8-a3036218863e",
+                "name": "Clinic Management System",
+                "created_at": "2026-08-25T14:46:15.304068",
+                "status": "active"
+            },
+            {
+                "project_id": "07a24fe0-7678-40e3-9e05-18d57f031fe4",
+                "name": "Clinic Management System",
+                "created_at": "2026-08-25T14:46:06.471141",
+                "status": "active"
+            },
+            {
+                "project_id": "ffd07e2a-4ce5-4f06-b570-a12d714b3508",
+                "name": "Clinic Management System",
+                "created_at": "2026-08-25T14:45:45.597540",
+                "status": "active"
+            },
+            {
+                "project_id": "e03e4bd6-896e-4a0e-8683-013b87cc4d8e",
+                "name": "Clinic Management System",
+                "created_at": "2026-08-25T14:45:21.663708",
+                "status": "active"
+            }
+        ],
+        "recommendations": {
+            "backend": "FastAPI",
+            "database": "PostgreSQL",
+            "architecture": "MVC",
+            "authentication": "JWT",
+            "confidence": 1
+        },
+        "processing_time": 0.008
+    },
+    "blueprint": {
+        "project_plan": [
+            {
+                "phase": "Authentication & User Management",
+                "priority": "high",
+                "tasks": [
+                    {
+                        "name": "Design User Entity",
+                        "priority": "high"
+                    },
+                    {
+                        "name": "Create Authentication System",
+                        "priority": "high"
+                    },
+                    {
+                        "name": "Implement User APIs",
+                        "priority": "medium"
+                    }
+                ]
+            },
+            {
+                "phase": "Appointments Management",
+                "priority": "high",
+                "tasks": [
+                    {
+                        "name": "Design appointments Entity",
+                        "priority": "high"
+                    },
+                    {
+                        "name": "Create appointments Database Model",
+                        "priority": "high"
+                    },
+                    {
+                        "name": "Build appointments APIs",
+                        "priority": "medium"
+                    },
+                    {
+                        "name": "Add appointments Validation Rules",
+                        "priority": "medium"
+                    }
+                ]
+            }
+        ],
+        "architecture": {
+            "backend": "FastAPI",
+            "database": "PostgreSQL",
+            "architecture_pattern": "MVC",
+            "authentication": "JWT",
+            "entities": [
+                "appointments",
+                "users"
+            ],
+            "actors": [
+                "customer",
+                "admin"
+            ],
+            "based_on_memory": true,
+            "memory_recommendations": {
+                "backend": "FastAPI",
+                "database": "PostgreSQL",
+                "architecture": "MVC",
+                "authentication": "JWT",
+                "confidence": 1
+            }
+        },
+        "database_design": {
+            "database": "PostgreSQL",
+            "tables": [
+                {
+                    "table": "appointments",
+                    "fields": [
+                        "id",
+                        "created_at",
+                        "updated_at"
+                    ]
+                },
+                {
+                    "table": "users",
+                    "fields": [
+                        "id",
+                        "created_at",
+                        "updated_at"
+                    ]
+                }
+            ]
+        },
+        "api_design": [
+            {
+                "method": "GET",
+                "endpoint": "/appointments"
+            },
+            {
+                "method": "POST",
+                "endpoint": "/appointments"
+            },
+            {
+                "method": "PUT",
+                "endpoint": "/appointments/{id}"
+            },
+            {
+                "method": "DELETE",
+                "endpoint": "/appointments/{id}"
+            },
+            {
+                "method": "GET",
+                "endpoint": "/users"
+            },
+            {
+                "method": "POST",
+                "endpoint": "/users"
+            },
+            {
+                "method": "PUT",
+                "endpoint": "/users/{id}"
+            },
+            {
+                "method": "DELETE",
+                "endpoint": "/users/{id}"
+            }
+        ],
+        "project_structure": [
+            "app/",
+            "app/models/",
+            "app/schemas/",
+            "app/routes/",
+            "app/services/",
+            "app/repositories/",
+            "app/database/",
+            "tests/",
+            "requirements.txt"
+        ],
+        "execution_order": [
+            "Setup Project Environment",
+            "Configure Database",
+            "Create Database Models",
+            "Implement Authentication",
+            "Create Business Logic Services",
+            "Build REST APIs",
+            "Add Validation",
+            "Write Tests",
+            "Prepare Deployment"
+        ],
+        "memory_context": {
+            "status": "success",
+            "agent_info": {
+                "name": "Memory Retrieval Agent",
+                "version": "1.2"
+            },
+            "query": "Clinic Management System",
+            "matches_count": 7,
+            "previous_projects": [
+                {
+                    "project_id": "7dcd32c8-7d7c-48f5-8292-3b210d62c979",
+                    "name": "Clinic Management System",
+                    "created_at": "2026-08-25T14:46:42.022900",
+                    "status": "active"
+                },
+                {
+                    "project_id": "2f9d4c89-fe89-4ed5-89ad-5916b73b3f50",
+                    "name": "Clinic Management System",
+                    "created_at": "2026-08-25T14:46:32.135425",
+                    "status": "active"
+                },
+                {
+                    "project_id": "84c0942d-d94f-43ec-82e9-b4cd28539aab",
+                    "name": "Clinic Management System",
+                    "created_at": "2026-08-25T14:46:23.733538",
+                    "status": "active"
+                },
+                {
+                    "project_id": "67020b8d-c7df-4f13-8cb8-a3036218863e",
+                    "name": "Clinic Management System",
+                    "created_at": "2026-08-25T14:46:15.304068",
+                    "status": "active"
+                },
+                {
+                    "project_id": "07a24fe0-7678-40e3-9e05-18d57f031fe4",
+                    "name": "Clinic Management System",
+                    "created_at": "2026-08-25T14:46:06.471141",
+                    "status": "active"
+                },
+                {
+                    "project_id": "ffd07e2a-4ce5-4f06-b570-a12d714b3508",
+                    "name": "Clinic Management System",
+                    "created_at": "2026-08-25T14:45:45.597540",
+                    "status": "active"
+                },
+                {
+                    "project_id": "e03e4bd6-896e-4a0e-8683-013b87cc4d8e",
+                    "name": "Clinic Management System",
+                    "created_at": "2026-08-25T14:45:21.663708",
+                    "status": "active"
+                }
+            ],
+            "recommendations": {
+                "backend": "FastAPI",
+                "database": "PostgreSQL",
+                "architecture": "MVC",
+                "authentication": "JWT",
+                "confidence": 1
+            },
+            "processing_time": 0.008
+        }
+    }
+}

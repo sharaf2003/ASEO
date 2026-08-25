@@ -4,7 +4,9 @@ from .node import KnowledgeNode
 
 class KnowledgeGraphUpdater:
     """
-    ASEO Knowledge Graph Auto Updater v14.1
+    ASEO Knowledge Graph Auto Updater v15
+
+    Intelligent knowledge accumulation.
     """
 
 
@@ -36,17 +38,11 @@ class KnowledgeGraphUpdater:
 
 
 
-        framework = result.get(
+        score = result.get(
 
-            "framework"
+            "score",
 
-        )
-
-
-
-        architecture = result.get(
-
-            "architecture"
+            0
 
         )
 
@@ -62,35 +58,23 @@ class KnowledgeGraphUpdater:
 
 
 
+        action = decision.get(
+
+            "action",
+
+            ""
+
+        )
 
 
-        project_node = KnowledgeNode(
+
+
+
+        existing = self.graph.find_node(
 
             project_name,
 
-            "project",
-
-            {
-
-                "score":
-
-                    result.get(
-
-                        "score",
-
-                        0
-
-                    )
-
-            }
-
-        )
-
-
-
-        self.graph.add_node(
-
-            project_node
+            "project"
 
         )
 
@@ -98,32 +82,119 @@ class KnowledgeGraphUpdater:
 
 
 
-        if framework:
+        if existing:
 
 
-            framework_node = KnowledgeNode(
+            metadata = existing.metadata
 
-                framework,
 
-                "framework"
+
+            old_count = metadata.get(
+
+                "executions",
+
+                0
+
+            )
+
+
+
+            old_score = metadata.get(
+
+                "average_score",
+
+                0
+
+            )
+
+
+
+            new_count = old_count + 1
+
+
+
+            metadata.update({
+
+                "executions":
+
+                    new_count,
+
+
+                "last_score":
+
+                    score,
+
+
+                "average_score":
+
+                    round(
+
+                        (
+
+                            old_score * old_count
+
+                            +
+
+                            score
+
+                        )
+
+                        /
+
+                        new_count,
+
+                        2
+
+                    ),
+
+
+                "last_decision":
+
+                    action
+
+            })
+
+
+
+        else:
+
+
+            project_node = KnowledgeNode(
+
+                project_name,
+
+                "project",
+
+                {
+
+
+                    "executions":
+
+                        1,
+
+
+                    "last_score":
+
+                        score,
+
+
+                    "average_score":
+
+                        score,
+
+
+                    "last_decision":
+
+                        action
+
+                }
 
             )
 
 
             self.graph.add_node(
 
-                framework_node
-
-            )
-
-
-            self.graph.connect(
-
-                project_name,
-
-                "uses",
-
-                framework
+                project_node
 
             )
 
@@ -131,12 +202,14 @@ class KnowledgeGraphUpdater:
 
 
 
-        if architecture:
+        # Add architecture relationship
+
+        if action:
 
 
             architecture_node = KnowledgeNode(
 
-                architecture,
+                action,
 
                 "architecture"
 
@@ -154,9 +227,9 @@ class KnowledgeGraphUpdater:
 
                 project_name,
 
-                "architecture",
+                "uses_architecture",
 
-                architecture
+                action
 
             )
 

@@ -1,5 +1,7 @@
 from datetime import datetime
 
+import uuid
+
 from sqlalchemy import (
     Integer,
     String,
@@ -34,7 +36,11 @@ class Project(Base):
 
     id: Mapped[int] = mapped_column(
 
+        String(36),
+
         primary_key=True,
+
+        default=lambda: str(uuid.uuid4()),
 
         index=True
 

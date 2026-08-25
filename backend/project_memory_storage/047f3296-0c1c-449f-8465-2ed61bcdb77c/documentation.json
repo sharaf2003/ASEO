@@ -1,0 +1,16 @@
+{
+    "status": "passed",
+    "agent_info": {
+        "name": "Documentation Agent",
+        "version": "2.0"
+    },
+    "documentation": {
+        "files_created": [
+            "generated_project\\README.md",
+            "generated_project\\docs/architecture.md",
+            "generated_project\\docs/api.md"
+        ],
+        "files_count": 3
+    },
+    "processing_time": 0.014
+}

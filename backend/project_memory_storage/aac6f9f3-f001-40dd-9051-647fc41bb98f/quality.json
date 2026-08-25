@@ -1,0 +1,52 @@
+{
+    "status": "passed",
+    "agent_info": {
+        "name": "Quality Agent",
+        "version": "2.0"
+    },
+    "quality": {
+        "files_checked": 9,
+        "documentation_files": 9,
+        "quality_score": 100,
+        "issues": []
+    },
+    "fixes": [
+        {
+            "status": "fixed",
+            "file": "generated_project\\app\\main.py"
+        },
+        {
+            "status": "fixed",
+            "file": "generated_project\\app\\models\\appointments.py"
+        },
+        {
+            "status": "fixed",
+            "file": "generated_project\\app\\models\\users.py"
+        },
+        {
+            "status": "fixed",
+            "file": "generated_project\\app\\routes\\appointments_routes.py"
+        },
+        {
+            "status": "fixed",
+            "file": "generated_project\\app\\routes\\users_routes.py"
+        },
+        {
+            "status": "fixed",
+            "file": "generated_project\\app\\schemas\\appointments_schema.py"
+        },
+        {
+            "status": "fixed",
+            "file": "generated_project\\app\\schemas\\users_schema.py"
+        },
+        {
+            "status": "fixed",
+            "file": "generated_project\\app\\services\\appointments_service.py"
+        },
+        {
+            "status": "fixed",
+            "file": "generated_project\\app\\services\\users_service.py"
+        }
+    ],
+    "processing_time": 0.011
+}

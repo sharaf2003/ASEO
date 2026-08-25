@@ -40,7 +40,8 @@ class Task(Base):
 
     execution_id: Mapped[int] = mapped_column(
         ForeignKey(
-            "execution_records.id"
+            "execution_records.id",
+            ondelete="CASCADE"
         ),
         nullable=False,
         index=True

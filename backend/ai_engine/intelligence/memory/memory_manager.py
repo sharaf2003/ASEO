@@ -1,20 +1,28 @@
 from .memory_item import MemoryItem
 
-from .memory_store import MemoryStore
+from ai_engine.database import (
+    SessionLocal,
+    DatabaseRepository
+)
 
 
 
 
 class MemoryManager:
     """
-    ASEO Memory Intelligence Manager v13
+    ASEO Persistent Memory Intelligence v21
+
+    RAM Memory
+    +
+    PostgreSQL Persistence
     """
 
 
 
     def __init__(self):
 
-        self.store = MemoryStore()
+        self.repository = DatabaseRepository()
+
 
 
 
@@ -41,15 +49,73 @@ class MemoryManager:
         )
 
 
-        self.store.add(
 
-            item
-
-        )
+        db = SessionLocal()
 
 
 
-        return item.to_dict()
+        try:
+
+
+            saved = self.repository.save_agent_memory(
+
+                db,
+
+                agent_name=key,
+
+                memory_type=category,
+
+                content={
+
+                    "value":
+
+                        value,
+
+
+                    "confidence":
+
+                        confidence
+
+                }
+
+            )
+
+
+            return {
+
+                "key":
+
+                    key,
+
+
+                "value":
+
+                    value,
+
+
+                "category":
+
+                    category,
+
+
+                "confidence":
+
+                    confidence,
+
+
+                "id":
+
+                    saved.id
+
+            }
+
+
+
+        finally:
+
+            db.close()
+
+
 
 
 
@@ -60,12 +126,69 @@ class MemoryManager:
         keyword
     ):
 
+        db = SessionLocal()
 
-        return self.store.search(
+        try:
 
-            keyword
+            memories = self.repository.get_agent_memories(
+                db
+            )
 
-        )
+            results = []
+
+            keyword_words = set(
+                keyword.lower().split()
+            )
+
+
+            for memory in memories:
+
+                content = memory.content or {}
+
+                text = (
+                    memory.agent_name
+                    + " "
+                    + str(
+                        content.get(
+                            "value",
+                            ""
+                        )
+                    )
+                ).lower()
+
+
+                text_words = set(
+                    text.split()
+                )
+
+
+                # partial semantic match
+                if keyword_words.intersection(text_words):
+
+                    results.append(
+                        {
+                            "key": memory.agent_name,
+
+                            "value": content.get(
+                                "value"
+                            ),
+
+                            "category": memory.memory_type,
+
+                            "confidence": content.get(
+                                "confidence",
+                                0
+                            )
+                        }
+                    )
+
+
+            return results
+
+
+        finally:
+            db.close()
+
 
 
 
@@ -73,4 +196,69 @@ class MemoryManager:
     def memories(self):
 
 
-        return self.store.all()
+        db = SessionLocal()
+
+
+
+        try:
+
+
+            records = self.repository.get_agent_memories(
+
+                db
+
+            )
+
+
+            result = []
+
+
+
+            for memory in records:
+
+
+                content = memory.content or {}
+
+
+
+                result.append(
+
+                    {
+
+                        "key":
+
+                            memory.agent_name,
+
+
+                        "value":
+
+                            content.get(
+                                "value"
+                            ),
+
+
+                        "category":
+
+                            memory.memory_type,
+
+
+                        "confidence":
+
+                            content.get(
+                                "confidence",
+                                0
+                            )
+
+                    }
+
+                )
+
+
+
+            return result
+
+
+
+        finally:
+
+            db.close()

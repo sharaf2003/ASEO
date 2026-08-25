@@ -1,10 +1,43 @@
-from sqlalchemy import create_engine
+import os
 
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 
+DATABASE_USER = os.getenv(
+    "DATABASE_USER",
+    "aseo"
+)
 
-DATABASE_URL = "sqlite:///aseo.db"
+DATABASE_PASSWORD = os.getenv(
+    "DATABASE_PASSWORD",
+    "aseo_password"
+)
+
+DATABASE_HOST = os.getenv(
+    "DATABASE_HOST",
+    "localhost"
+)
+
+DATABASE_PORT = os.getenv(
+    "DATABASE_PORT",
+    "5433"
+)
+
+DATABASE_NAME = os.getenv(
+    "DATABASE_NAME",
+    "aseo_db"
+)
+
+
+DATABASE_URL = (
+    f"postgresql://"
+    f"{DATABASE_USER}:"
+    f"{DATABASE_PASSWORD}@"
+    f"{DATABASE_HOST}:"
+    f"{DATABASE_PORT}/"
+    f"{DATABASE_NAME}"
+)
 
 
 
@@ -12,11 +45,7 @@ engine = create_engine(
 
     DATABASE_URL,
 
-    connect_args={
-
-        "check_same_thread": False
-
-    }
+    pool_pre_ping=True
 
 )
 
@@ -31,8 +60,6 @@ SessionLocal = sessionmaker(
     bind=engine
 
 )
-
-
 
 
 

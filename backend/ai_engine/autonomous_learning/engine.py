@@ -11,11 +11,15 @@ from ai_engine.knowledge_graph import (
     KnowledgeGraphUpdater
 )
 
+from ai_engine.intelligence.memory import (
+    MemoryManager
+)
+
 
 
 class AutonomousLearningEngine:
     """
-    ASEO Autonomous Learning Engine v14.1.2
+    ASEO Autonomous Learning Engine v14.2
 
     Combines:
 
@@ -25,7 +29,11 @@ class AutonomousLearningEngine:
     +
     Real Agent Evaluation
     +
-    Knowledge Graph Update
+    Knowledge Graph Intelligence
+    +
+    Pattern Evolution
+    +
+    Shared Memory Intelligence
     """
 
 
@@ -36,18 +44,13 @@ class AutonomousLearningEngine:
     ):
 
 
-        self.executor = AutonomousExecutionEngine(
+        # Shared memory brain
 
-            agents
-
-        )
-
-
-        self.learning_loop = LearningLoop()
+        self.memory = MemoryManager()
 
 
 
-        # Knowledge Intelligence Layer
+        # Knowledge intelligence layer
 
         self.knowledge_graph = KnowledgeGraph()
 
@@ -60,6 +63,29 @@ class AutonomousLearningEngine:
 
 
 
+        # Autonomous execution engine
+
+        self.executor = AutonomousExecutionEngine(
+
+            agents,
+
+            self.memory
+
+        )
+
+
+
+        # Learning system
+
+        self.learning_loop = LearningLoop(
+
+            memory=self.memory
+
+        )
+
+
+
+
 
 
     def learn_build_project(
@@ -68,7 +94,8 @@ class AutonomousLearningEngine:
     ):
 
 
-        # 1 - Execute project
+
+        # 1 - Execute autonomous pipeline
 
         execution = self.executor.run(
 
@@ -78,19 +105,26 @@ class AutonomousLearningEngine:
 
 
 
-        # 2 - Extract execution result
 
-        result = (
 
-            execution
-            .get(
-                "execution",
-                {}
-            )
-            .get(
-                "result",
-                {}
-            )
+
+        # 2 - Extract result
+
+
+        execution_data = execution.get(
+
+            "execution",
+
+            {}
+
+        )
+
+
+        result = execution_data.get(
+
+            "result",
+
+            {}
 
         )
 
@@ -98,17 +132,11 @@ class AutonomousLearningEngine:
 
 
 
-        decision = (
+        intelligence = execution.get(
 
-            execution
-            .get(
-                "intelligence",
-                {}
-            )
-            .get(
-                "decision",
-                {}
-            )
+            "intelligence",
+
+            {}
 
         )
 
@@ -116,19 +144,77 @@ class AutonomousLearningEngine:
 
 
 
-        # 3 - Extract real agents from pipeline stages
+        decision = intelligence.get(
 
-        stages = (
+            "decision",
 
-            execution
-            .get(
-                "execution",
-                {}
-            )
-            .get(
-                "stages",
+            {}
+
+        )
+
+
+
+
+
+
+        # 3 - Extract pattern
+
+
+        pattern = None
+
+
+
+        if isinstance(
+            decision,
+            dict
+        ):
+
+
+            patterns = decision.get(
+
+                "patterns",
+
                 []
+
             )
+
+
+            if patterns:
+
+                pattern = patterns[0]
+
+
+
+
+        if pattern is None:
+
+
+            patterns = intelligence.get(
+
+                "patterns",
+
+                []
+
+            )
+
+
+            if patterns:
+
+                pattern = patterns[0]
+
+
+
+
+
+
+        # 4 - Extract agents
+
+
+        stages = execution_data.get(
+
+            "stages",
+
+            []
 
         )
 
@@ -159,7 +245,9 @@ class AutonomousLearningEngine:
 
 
 
-        # 4 - Learning process
+
+        # 5 - Learning
+
 
         learning = self.learning_loop.process(
 
@@ -177,9 +265,6 @@ class AutonomousLearningEngine:
             ),
 
 
-
-            # Real agents
-
             agents=agent_names,
 
 
@@ -189,7 +274,10 @@ class AutonomousLearningEngine:
             old_score=75,
 
 
-            new_score=95
+            new_score=95,
+
+
+            pattern=pattern
 
         )
 
@@ -197,31 +285,30 @@ class AutonomousLearningEngine:
 
 
 
-        # 5 - Update Knowledge Graph
 
-        knowledge_result = (
-
-            self.knowledge_updater.update_from_result(
-
-                {
-
-                    **result,
+        # 6 - Knowledge graph update
 
 
-                    "requirement":
+        knowledge_result = self.knowledge_updater.update_from_result(
 
-                        requirement,
+            {
+
+                **result,
 
 
-                    "score":
+                "requirement":
 
-                        95
+                    requirement,
 
-                }
 
-            )
+                "score":
+
+                    95
+
+            }
 
         )
+
 
 
 

@@ -23,6 +23,24 @@ class ProjectMemoryManager:
             exist_ok=True
         )
 
+    
+    def create_project(
+        self,
+        project_name
+    ):
+
+        project_id = (
+            project_name
+            .lower()
+            .replace(" ", "_")
+        )
+
+
+        return self.create_project_with_id(
+            project_id,
+            project_name
+        )
+
 
 
     def create_project_with_id(

@@ -12,6 +12,9 @@ from app.security.jwt import (
     create_access_token
 )
 
+from app.services.audit_service import (
+    AuditService
+)
 
 class AuthService:
     """
@@ -22,6 +25,8 @@ class AuthService:
     def __init__(self):
 
         self.repository = UserRepository()
+
+        self.audit_service = AuditService()
 
 
 
@@ -47,6 +52,17 @@ class AuthService:
 
         if not user:
 
+            self.audit_service.log_event(
+
+                db,
+
+                action="USER_LOGIN_FAILED",
+
+                description=f"Login failed for email: {email}"
+
+            )
+
+
             raise ValueError(
                 "Invalid credentials"
             )
@@ -58,6 +74,21 @@ class AuthService:
             user.password_hash
         ):
 
+            self.audit_service.log_event(
+
+                db,
+
+                action="USER_LOGIN_FAILED",
+
+                description="Invalid password",
+
+                user_id=user.id,
+
+                organization_id=user.organization_id
+
+            )
+
+
             raise ValueError(
                 "Invalid credentials"
             )
@@ -65,6 +96,21 @@ class AuthService:
 
 
         if not user.role:
+
+            self.audit_service.log_event(
+
+                db,
+
+                action="USER_ROLE_MISSING",
+
+                description="User role is not configured",
+
+                user_id=user.id,
+
+                organization_id=user.organization_id
+
+            )
+
 
             raise ValueError(
                 "User role is not configured"
@@ -86,7 +132,19 @@ class AuthService:
 
         })
 
+        self.audit_service.log_event(
 
+        db,
+
+        action="USER_LOGIN_SUCCESS",
+
+        description="User logged in successfully",
+
+        user_id=user.id,
+
+        organization_id=user.organization_id
+
+    )
 
         return {
 

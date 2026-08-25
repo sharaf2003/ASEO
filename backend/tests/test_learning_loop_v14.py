@@ -1,47 +1,39 @@
-from ai_engine.learning_loop import (
-    LearningLoop
-)
+from ai_engine.learning_loop import LearningLoop
 
 
+def test_learning_loop_v14():
 
-loop = LearningLoop()
+    loop = LearningLoop()
 
 
+    result = loop.process(
 
-result = loop.process(
+        "Ecommerce Backend",
 
-    "Ecommerce Backend",
+        "Generate backend API",
 
-    "Generate backend API",
+        "Generate scalable FastAPI backend API with JWT authentication",
 
-    "Generate scalable FastAPI backend API with JWT authentication",
+        [
+            "planning",
+            "coding",
+            "security"
+        ],
 
-    [
-        "planning",
-        "coding",
-        "security"
-    ],
-
-    {
-        "decision":
         {
-            "framework":
-                "FastAPI",
+            "decision": {
+                "framework": "FastAPI",
+                "database": "PostgreSQL"
+            },
 
-            "database":
-                "PostgreSQL"
+            "files": 10
         },
 
-        "files":
-            10
-    },
+        75,
 
-    75,
+        95
 
-    95
-
-)
+    )
 
 
-
-print(result)
+    assert result is not None

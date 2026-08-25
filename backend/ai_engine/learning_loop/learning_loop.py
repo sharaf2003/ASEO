@@ -14,7 +14,6 @@ from ai_engine.self_improvement import (
     SelfImprovementEngine
 )
 
-
 from .result_analyzer import (
     ResultAnalyzer
 )
@@ -27,48 +26,92 @@ from .improvement_tracker import (
     ImprovementTracker
 )
 
+from ai_engine.intelligence.patterns import (
+    PatternLearning
+)
+
+from ai_engine.intelligence.memory import (
+    MemoryManager
+)
 
 
 
 class LearningLoop:
     """
-    ASEO Learning Loop v20.3
+    ASEO Learning Loop v21
 
     Connects:
 
-    Learning +
-    Evaluation +
-    Optimization +
-    Self Improvement +
-    Result Analysis +
-    Knowledge Update +
-    Improvement Tracking
+    Experience Memory
+    +
+    Pattern Evolution
+    +
+    Knowledge Graph
+    +
+    Evaluation
+    +
+    Optimization
+    +
+    Self Improvement
     """
 
 
 
-    def __init__(self):
+    def __init__(
+        self,
+        memory=None,
+        knowledge=None
+    ):
 
-
-        # Previous intelligence
 
         self.learning = LearningEngine()
 
+
         self.evaluator = AgentEvaluator()
 
+
         self.optimizer = PromptOptimizer()
+
 
         self.improver = SelfImprovementEngine()
 
 
+        self.pattern_learning = PatternLearning()
 
-        # v20.3 intelligence
+
+
+        self.memory = (
+
+            memory
+
+            if memory
+
+            else MemoryManager()
+
+        )
+
+
 
         self.analyzer = ResultAnalyzer()
 
-        self.knowledge = KnowledgeUpdater()
+
+
+        # Shared Knowledge Layer
+
+        self.knowledge = (
+
+            knowledge
+
+            if knowledge
+
+            else KnowledgeUpdater()
+
+        )
+
+
 
         self.tracker = ImprovementTracker()
+
 
 
 
@@ -82,11 +125,14 @@ class LearningLoop:
         agents,
         result,
         old_score,
-        new_score
+        new_score,
+        pattern=None
     ):
 
 
-        # 1 - Save engineering experience
+
+        # 1 - Save experience
+
 
         experience = self.learning.learn(
 
@@ -109,7 +155,75 @@ class LearningLoop:
 
 
 
-        # 2 - Analyze result
+        decision = result.get(
+            "decision",
+            {}
+        )
+
+
+        if isinstance(decision, str):
+
+            decision = {
+                "action": decision
+            }
+
+
+
+        architecture = decision.get(
+            "action",
+            ""
+        )
+
+
+
+        # 2 - Create memory from successful decision
+
+
+        if architecture:
+
+
+            self.memory.remember(
+
+                project,
+
+                architecture,
+
+                "architecture",
+
+                new_score / 100
+
+            )
+
+
+
+
+
+        # 3 - Update pattern intelligence
+
+
+        pattern_update = None
+
+
+
+        if pattern:
+
+
+            pattern_update = self.pattern_learning.update(
+
+                pattern,
+
+                True,
+
+                new_score
+
+            )
+
+
+
+
+
+        # 4 - Analyze result
+
 
         analysis = self.analyzer.analyze(
 
@@ -121,16 +235,14 @@ class LearningLoop:
 
 
 
-        # 3 - Update company knowledge
+        # 5 - Update knowledge
+
 
         knowledge = self.knowledge.update(
 
             project,
 
-            result.get(
-                "decision",
-                {}
-            ),
+            decision,
 
             analysis
 
@@ -140,7 +252,9 @@ class LearningLoop:
 
 
 
-        # 4 - Evaluate agents
+
+        # 6 - Evaluate agents
+
 
         evaluations = {}
 
@@ -149,17 +263,13 @@ class LearningLoop:
         for agent in agents:
 
 
-            evaluations[agent] = (
+            evaluations[agent] = self.evaluator.evaluate(
 
-                self.evaluator.evaluate(
+                agent,
 
-                    agent,
+                True,
 
-                    True,
-
-                    new_score
-
-                )
+                new_score
 
             )
 
@@ -167,7 +277,9 @@ class LearningLoop:
 
 
 
-        # 5 - Optimize prompt
+
+        # 7 - Prompt optimization
+
 
         optimized = self.optimizer.optimize(
 
@@ -179,7 +291,9 @@ class LearningLoop:
 
 
 
-        # 6 - Compare improvement
+
+        # 8 - Improvement
+
 
         improvement = self.improver.improve(
 
@@ -197,7 +311,9 @@ class LearningLoop:
 
 
 
-        # 7 - Track learning improvement
+
+        # 9 - Track progress
+
 
         learning_progress = self.tracker.track(
 
@@ -211,6 +327,7 @@ class LearningLoop:
 
 
 
+
         return {
 
 
@@ -219,9 +336,11 @@ class LearningLoop:
                 experience,
 
 
+
             "result_analysis":
 
                 analysis,
+
 
 
             "knowledge":
@@ -229,9 +348,11 @@ class LearningLoop:
                 knowledge,
 
 
+
             "evaluation":
 
                 evaluations,
+
 
 
             "optimized_prompt":
@@ -239,13 +360,21 @@ class LearningLoop:
                 optimized,
 
 
+
             "improvement":
 
                 improvement,
 
 
+
             "learning_progress":
 
-                learning_progress
+                learning_progress,
+
+
+
+            "pattern_update":
+
+                pattern_update
 
         }

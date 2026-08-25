@@ -69,7 +69,9 @@ class ASEOEngineService:
 
         project_name: str,
 
-        organization_id: int
+        organization_id: int,
+
+        project_id: int | None = None
 
     ):
 
@@ -90,22 +92,39 @@ class ASEOEngineService:
         # Load Project With Tenant Isolation
         # =================================================
 
-        project = (
+        if project_id:
 
-            db.query(Project)
-
-            .filter(
-
-                Project.name == project_name,
-
-                Project.organization_id == organization_id
-
+            project = (
+                db.query(Project)
+                .filter(
+                    Project.id == project_id,
+                    Project.organization_id == organization_id
+                )
+                .first()
             )
 
-            .first()
+        else:
 
-        )
+            project = (
+                db.query(Project)
+                .filter(
+                    Project.organization_id == organization_id,
+                    Project.name.ilike(project_name)
+                )
+                .first()
+            )
 
+
+            if not project:
+
+                project = (
+                    db.query(Project)
+                    .filter(
+                        Project.organization_id == organization_id
+                    )
+                    .order_by(Project.id)
+                    .first()
+                )
 
 
         if not project:
@@ -179,10 +198,7 @@ class ASEOEngineService:
             # Project Lifecycle
             # =============================================
 
-            if project.status in [
-                "created",
-                "operational"
-            ]:
+            if project.status == "created":
 
                 self.lifecycle.update_status(
 
@@ -489,30 +505,21 @@ class ASEOEngineService:
 
             return {
 
-
                 "project": project.name,
-
 
                 "project_id": project.id,
 
-
                 "organization_id": project.organization_id,
 
-
-                "lifecycle_status": project.status,
-
+                "lifecycle_status": "operational",
 
                 "agents": agents_result,
 
-
                 "analysis": analysis,
-
 
                 "execution": execution,
 
-
                 "execution_record_id": execution_record.id,
-
 
                 "status": "SUCCESS"
 
@@ -520,7 +527,7 @@ class ASEOEngineService:
 
 
 
-        except Exception :
+        except Exception as error :
 
 
             db.rollback()

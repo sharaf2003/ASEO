@@ -1,0 +1,43 @@
+{
+    "status": "success",
+    "agent_info": {
+        "name": "Memory Retrieval Agent",
+        "version": "1.2"
+    },
+    "query": "ASEO Project",
+    "matches_count": 4,
+    "previous_projects": [
+        {
+            "project_id": "a6de30f7-3eec-48ac-bc7a-3665d9d7d843",
+            "name": "ASEO Project",
+            "created_at": "2026-08-25T14:53:20.011764",
+            "status": "active"
+        },
+        {
+            "project_id": "c62a0d3d-d757-443c-855f-9ac72bae1d05",
+            "name": "ASEO Demo Project",
+            "created_at": "2026-08-25T14:53:13.909890",
+            "status": "active"
+        },
+        {
+            "project_id": "6c07fce8-4385-461a-af97-ec5e70985bad",
+            "name": "ASEO Project",
+            "created_at": "2026-08-25T14:44:59.060746",
+            "status": "active"
+        },
+        {
+            "project_id": "a347e65d-711b-42b1-884e-93781bfc3b3d",
+            "name": "ASEO Demo Project",
+            "created_at": "2026-08-25T14:44:41.578883",
+            "status": "active"
+        }
+    ],
+    "recommendations": {
+        "backend": "FastAPI",
+        "database": "PostgreSQL",
+        "architecture": "MVC",
+        "authentication": "JWT",
+        "confidence": 0.8
+    },
+    "processing_time": 0.012
+}

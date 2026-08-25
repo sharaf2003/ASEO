@@ -1,0 +1,57 @@
+{
+    "status": "passed",
+    "files_checked": 9,
+    "errors": 0,
+    "details": [
+        {
+            "file": "generated_project\\app\\main.py",
+            "status": "passed",
+            "error": null
+        },
+        {
+            "file": "generated_project\\app\\models\\appointments.py",
+            "status": "passed",
+            "error": null
+        },
+        {
+            "file": "generated_project\\app\\models\\users.py",
+            "status": "passed",
+            "error": null
+        },
+        {
+            "file": "generated_project\\app\\routes\\appointments_routes.py",
+            "status": "passed",
+            "error": null
+        },
+        {
+            "file": "generated_project\\app\\routes\\users_routes.py",
+            "status": "passed",
+            "error": null
+        },
+        {
+            "file": "generated_project\\app\\schemas\\appointments_schema.py",
+            "status": "passed",
+            "error": null
+        },
+        {
+            "file": "generated_project\\app\\schemas\\users_schema.py",
+            "status": "passed",
+            "error": null
+        },
+        {
+            "file": "generated_project\\app\\services\\appointments_service.py",
+            "status": "passed",
+            "error": null
+        },
+        {
+            "file": "generated_project\\app\\services\\users_service.py",
+            "status": "passed",
+            "error": null
+        }
+    ],
+    "agent_info": {
+        "name": "Testing Agent",
+        "version": "1.0"
+    },
+    "processing_time": 0.058
+}

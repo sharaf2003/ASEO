@@ -1,49 +1,34 @@
-from ai_engine.learning import (
-    LearningEngine
-)
+from ai_engine.learning import LearningEngine
 
 
+def test_learning_engine():
 
-learning = LearningEngine()
-
-
-
-result = learning.learn(
-
-    "Ecommerce Backend",
-
-    {
-        "framework":
-            "FastAPI",
-
-        "database":
-            "PostgreSQL"
-    },
+    learning = LearningEngine()
 
 
-    {
-        "files":
-            10,
+    result = learning.learn(
 
-        "tests":
-            "passed"
-    },
+        "Ecommerce Backend",
+
+        {
+            "framework": "FastAPI",
+            "database": "PostgreSQL"
+        },
+
+        {
+            "files": 10,
+            "tests": "passed"
+        },
+
+        True,
+
+        98
+
+    )
 
 
-    True,
+    assert result is not None
 
-    98
+    history = learning.history()
 
-)
-
-
-
-print(result)
-
-
-
-print(
-
-    learning.history()
-
-)
+    assert history is not None

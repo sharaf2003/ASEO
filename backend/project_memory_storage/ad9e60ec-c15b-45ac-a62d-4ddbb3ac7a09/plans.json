@@ -1,0 +1,413 @@
+{
+    "status": "success",
+    "agent_info": {
+        "name": "Planning Agent",
+        "version": "5.0"
+    },
+    "processing_time": 1.054,
+    "knowledge": {
+        "actors": [
+            "customer",
+            "admin"
+        ],
+        "entities": [
+            "users",
+            "appointments"
+        ],
+        "actions": [
+            "book",
+            "manage"
+        ],
+        "statistics": {
+            "documents": 3,
+            "requirements": 2,
+            "graphs": 3,
+            "plans": 670
+        }
+    },
+    "memory_context": {
+        "status": "success",
+        "agent_info": {
+            "name": "Memory Retrieval Agent",
+            "version": "1.2"
+        },
+        "query": "ASEO Demo Project",
+        "matches_count": 17,
+        "previous_projects": [
+            {
+                "project_id": "ad9e60ec-c15b-45ac-a62d-4ddbb3ac7a09",
+                "name": "ASEO Demo Project",
+                "created_at": "2026-08-25T16:15:23.138878",
+                "status": "active"
+            },
+            {
+                "project_id": "ac3e4dec-c166-4c26-a377-5655be89b212",
+                "name": "ASEO Project",
+                "created_at": "2026-08-25T16:09:48.112003",
+                "status": "active"
+            },
+            {
+                "project_id": "4fdde83f-d958-4a3b-9797-0362c84bb5e1",
+                "name": "ASEO Demo Project",
+                "created_at": "2026-08-25T16:09:43.794272",
+                "status": "active"
+            },
+            {
+                "project_id": "f26b680f-0e82-45e3-925a-87cbad5f6261",
+                "name": "ASEO Project",
+                "created_at": "2026-08-25T15:54:10.452856",
+                "status": "active"
+            },
+            {
+                "project_id": "ebb38df2-4816-4674-819b-43142aacddc4",
+                "name": "ASEO Demo Project",
+                "created_at": "2026-08-25T15:54:06.276108",
+                "status": "active"
+            },
+            {
+                "project_id": "d329d6a8-51d2-4941-b229-d747673ed507",
+                "name": "ASEO Project",
+                "created_at": "2026-08-25T15:29:16.158673",
+                "status": "active"
+            },
+            {
+                "project_id": "574e0e0e-2636-43d1-a9bb-4ad3db7d0593",
+                "name": "ASEO Demo Project",
+                "created_at": "2026-08-25T15:29:08.672381",
+                "status": "active"
+            },
+            {
+                "project_id": "1652f875-aba3-438e-8fcc-1c9c150ee23f",
+                "name": "ASEO Project",
+                "created_at": "2026-08-25T15:14:06.493148",
+                "status": "active"
+            },
+            {
+                "project_id": "3f0b53f1-24b0-4f86-8e9f-d7464a0344d3",
+                "name": "ASEO Demo Project",
+                "created_at": "2026-08-25T15:14:02.316377",
+                "status": "active"
+            },
+            {
+                "project_id": "a072ce06-1229-43e0-995a-40f4ee42efb5",
+                "name": "ASEO Project",
+                "created_at": "2026-08-25T15:10:43.280119",
+                "status": "active"
+            },
+            {
+                "project_id": "075d73fa-4a25-4b25-829b-c32731fc3ec4",
+                "name": "ASEO Demo Project",
+                "created_at": "2026-08-25T15:10:37.151015",
+                "status": "active"
+            },
+            {
+                "project_id": "b2db915a-c20a-48bf-b7ae-5e54fc9dbcac",
+                "name": "ASEO Project",
+                "created_at": "2026-08-25T15:07:41.022402",
+                "status": "active"
+            },
+            {
+                "project_id": "c87fc725-d8d1-4fa3-886f-6c1b527237f7",
+                "name": "ASEO Demo Project",
+                "created_at": "2026-08-25T15:07:35.453052",
+                "status": "active"
+            },
+            {
+                "project_id": "a6de30f7-3eec-48ac-bc7a-3665d9d7d843",
+                "name": "ASEO Project",
+                "created_at": "2026-08-25T14:53:20.011764",
+                "status": "active"
+            },
+            {
+                "project_id": "c62a0d3d-d757-443c-855f-9ac72bae1d05",
+                "name": "ASEO Demo Project",
+                "created_at": "2026-08-25T14:53:13.909890",
+                "status": "active"
+            },
+            {
+                "project_id": "6c07fce8-4385-461a-af97-ec5e70985bad",
+                "name": "ASEO Project",
+                "created_at": "2026-08-25T14:44:59.060746",
+                "status": "active"
+            },
+            {
+                "project_id": "a347e65d-711b-42b1-884e-93781bfc3b3d",
+                "name": "ASEO Demo Project",
+                "created_at": "2026-08-25T14:44:41.578883",
+                "status": "active"
+            }
+        ],
+        "recommendations": {
+            "backend": "FastAPI",
+            "database": "PostgreSQL",
+            "architecture": "MVC",
+            "authentication": "JWT",
+            "confidence": 1
+        },
+        "processing_time": 0.06
+    },
+    "blueprint": {
+        "project_plan": [
+            {
+                "phase": "Authentication & User Management",
+                "priority": "high",
+                "tasks": [
+                    {
+                        "name": "Design User Entity",
+                        "priority": "high"
+                    },
+                    {
+                        "name": "Create Authentication System",
+                        "priority": "high"
+                    },
+                    {
+                        "name": "Implement User APIs",
+                        "priority": "medium"
+                    }
+                ]
+            },
+            {
+                "phase": "Appointments Management",
+                "priority": "high",
+                "tasks": [
+                    {
+                        "name": "Design appointments Entity",
+                        "priority": "high"
+                    },
+                    {
+                        "name": "Create appointments Database Model",
+                        "priority": "high"
+                    },
+                    {
+                        "name": "Build appointments APIs",
+                        "priority": "medium"
+                    },
+                    {
+                        "name": "Add appointments Validation Rules",
+                        "priority": "medium"
+                    }
+                ]
+            }
+        ],
+        "architecture": {
+            "backend": "FastAPI",
+            "database": "PostgreSQL",
+            "architecture_pattern": "MVC",
+            "authentication": "JWT",
+            "entities": [
+                "users",
+                "appointments"
+            ],
+            "actors": [
+                "customer",
+                "admin"
+            ],
+            "based_on_memory": true,
+            "memory_recommendations": {
+                "backend": "FastAPI",
+                "database": "PostgreSQL",
+                "architecture": "MVC",
+                "authentication": "JWT",
+                "confidence": 1
+            }
+        },
+        "database_design": {
+            "database": "PostgreSQL",
+            "tables": [
+                {
+                    "table": "users",
+                    "fields": [
+                        "id",
+                        "created_at",
+                        "updated_at"
+                    ]
+                },
+                {
+                    "table": "appointments",
+                    "fields": [
+                        "id",
+                        "created_at",
+                        "updated_at"
+                    ]
+                }
+            ]
+        },
+        "api_design": [
+            {
+                "method": "GET",
+                "endpoint": "/users"
+            },
+            {
+                "method": "POST",
+                "endpoint": "/users"
+            },
+            {
+                "method": "PUT",
+                "endpoint": "/users/{id}"
+            },
+            {
+                "method": "DELETE",
+                "endpoint": "/users/{id}"
+            },
+            {
+                "method": "GET",
+                "endpoint": "/appointments"
+            },
+            {
+                "method": "POST",
+                "endpoint": "/appointments"
+            },
+            {
+                "method": "PUT",
+                "endpoint": "/appointments/{id}"
+            },
+            {
+                "method": "DELETE",
+                "endpoint": "/appointments/{id}"
+            }
+        ],
+        "project_structure": [
+            "app/",
+            "app/models/",
+            "app/schemas/",
+            "app/routes/",
+            "app/services/",
+            "app/repositories/",
+            "app/database/",
+            "tests/",
+            "requirements.txt"
+        ],
+        "execution_order": [
+            "Setup Project Environment",
+            "Configure Database",
+            "Create Database Models",
+            "Implement Authentication",
+            "Create Business Logic Services",
+            "Build REST APIs",
+            "Add Validation",
+            "Write Tests",
+            "Prepare Deployment"
+        ],
+        "memory_context": {
+            "status": "success",
+            "agent_info": {
+                "name": "Memory Retrieval Agent",
+                "version": "1.2"
+            },
+            "query": "ASEO Demo Project",
+            "matches_count": 17,
+            "previous_projects": [
+                {
+                    "project_id": "ad9e60ec-c15b-45ac-a62d-4ddbb3ac7a09",
+                    "name": "ASEO Demo Project",
+                    "created_at": "2026-08-25T16:15:23.138878",
+                    "status": "active"
+                },
+                {
+                    "project_id": "ac3e4dec-c166-4c26-a377-5655be89b212",
+                    "name": "ASEO Project",
+                    "created_at": "2026-08-25T16:09:48.112003",
+                    "status": "active"
+                },
+                {
+                    "project_id": "4fdde83f-d958-4a3b-9797-0362c84bb5e1",
+                    "name": "ASEO Demo Project",
+                    "created_at": "2026-08-25T16:09:43.794272",
+                    "status": "active"
+                },
+                {
+                    "project_id": "f26b680f-0e82-45e3-925a-87cbad5f6261",
+                    "name": "ASEO Project",
+                    "created_at": "2026-08-25T15:54:10.452856",
+                    "status": "active"
+                },
+                {
+                    "project_id": "ebb38df2-4816-4674-819b-43142aacddc4",
+                    "name": "ASEO Demo Project",
+                    "created_at": "2026-08-25T15:54:06.276108",
+                    "status": "active"
+                },
+                {
+                    "project_id": "d329d6a8-51d2-4941-b229-d747673ed507",
+                    "name": "ASEO Project",
+                    "created_at": "2026-08-25T15:29:16.158673",
+                    "status": "active"
+                },
+                {
+                    "project_id": "574e0e0e-2636-43d1-a9bb-4ad3db7d0593",
+                    "name": "ASEO Demo Project",
+                    "created_at": "2026-08-25T15:29:08.672381",
+                    "status": "active"
+                },
+                {
+                    "project_id": "1652f875-aba3-438e-8fcc-1c9c150ee23f",
+                    "name": "ASEO Project",
+                    "created_at": "2026-08-25T15:14:06.493148",
+                    "status": "active"
+                },
+                {
+                    "project_id": "3f0b53f1-24b0-4f86-8e9f-d7464a0344d3",
+                    "name": "ASEO Demo Project",
+                    "created_at": "2026-08-25T15:14:02.316377",
+                    "status": "active"
+                },
+                {
+                    "project_id": "a072ce06-1229-43e0-995a-40f4ee42efb5",
+                    "name": "ASEO Project",
+                    "created_at": "2026-08-25T15:10:43.280119",
+                    "status": "active"
+                },
+                {
+                    "project_id": "075d73fa-4a25-4b25-829b-c32731fc3ec4",
+                    "name": "ASEO Demo Project",
+                    "created_at": "2026-08-25T15:10:37.151015",
+                    "status": "active"
+                },
+                {
+                    "project_id": "b2db915a-c20a-48bf-b7ae-5e54fc9dbcac",
+                    "name": "ASEO Project",
+                    "created_at": "2026-08-25T15:07:41.022402",
+                    "status": "active"
+                },
+                {
+                    "project_id": "c87fc725-d8d1-4fa3-886f-6c1b527237f7",
+                    "name": "ASEO Demo Project",
+                    "created_at": "2026-08-25T15:07:35.453052",
+                    "status": "active"
+                },
+                {
+                    "project_id": "a6de30f7-3eec-48ac-bc7a-3665d9d7d843",
+                    "name": "ASEO Project",
+                    "created_at": "2026-08-25T14:53:20.011764",
+                    "status": "active"
+                },
+                {
+                    "project_id": "c62a0d3d-d757-443c-855f-9ac72bae1d05",
+                    "name": "ASEO Demo Project",
+                    "created_at": "2026-08-25T14:53:13.909890",
+                    "status": "active"
+                },
+                {
+                    "project_id": "6c07fce8-4385-461a-af97-ec5e70985bad",
+                    "name": "ASEO Project",
+                    "created_at": "2026-08-25T14:44:59.060746",
+                    "status": "active"
+                },
+                {
+                    "project_id": "a347e65d-711b-42b1-884e-93781bfc3b3d",
+                    "name": "ASEO Demo Project",
+                    "created_at": "2026-08-25T14:44:41.578883",
+                    "status": "active"
+                }
+            ],
+            "recommendations": {
+                "backend": "FastAPI",
+                "database": "PostgreSQL",
+                "architecture": "MVC",
+                "authentication": "JWT",
+                "confidence": 1
+            },
+            "processing_time": 0.06
+        }
+    }
+}

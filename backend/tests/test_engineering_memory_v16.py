@@ -1,55 +1,26 @@
-from ai_engine.engineering_memory import (
-    EngineeringMemoryEngine
-)
+from ai_engine.engineering_memory import EngineeringMemoryEngine
 
 
+def test_engineering_memory():
 
-memory = EngineeringMemoryEngine()
-
-
-
-saved = memory.remember(
-
-    "Ecommerce Backend",
-
-    "FastAPI + PostgreSQL + Layered",
-
-    {
-        "score":95,
-        "success":True
-    }
-
-)
+    memory = EngineeringMemoryEngine()
 
 
-
-retrieved = memory.recall(
-
-    "FastAPI"
-
-)
-
-
-
-print(
-
-    {
-
-        "stored":
-            saved,
+    saved = memory.remember(
+        "Ecommerce Backend",
+        "FastAPI + PostgreSQL + Layered",
+        {
+            "score":95,
+            "success":True
+        }
+    )
 
 
-        "retrieved":
-            retrieved,
+    retrieved = memory.recall(
+        "FastAPI"
+    )
 
 
-        "knowledge_used":
-            len(retrieved) > 0,
+    assert saved is not None
 
-
-        "recommendation":
-            "Use previous successful architecture"
-
-    }
-
-)
+    assert len(retrieved) > 0

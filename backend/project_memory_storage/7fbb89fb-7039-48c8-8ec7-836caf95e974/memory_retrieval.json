@@ -1,0 +1,301 @@
+{
+    "status": "success",
+    "agent_info": {
+        "name": "Memory Retrieval Agent",
+        "version": "1.2"
+    },
+    "query": "Clinic Management System",
+    "matches_count": 47,
+    "previous_projects": [
+        {
+            "project_id": "7fbb89fb-7039-48c8-8ec7-836caf95e974",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T15:14:40.326554",
+            "status": "active"
+        },
+        {
+            "project_id": "c13a8e30-28ba-43f7-b5ec-145c2d8fbe88",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T15:14:34.859160",
+            "status": "active"
+        },
+        {
+            "project_id": "c997757f-bce4-46c3-82f4-699d6768a255",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T15:14:29.694186",
+            "status": "active"
+        },
+        {
+            "project_id": "a45ea049-3279-46a8-b90b-5078cac13d01",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T15:14:24.231746",
+            "status": "active"
+        },
+        {
+            "project_id": "74c0eb9e-4e05-4c90-894f-ab5150119502",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T15:14:17.650359",
+            "status": "active"
+        },
+        {
+            "project_id": "efc2de5a-c3aa-4817-b2ff-b415a1546ac3",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T15:14:12.116955",
+            "status": "active"
+        },
+        {
+            "project_id": "clinic_management_system",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T15:12:11.827294",
+            "status": "active"
+        },
+        {
+            "project_id": "23fe6474-8b7c-43de-8165-0a33548ad4b6",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T15:12:05.397108",
+            "status": "active"
+        },
+        {
+            "project_id": "8aecb232-02a2-47bd-8da6-610c2114cdd2",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T15:11:57.438240",
+            "status": "active"
+        },
+        {
+            "project_id": "6858d6e0-dfe0-4896-ba7d-3c763c51e5dc",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T15:11:48.510250",
+            "status": "active"
+        },
+        {
+            "project_id": "7ddaee0e-207a-4aae-b559-57ca650bfba4",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T15:11:40.027172",
+            "status": "active"
+        },
+        {
+            "project_id": "26a1b171-df98-4cfc-b8bc-496287e710a8",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T15:11:31.638000",
+            "status": "active"
+        },
+        {
+            "project_id": "c969a40d-da86-4898-b7bf-56bd2c1b3fd7",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T15:11:23.907538",
+            "status": "active"
+        },
+        {
+            "project_id": "b11cc212-e25b-44d0-81f2-b3f1c99a26fc",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T15:11:15.800367",
+            "status": "active"
+        },
+        {
+            "project_id": "def8df49-3bb4-41da-927e-cc2bb9cfa9db",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T15:11:08.123750",
+            "status": "active"
+        },
+        {
+            "project_id": "9144a76d-b52c-4d31-8872-d0f399fd3bcd",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T15:10:59.243618",
+            "status": "active"
+        },
+        {
+            "project_id": "ff93892b-6d8f-4764-ba11-990566deaf9c",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T15:10:50.869344",
+            "status": "active"
+        },
+        {
+            "project_id": "41910ed3-bb32-4bc4-b580-678fa9821415",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T15:08:58.162331",
+            "status": "active"
+        },
+        {
+            "project_id": "3c94a137-1b67-41c5-90c2-df7ca41350bd",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T15:08:50.245597",
+            "status": "active"
+        },
+        {
+            "project_id": "474e7ce8-368a-4006-b861-b5ba84fb3b0a",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T15:08:42.605609",
+            "status": "active"
+        },
+        {
+            "project_id": "23a20115-d696-45da-a00f-3278a1768a2f",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T15:08:35.063832",
+            "status": "active"
+        },
+        {
+            "project_id": "0f840e73-ea21-4173-b9b4-4b81e3955318",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T15:08:27.223399",
+            "status": "active"
+        },
+        {
+            "project_id": "7f8c98df-e8fd-4126-8fe1-549b44116731",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T15:08:19.936141",
+            "status": "active"
+        },
+        {
+            "project_id": "a9536701-d68c-40ff-b6f4-d7d330c15cb2",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T15:08:12.174378",
+            "status": "active"
+        },
+        {
+            "project_id": "e8a63a25-03dc-4539-8027-af3669f453ff",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T15:08:04.300357",
+            "status": "active"
+        },
+        {
+            "project_id": "a461a8da-9fa2-4a3c-8865-ec0c546c85bb",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T15:07:55.432898",
+            "status": "active"
+        },
+        {
+            "project_id": "61a9ddc8-26cb-47f1-ae18-972edac7861f",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T15:07:48.364055",
+            "status": "active"
+        },
+        {
+            "project_id": "648fd298-4dc9-4786-84ca-aee828ac4b90",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T14:55:55.327368",
+            "status": "active"
+        },
+        {
+            "project_id": "f540624a-c161-4b0d-a428-6596ea350836",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T14:55:24.931647",
+            "status": "active"
+        },
+        {
+            "project_id": "bfb9d63d-019d-4a50-a32d-f90f38ba559d",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T14:55:05.183252",
+            "status": "active"
+        },
+        {
+            "project_id": "c19cd52c-bcbd-4fa3-bc6c-7b7e0e898f65",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T14:54:50.572135",
+            "status": "active"
+        },
+        {
+            "project_id": "809bac62-e068-4833-8cfe-b62110d6b026",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T14:54:24.805951",
+            "status": "active"
+        },
+        {
+            "project_id": "058f5987-b4e0-4104-8bee-b491183fef05",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T14:54:13.748283",
+            "status": "active"
+        },
+        {
+            "project_id": "4aa02071-5a0e-40e3-8370-b19cdcf41bec",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T14:53:54.678156",
+            "status": "active"
+        },
+        {
+            "project_id": "9676d64c-3904-4aee-94a9-44d7749c3cbc",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T14:53:43.480849",
+            "status": "active"
+        },
+        {
+            "project_id": "e1f0e0ee-fa50-4bc8-9c67-339a738dfa17",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T14:53:35.088993",
+            "status": "active"
+        },
+        {
+            "project_id": "67539293-db33-424a-8e62-e6de84beb977",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T14:53:27.802401",
+            "status": "active"
+        },
+        {
+            "project_id": "3641029a-e8f5-4336-b532-4070d59d1c48",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T14:47:08.441484",
+            "status": "active"
+        },
+        {
+            "project_id": "9446bb95-16bb-4eda-b1b4-6359ad0acd2c",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T14:46:59.099872",
+            "status": "active"
+        },
+        {
+            "project_id": "8524b957-115a-40e6-a46b-13055445eea4",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T14:46:50.472083",
+            "status": "active"
+        },
+        {
+            "project_id": "7dcd32c8-7d7c-48f5-8292-3b210d62c979",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T14:46:42.022900",
+            "status": "active"
+        },
+        {
+            "project_id": "2f9d4c89-fe89-4ed5-89ad-5916b73b3f50",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T14:46:32.135425",
+            "status": "active"
+        },
+        {
+            "project_id": "84c0942d-d94f-43ec-82e9-b4cd28539aab",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T14:46:23.733538",
+            "status": "active"
+        },
+        {
+            "project_id": "67020b8d-c7df-4f13-8cb8-a3036218863e",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T14:46:15.304068",
+            "status": "active"
+        },
+        {
+            "project_id": "07a24fe0-7678-40e3-9e05-18d57f031fe4",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T14:46:06.471141",
+            "status": "active"
+        },
+        {
+            "project_id": "ffd07e2a-4ce5-4f06-b570-a12d714b3508",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T14:45:45.597540",
+            "status": "active"
+        },
+        {
+            "project_id": "e03e4bd6-896e-4a0e-8683-013b87cc4d8e",
+            "name": "Clinic Management System",
+            "created_at": "2026-08-25T14:45:21.663708",
+            "status": "active"
+        }
+    ],
+    "recommendations": {
+        "backend": "FastAPI",
+        "database": "PostgreSQL",
+        "architecture": "MVC",
+        "authentication": "JWT",
+        "confidence": 1
+    },
+    "processing_time": 0.031
+}

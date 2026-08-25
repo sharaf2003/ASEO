@@ -1,33 +1,19 @@
-from ai_engine.self_improvement import (
-    SelfImprovementEngine
-)
+from ai_engine.self_improvement import SelfImprovementEngine
 
 
+def test_self_improvement_v14():
 
-engine = SelfImprovementEngine()
+    engine = SelfImprovementEngine()
 
+    result = engine.improve(
+        "Generate backend API",
+        "Generate scalable FastAPI backend API with JWT authentication",
+        75,
+        95
+    )
 
+    assert result is not None
 
-result = engine.improve(
+    history = engine.history()
 
-    "Generate backend API",
-
-    "Generate scalable FastAPI backend API with JWT authentication",
-
-    75,
-
-    95
-
-)
-
-
-
-print(result)
-
-
-
-print(
-
-    engine.history()
-
-)
+    assert len(history) > 0

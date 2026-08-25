@@ -11,9 +11,11 @@ from .base import (
 
 from .models import (
     CustomerModel,
-    ProjectModel
+    ProjectModel,
+    AgentMemoryModel,
+    KnowledgePatternModel,
+    DecisionMemoryModel
 )
-
 
 from .repository import (
     DatabaseRepository

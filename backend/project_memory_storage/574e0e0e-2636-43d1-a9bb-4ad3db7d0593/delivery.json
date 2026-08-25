@@ -1,0 +1,18 @@
+{
+    "status": "passed",
+    "agent_info": {
+        "name": "Delivery Agent",
+        "version": "2.0"
+    },
+    "delivery": {
+        "package": "C:\\aseo\\backend\\deliveries\\ASEO_Demo_Project.zip",
+        "report": {
+            "project": "ASEO_Demo_Project",
+            "status": "ready",
+            "package": "C:\\aseo\\backend\\deliveries\\ASEO_Demo_Project.zip",
+            "delivery": "completed"
+        },
+        "completed": true
+    },
+    "processing_time": 0.027
+}

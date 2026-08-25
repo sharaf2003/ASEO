@@ -1,0 +1,18 @@
+{
+    "status": "passed",
+    "agent_info": {
+        "name": "Delivery Agent",
+        "version": "2.0"
+    },
+    "delivery": {
+        "package": "C:\\aseo\\backend\\deliveries\\Clinic_Management_System.zip",
+        "report": {
+            "project": "Clinic_Management_System",
+            "status": "ready",
+            "package": "C:\\aseo\\backend\\deliveries\\Clinic_Management_System.zip",
+            "delivery": "completed"
+        },
+        "completed": true
+    },
+    "processing_time": 0.019
+}

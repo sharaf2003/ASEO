@@ -1,9 +1,0 @@
-{
-    "status": "failed",
-    "agent_info": {
-        "name": "Document Understanding Agent",
-        "version": "1.0"
-    },
-    "timestamp": "2026-07-27T16:53:23.395717",
-    "error": "File not found: sample_requirement.txt"
-}

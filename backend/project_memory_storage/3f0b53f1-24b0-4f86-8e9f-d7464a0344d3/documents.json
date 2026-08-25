@@ -1,0 +1,5 @@
+{
+    "status": "success",
+    "source": "memory_context",
+    "message": "No document provided. Requirements will be generated from project context."
+}

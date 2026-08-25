@@ -1,0 +1,29 @@
+{
+    "status": "passed",
+    "agent_info": {
+        "name": "Deployment Agent",
+        "version": "2.0"
+    },
+    "deployment": {
+        "generated_files": [
+            "generated_project\\Dockerfile",
+            "generated_project\\docker-compose.yml",
+            "generated_project\\.env.example"
+        ],
+        "validation": [
+            {
+                "file": "Dockerfile",
+                "exists": true
+            },
+            {
+                "file": "docker-compose.yml",
+                "exists": true
+            },
+            {
+                "file": "requirements.txt",
+                "exists": true
+            }
+        ]
+    },
+    "processing_time": 0.004
+}

@@ -1,19 +1,12 @@
-from ai_engine.self_improvement import (
-    SelfImprovementEngine
-)
+from ai_engine.self_improvement import SelfImprovementEngine
 
 
+def test_self_improvement_v17():
 
-engine = SelfImprovementEngine()
+    engine = SelfImprovementEngine()
 
+    result = engine.self_improve(
+        "Database connection failed"
+    )
 
-
-result = engine.self_improve(
-
-    "Database connection failed"
-
-)
-
-
-
-print(result)
+    assert result is not None

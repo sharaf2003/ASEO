@@ -1,9 +1,12 @@
 class MemoryStore:
     """
-    ASEO Memory Storage v13
+    ASEO Memory Storage v14
 
-    Intelligent memory retrieval
-    using keyword matching.
+    Intelligent memory storage with:
+
+    - Duplicate detection
+    - Memory reinforcement
+    - Confidence evolution
     """
 
 
@@ -16,17 +19,88 @@ class MemoryStore:
 
 
 
+
     def add(
         self,
         item
     ):
 
+        existing = self.find_exact(
+
+            item.key,
+
+            item.value,
+
+            item.category
+
+        )
+
+
+        # Existing memory found
+
+        if existing:
+
+
+            existing.reinforce()
+
+
+            return existing
+
+
+
+        # New memory
 
         self.items.append(
 
             item
 
         )
+
+
+        return item
+
+
+
+
+
+
+    def find_exact(
+        self,
+        key,
+        value,
+        category
+    ):
+
+
+        for item in self.items:
+
+
+            if (
+
+                item.key.lower().strip()
+                ==
+                key.lower().strip()
+
+                and
+
+                item.value.lower().strip()
+                ==
+                value.lower().strip()
+
+                and
+
+                item.category
+                ==
+                category
+
+            ):
+
+                return item
+
+
+
+        return None
+
 
 
 
@@ -47,6 +121,7 @@ class MemoryStore:
 
 
 
+
     def search(
         self,
         keyword
@@ -56,13 +131,11 @@ class MemoryStore:
         keywords = keyword.lower().split()
 
 
-
         results = []
 
 
 
         for item in self.items:
-
 
 
             text = (
@@ -81,13 +154,11 @@ class MemoryStore:
 
 
 
-
             matches = 0
 
 
 
             for word in keywords:
-
 
 
                 if word in text:
@@ -97,9 +168,10 @@ class MemoryStore:
 
 
 
-
             if matches > 0:
 
+
+                item.reinforce()
 
 
                 results.append(
@@ -107,8 +179,6 @@ class MemoryStore:
                     item.to_dict()
 
                 )
-
-
 
 
 

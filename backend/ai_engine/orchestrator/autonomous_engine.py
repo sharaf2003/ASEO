@@ -23,11 +23,12 @@ class AutonomousExecutionEngine:
 
     def __init__(
         self,
-        agents=None
+        agents=None,
+        memory=None
     ):
 
 
-        self.memory = MemoryManager()
+        self.memory = memory if memory else MemoryManager()
 
 
         self.reasoning = MemoryReasoningEngine(
@@ -66,13 +67,15 @@ class AutonomousExecutionEngine:
 
 
         # Step 1:
-        # Analyze requirement using memory + reasoning
+        # Analyze requirement using memory + cognition
 
         intelligence = self.reasoning.analyze(
 
             requirement
 
         )
+
+
 
 
 
@@ -87,16 +90,44 @@ class AutonomousExecutionEngine:
                 requirement,
 
 
+
             "decision":
 
                 intelligence["decision"],
 
 
+
             "memory":
 
-                intelligence["memory_used"]
+                intelligence["memory_used"],
+
+
+
+            "patterns":
+
+                intelligence.get(
+
+                    "patterns",
+
+                    []
+
+                ),
+
+
+
+            "evidence":
+
+                intelligence.get(
+
+                    "evidence",
+
+                    []
+
+                )
 
         }
+
+
 
 
 
@@ -111,6 +142,56 @@ class AutonomousExecutionEngine:
 
 
 
+
+
+        # Step 4:
+        # Preserve evolved intelligence data
+
+        updated_intelligence = {
+
+
+            **intelligence,
+
+
+
+            "patterns":
+
+                result
+                .get(
+                    "result",
+                    {}
+                )
+                .get(
+                    "patterns",
+                    intelligence.get(
+                        "patterns",
+                        []
+                    )
+                ),
+
+
+
+            "evidence":
+
+                result
+                .get(
+                    "result",
+                    {}
+                )
+                .get(
+                    "evidence",
+                    intelligence.get(
+                        "evidence",
+                        []
+                    )
+                )
+
+        }
+
+
+
+
+
         return {
 
 
@@ -122,7 +203,7 @@ class AutonomousExecutionEngine:
 
             "intelligence":
 
-                intelligence,
+                updated_intelligence,
 
 
 

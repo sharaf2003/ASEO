@@ -4,9 +4,13 @@ from .node import KnowledgeNode
 
 class KnowledgeGraph:
     """
-    ASEO Knowledge Graph Engine v14
-    """
+    ASEO Knowledge Graph Engine v15
 
+    Supports:
+    - Node deduplication
+    - Knowledge accumulation
+    - Relationship memory
+    """
 
 
     def __init__(self):
@@ -19,10 +23,54 @@ class KnowledgeGraph:
 
 
 
+    def find_node(
+        self,
+        name,
+        node_type=None
+    ):
+
+        for node in self.nodes:
+
+            if node.name == name:
+
+                if node_type is None or node.node_type == node_type:
+
+                    return node
+
+
+        return None
+
+
+
+
+
     def add_node(
         self,
         node
     ):
+
+
+        existing = self.find_node(
+
+            node.name,
+
+            node.node_type
+
+        )
+
+
+        if existing:
+
+
+            existing.metadata.update(
+
+                node.metadata
+
+            )
+
+
+            return existing.to_dict()
+
 
 
         self.nodes.append(
@@ -38,6 +86,7 @@ class KnowledgeGraph:
 
 
 
+
     def connect(
         self,
         source,
@@ -46,22 +95,28 @@ class KnowledgeGraph:
     ):
 
 
-        self.edges.append(
+        edge = {
 
-            {
+            "source":
+                source,
 
-                "source":
-                    source,
+            "relation":
+                relation,
 
-                "relation":
-                    relation,
+            "target":
+                target
 
-                "target":
-                    target
+        }
 
-            }
 
-        )
+
+        if edge not in self.edges:
+
+            self.edges.append(
+
+                edge
+
+            )
 
 
 
@@ -70,6 +125,7 @@ class KnowledgeGraph:
     def all(self):
 
         return {
+
 
             "nodes":
 

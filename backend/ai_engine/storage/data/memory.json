@@ -1,5 +1,31 @@
 [
     {
+        "key": "Build hospital management system",
+        "value": "Use Layered FastAPI Architecture",
+        "category": "architecture",
+        "confidence": 0.95,
+        "created_at": "2026-08-21T22:39:01.949063"
+    },
+    {
+        "key": "Build hospital management system",
+        "value": "Use Layered FastAPI Architecture",
+        "category": "architecture",
+        "confidence": 0.95,
+        "created_at": "2026-08-21T22:39:01.949063"
+    },
+    {
+        "key": "hospital management system",
+        "value": "FastAPI PostgreSQL RBAC Audit Logging",
+        "category": "architecture",
+        "confidence": 0.94,
+        "created_at": "2026-08-21T22:39:01.949063"
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
         "project": "Ecommerce Backend",
         "decision": "FastAPI + PostgreSQL",
         "score": 95
@@ -12,6 +38,201 @@
     {
         "project": "Ecommerce Backend",
         "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "technology": "FastAPI PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "technology": "FastAPI PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "technology": "FastAPI PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "technology": "FastAPI PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "technology": "FastAPI PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "technology": "FastAPI PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "technology": "FastAPI PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "technology": "FastAPI PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "technology": "FastAPI PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "decision": "FastAPI + PostgreSQL",
+        "score": 95
+    },
+    {
+        "project": "Ecommerce Backend",
+        "technology": "FastAPI PostgreSQL",
         "score": 95
     },
     {
