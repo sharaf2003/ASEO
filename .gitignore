@@ -3,3 +3,29 @@ __pycache__/
 *.pyc
 .env
 .pytest_cache/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment
+.env
+
+# Virtual environments
+venv/
+.venv/
+
+# IDE
+.idea/
+.vscode/
+
+# Logs
+*.log
+
+.coverage
+*.zip
+aseo.db
+project_memory_storage/
+__pycache__/
+*.pyc
